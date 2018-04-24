@@ -13,8 +13,13 @@ public:
 		return &instance;
 	}
 
-	std::unordered_map<uint64_t, Object*> m_mappedObjects;
-	std::set<Object*> m_objects;
+	Object* operator [] ( uint64_t id );
+
+	void Add ( uint64_t id, Object* obj );
+	bool Exists ( uint64_t id ) const;
+
+	std::unordered_map <uint64_t, Object*> m_mappedObjects;
+	std::set <Object*> m_objects;
 };
 
 #define sObjectMgr ObjectMgr::instance()
