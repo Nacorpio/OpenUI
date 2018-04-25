@@ -262,3 +262,11 @@ __pycache__/
 
 # Additional
 *.dll
+*.png
+*.ttf
+*.jpeg
+*.jpg
+*.gif
+*.filter
+*.user
+*.vcxproj
