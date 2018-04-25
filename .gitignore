@@ -267,6 +267,3 @@ __pycache__/
 *.jpeg
 *.jpg
 *.gif
-*.filter
-*.user
-*.vcxproj
