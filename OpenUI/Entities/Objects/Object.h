@@ -2,6 +2,8 @@
 
 #include "ObjectGuid.h"
 
+class Button;
+
 class Object
 {
 public:
@@ -13,6 +15,8 @@ public:
 	}
 
 	ObjectGuid& GetGuid () { return m_guid; }
+
+	Button* ToButton() { return reinterpret_cast <Button*> (this); }
 
 protected:
 	ObjectGuid m_guid;

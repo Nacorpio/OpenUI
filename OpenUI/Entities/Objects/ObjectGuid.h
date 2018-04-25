@@ -1,4 +1,5 @@
 #pragma once
+
 class ObjectGuid
 {
 public:
@@ -39,13 +40,15 @@ public:
 		return m_detail;
 	}
 
+	
+
 	bool IsObject () const { return m_typeId == TypeId::Object; }
 	bool IsElement () const { return m_typeId == TypeId::Element; }
 	bool IsControl () const { return m_typeId == TypeId::Control; }
 
-	bool IsPanel() const { return m_detail == Detail::Panel; }
-	bool IsButton() const { return m_detail == Detail::Button; }
-	bool IsLabel() const { return m_detail == Detail::Label; }
+	bool IsPanel () const { return m_detail == Detail::Panel; }
+	bool IsButton () const { return m_detail == Detail::Button; }
+	bool IsLabel () const { return m_detail == Detail::Label; }
 
 	bool operator == ( const ObjectGuid& rhs ) const
 	{
