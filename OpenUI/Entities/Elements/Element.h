@@ -2,6 +2,7 @@
 
 #include "../Objects/Object.h"
 #include <string>
+#include "../../Structures.h"
 
 class Element : public Object
 {
@@ -13,6 +14,8 @@ public:
 
 	void SetName ( const std::string& name ) { m_name = name; }
 	std::string& GetName () { return m_name; }
+
+
 
 	virtual void Initialize () = 0;
 	virtual void Update () = 0;
@@ -30,4 +33,5 @@ public:
 
 private:
 	std::string m_name = "Element";
+	OpenUI::IntVector m_position { };
 };

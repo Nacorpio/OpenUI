@@ -164,12 +164,12 @@
     <ClInclude Include="Entities\Objects\Object.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="EventArgs.h" />
-    <ClInclude Include="Graphic\GraphicProperties.h" />
     <ClInclude Include="Managers\GraphicMgr.h" />
     <ClInclude Include="Managers\ElementMgr.h" />
     <ClInclude Include="Entities\Controls\Control.h" />
     <ClInclude Include="Entities\Elements\Element.h" />
     <ClInclude Include="Managers\ResourceMgr.h" />
+    <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Structures.h" />
     <ClInclude Include="targetver.h" />
@@ -180,11 +180,11 @@
     <ClCompile Include="Entities\Objects\Object.cpp" />
     <ClCompile Include="Enums.cpp" />
     <ClCompile Include="EventArgs.cpp" />
-    <ClCompile Include="Graphic\GraphicProperties.cpp" />
     <ClCompile Include="Managers\GraphicMgr.cpp" />
     <ClCompile Include="Managers\ElementMgr.cpp" />
     <ClCompile Include="Entities\Controls\Control.cpp" />
     <ClCompile Include="Entities\Elements\Element.cpp" />
+    <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="OpenUI.cpp" />
     <ClCompile Include="Managers\ResourceMgr.cpp" />
     <ClCompile Include="stdafx.cpp">

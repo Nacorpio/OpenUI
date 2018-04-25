@@ -6,15 +6,7 @@ class Control : public Element
 public:
 	Control () = default;
 
-	void Initialize () override
-	{
-	}
-
-	void Update () override
-	{
-	}
-
-	void Draw () override
-	{
-	}
+	void Initialize () override;
+	void Update () override;
+	void Draw () override;
 };
