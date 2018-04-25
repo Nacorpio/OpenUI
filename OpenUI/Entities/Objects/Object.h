@@ -5,8 +5,12 @@
 class Object
 {
 public:
-	Object ();
-	~Object ();
+	virtual ~Object () = default;
+
+	Object ()
+		: m_guid ( ObjectGuid::TypeId::Object, ObjectGuid::Detail::None )
+	{
+	}
 
 	ObjectGuid& GetGuid () { return m_guid; }
 

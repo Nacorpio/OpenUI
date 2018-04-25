@@ -21,9 +21,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Managers\ObjectMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entities\Controls\Control.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -36,16 +33,16 @@
     <ClInclude Include="Entities\Objects\Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graphic\GraphicProperties.h">
+    <ClInclude Include="Managers\ElementMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventArgs.h">
+    <ClInclude Include="Managers\GraphicMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enums.h">
+    <ClInclude Include="Entities\Controls\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Structures.h">
+    <ClInclude Include="Managers\ResourceMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -54,9 +51,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OpenUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\ObjectMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Entities\Controls\Control.cpp">
@@ -71,16 +65,16 @@
     <ClCompile Include="Entities\Objects\ObjectGuid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Graphic\GraphicProperties.cpp">
+    <ClCompile Include="Managers\ElementMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EventArgs.cpp">
+    <ClCompile Include="Managers\GraphicMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enums.cpp">
+    <ClCompile Include="Entities\Controls\Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Structures.cpp">
+    <ClCompile Include="Managers\ResourceMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
