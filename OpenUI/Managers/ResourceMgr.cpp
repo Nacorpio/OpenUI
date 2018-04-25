@@ -22,6 +22,11 @@ ResourceMgr::~ResourceMgr ()
 	{
 		delete it._Ptr->_Myval;
 	}
+
+	for (auto it = m_textures.begin(); it != m_textures.end(); ++it)
+	{
+		delete it._Ptr->_Myval;
+	}
 }
 
 sf::Shader& ResourceMgr::CreateShader ( const std::string& fileName, const sf::Shader::Type type )
@@ -65,10 +70,7 @@ sf::Image& ResourceMgr::CreateImage ( const std::string& fileName )
 
 sf::Sprite& ResourceMgr::CreateSprite ( const std::string& fileName, const sf::IntRect& area )
 {
-	sf::Texture texture;
-	texture.loadFromFile ( fileName, area );
-
-	return CreateSprite(texture);
+	return CreateSprite ( CreateTexture ( fileName ) );
 }
 
 sf::Sprite& ResourceMgr::CreateSprite ( const sf::Texture& texture )
@@ -77,4 +79,40 @@ sf::Sprite& ResourceMgr::CreateSprite ( const sf::Texture& texture )
 	m_sprites.insert ( sprite );
 
 	return *sprite;
+}
+
+sf::Sprite& ResourceMgr::CreateSprite ( const sf::Image& image )
+{
+	return CreateSprite ( CreateTexture ( image ) );
+}
+
+sf::Sprite& ResourceMgr::CreateSprite ( const sf::Image& image, const sf::IntRect& area )
+{
+	return CreateSprite ( CreateTexture ( image, area ) );
+}
+
+sf::Texture& ResourceMgr::CreateTexture ( const std::string& fileName )
+{
+	auto* texture = new sf::Texture;
+	texture->loadFromFile ( fileName );
+
+	m_textures.insert ( texture );
+
+	return *texture;
+}
+
+sf::Texture& ResourceMgr::CreateTexture ( const sf::Image& image, const sf::IntRect& area )
+{
+	auto* texture = new sf::Texture;
+	texture->loadFromImage ( image, area );
+
+	m_textures.insert ( texture );
+
+	return *texture;
+}
+
+sf::Texture& ResourceMgr::CreateTexture ( const sf::Image& image )
+{
+	const sf::Vector2u& imageSize = image.getSize ();
+	return CreateTexture ( image, sf::IntRect ( 0, 0, imageSize.x, imageSize.y ) );
 }
