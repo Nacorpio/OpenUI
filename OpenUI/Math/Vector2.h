@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include <type_traits>
 #include "SFML/System/Vector2.hpp"
 #include <cstdint>
+#include <type_traits>
 
 template < class _Ty, typename = std::enable_if_t <std::is_integral_v <_Ty>, _Ty> >
 struct Vector2

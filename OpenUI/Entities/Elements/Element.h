@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "../Objects/Object.h"
-#include "../../Structures.h"
 #include "../../Math/Vector2.h"
 
 class Element : public Object
@@ -49,6 +48,7 @@ private:
 
 	uint16_t m_drawOrder = 0;
 	std::vector <Element*> m_children { };
+
 	IntVector m_position { };
 	Element* m_parent = nullptr;
 };

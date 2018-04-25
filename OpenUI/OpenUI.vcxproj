@@ -160,12 +160,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ClientWindow.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="Common\Comparers\ElementComparer.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Entities\Controls\Button.h" />
     <ClInclude Include="Entities\Objects\ObjectGuid.h" />
     <ClInclude Include="Entities\Objects\Object.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="EventArgs.h" />
+    <ClInclude Include="Graphic\GraphicProperties.h" />
     <ClInclude Include="Managers\GraphicMgr.h" />
     <ClInclude Include="Managers\ElementMgr.h" />
     <ClInclude Include="Entities\Controls\Control.h" />
@@ -178,12 +181,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientWindow.cpp" />
+    <ClCompile Include="Common\Comparers\ElementComparer.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="Entities\Controls\Button.cpp" />
     <ClCompile Include="Entities\Objects\ObjectGuid.cpp" />
     <ClCompile Include="Entities\Objects\Object.cpp" />
     <ClCompile Include="Enums.cpp" />
     <ClCompile Include="EventArgs.cpp" />
+    <ClCompile Include="Graphic\GraphicProperties.cpp" />
     <ClCompile Include="Managers\GraphicMgr.cpp" />
     <ClCompile Include="Managers\ElementMgr.cpp" />
     <ClCompile Include="Entities\Controls\Control.cpp" />

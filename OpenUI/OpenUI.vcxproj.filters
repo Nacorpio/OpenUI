@@ -54,13 +54,22 @@
     <ClInclude Include="Enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Math\Vector2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ClientWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Comparers\ElementComparer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic\GraphicProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -111,6 +120,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Comparers\ElementComparer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic\GraphicProperties.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
