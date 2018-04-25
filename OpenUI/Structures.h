@@ -5,40 +5,6 @@
 
 namespace OpenUI
 {
-	template < class _Ty, typename = std::enable_if_t <std::is_integral_v <_Ty>, _Ty> >
-	struct Vector2
-	{
-		_Ty X = 0;
-		_Ty Y = 0;
-
-		Vector2() = default;
-
-		Vector2 ( const _Ty p_x, const _Ty p_y )
-			: X ( p_x )
-			, Y ( p_y )
-		{
-		}
-
-		Vector2 (sf::Vector2<_Ty>& other)
-			: Vector2(other.X, other.Y)
-		{
-		}
-
-		bool operator == ( const Vector2& rhs )
-		{
-			return X == rhs.X && Y == rhs.Y;
-		}
-
-		bool operator != ( const Vector2& rhs )
-		{
-			return !( *this == rhs );
-		}
-
-
-	};
-
-	typedef Vector2<int> IntVector;
-
 	template < class T, typename = std::enable_if_t <std::is_arithmetic_v <T>, T> >
 	struct Point
 	{

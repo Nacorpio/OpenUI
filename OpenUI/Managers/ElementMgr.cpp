@@ -18,7 +18,7 @@ void ElementMgr::Add ( const uint64_t id, Element* element )
 
 	if ( Exists ( id ) )
 	{
-		std::cout << "Element" << element->GetName () << " already exists." << std::endl;
+		std::cout << "Element '" << element->GetName () << "' already exists." << std::endl;
 		return;
 	}
 

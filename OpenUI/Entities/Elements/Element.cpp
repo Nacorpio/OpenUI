@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "../../Common/Comparers/ElementComparer.h"
 #include "../../Managers/ElementMgr.h"
+#include <iostream>
 
 void Element::SetParent ( Element* element )
 {
@@ -16,6 +17,12 @@ void Element::SetParent ( Element* element )
 
 void Element::AddChild ( Element* element )
 {
+	if (HasChild ( element ))
+	{
+		std::cout << "Element " << std::endl;
+		return;
+	}
+
 	element->SetParent ( this );
 	element->SetDrawOrder ( m_children.size () );
 
