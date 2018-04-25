@@ -5,12 +5,13 @@
 class Object
 {
 public:
-	Object ();
+	virtual ~Object () = default;
 
-protected:
-	~Object ();
+	Object ()
+		: m_guid ( ObjectGuid::TypeId::Object, ObjectGuid::Detail::None )
+	{
+	}
 
-public:
 	ObjectGuid& GetGuid () { return m_guid; }
 
 protected:

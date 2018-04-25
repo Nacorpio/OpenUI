@@ -1,12 +1,13 @@
 #include "stdafx.h"
-#include "ObjectMgr.h"
+#include "ElementMgr.h"
+#include "../Entities/Elements/Element.h"
 
-Object* ObjectMgr::operator[] ( const uint64_t id )
+Element* ElementMgr::operator[] ( const uint64_t id )
 {
 	return m_mappedObjects[id];
 }
 
-void ObjectMgr::Add ( const uint64_t id, Object* obj )
+void ElementMgr::Add ( const uint64_t id, Element* obj )
 {
 	if ( !obj )
 	{
@@ -22,7 +23,7 @@ void ObjectMgr::Add ( const uint64_t id, Object* obj )
 	m_mappedObjects.insert_or_assign ( id, obj );
 }
 
-bool ObjectMgr::Exists ( const uint64_t id ) const
+bool ElementMgr::Exists ( const uint64_t id ) const
 {
 	return m_mappedObjects.count ( id ) > 0;
 }

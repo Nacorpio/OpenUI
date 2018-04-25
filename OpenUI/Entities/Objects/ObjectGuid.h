@@ -11,6 +11,7 @@ public:
 
 	enum class Detail
 	{
+		None,
 		Panel,
 		Button,
 		Label
