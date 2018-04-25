@@ -27,7 +27,7 @@ public:
 	sf::Image& CreateImage ( unsigned int width, unsigned int height, const sf::Color& color );
 	sf::Image& CreateImage ( const std::string& fileName );
 	sf::Sprite& CreateSprite ( const std::string& fileName, const sf::IntRect& area );
-	sf::Sprite& CreateSprite ( sf::Texture* texture );
+	sf::Sprite& CreateSprite ( const sf::Texture& texture );
 
 private:
 	SpriteSet m_sprites;

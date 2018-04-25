@@ -65,15 +65,15 @@ sf::Image& ResourceMgr::CreateImage ( const std::string& fileName )
 
 sf::Sprite& ResourceMgr::CreateSprite ( const std::string& fileName, const sf::IntRect& area )
 {
-	auto* texture = new sf::Texture;
-	texture->loadFromFile ( fileName, area );
+	sf::Texture texture;
+	texture.loadFromFile ( fileName, area );
 
-	return CreateSprite ( texture );
+	return CreateSprite(texture);
 }
 
-sf::Sprite& ResourceMgr::CreateSprite ( sf::Texture* texture )
+sf::Sprite& ResourceMgr::CreateSprite ( const sf::Texture& texture )
 {
-	auto* sprite = new sf::Sprite ( *texture );
+	auto* sprite = new sf::Sprite ( texture );
 	m_sprites.insert ( sprite );
 
 	return *sprite;
