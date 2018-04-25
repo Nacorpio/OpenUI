@@ -1,5 +1,4 @@
 #pragma once
-#include "GraphicMgr.h"
 
 class GraphicMgr
 {
@@ -10,7 +9,7 @@ public:
 		return &instance;
 	}
 
-	void Draw ();
+	static void Draw ();
 };
 
 #define sGraphicMgr GraphicMgr::instance()

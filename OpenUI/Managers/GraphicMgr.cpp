@@ -5,8 +5,8 @@
 
 void GraphicMgr::Draw ()
 {
-	for ( auto it = sElementMgr->GetElements ().begin () ; it != sElementMgr->GetElements ().end () ; ++it )
+	for ( Element* element : sElementMgr->GetElements () )
 	{
-		it._Ptr->_Myval->Draw ();
+		element->Draw ();
 	}
 }

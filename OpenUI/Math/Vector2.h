@@ -48,7 +48,7 @@ struct Vector2
 		return *this;
 	}
 
-	Vector2 <_Ty>& operator += (const _Ty rhs)
+	Vector2 <_Ty>& operator += ( const _Ty rhs )
 	{
 		X += rhs;
 		Y += rhs;
@@ -56,7 +56,7 @@ struct Vector2
 		return { X + rhs, Y + rhs };
 	}
 
-	Vector2 <_Ty>& operator -= (const _Ty rhs)
+	Vector2 <_Ty>& operator -= ( const _Ty rhs )
 	{
 		X -= rhs;
 		Y -= rhs;
@@ -64,7 +64,7 @@ struct Vector2
 		return *this;
 	}
 
-	Vector2 <_Ty>& operator *= (const _Ty rhs)
+	Vector2 <_Ty>& operator *= ( const _Ty rhs )
 	{
 		X *= rhs;
 		Y *= rhs;
@@ -72,7 +72,7 @@ struct Vector2
 		return *this;
 	}
 
-	Vector2 <_Ty>& operator /= (const _Ty rhs)
+	Vector2 <_Ty>& operator /= ( const _Ty rhs )
 	{
 		X /= rhs;
 		Y /= rhs;
@@ -85,19 +85,19 @@ struct Vector2
 		return Vector2 <_Ty> ( X + rhs.X, Y + rhs.Y );
 	}
 
-	Vector2 <_Ty>& operator - (const Vector2 <_Ty> rhs)
+	Vector2 <_Ty>& operator - ( const Vector2 <_Ty> rhs )
 	{
-		return Vector2 <_Ty>(X - rhs.X, Y - rhs.Y);
+		return Vector2 <_Ty> ( X - rhs.X, Y - rhs.Y );
 	}
 
-	Vector2 <_Ty>& operator * (const Vector2 <_Ty> rhs)
+	Vector2 <_Ty>& operator * ( const Vector2 <_Ty> rhs )
 	{
-		return Vector2 <_Ty>(X * rhs.X, Y * rhs.Y);
+		return Vector2 <_Ty> ( X * rhs.X, Y * rhs.Y );
 	}
 
-	Vector2 <_Ty>& operator / (const Vector2 <_Ty> rhs)
+	Vector2 <_Ty>& operator / ( const Vector2 <_Ty> rhs )
 	{
-		return Vector2 <_Ty>(X / rhs.X, Y / rhs.Y);
+		return Vector2 <_Ty> ( X / rhs.X, Y / rhs.Y );
 	}
 };
 

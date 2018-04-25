@@ -2,7 +2,8 @@
 #include "Button.h"
 #include <iostream>
 
-Button::Button()
+Button::Button ( const std::string& name )
+	: Control ( name )
 {
 }
 

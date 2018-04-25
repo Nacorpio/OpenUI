@@ -57,6 +57,12 @@
     <ClInclude Include="Math\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Common\Comparers\ElementComparer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -98,7 +104,7 @@
     <ClCompile Include="Enums.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Math\Vector2.cpp">
+    <ClCompile Include="Common\Comparers\ElementComparer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

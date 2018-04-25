@@ -4,7 +4,7 @@
 class Control : public Element
 {
 public:
-	Control () = default;
+	explicit Control ( const std::string& name );
 
 	void Initialize () override;
 	void Update () override;

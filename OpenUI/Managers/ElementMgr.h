@@ -1,11 +1,10 @@
 #pragma once
 #include <unordered_map>
-#include <set>
 
 class Element;
+class Button;
 
-typedef std::set <Element*> ElementSet;
-typedef std::unordered_map<uint64_t, Element*> ElementMap;
+typedef std::unordered_map <uint64_t, Element*> ElementMap;
 
 class ElementMgr
 {
@@ -18,17 +17,17 @@ public:
 
 	Element* operator [] ( uint64_t id );
 
-	void Add ( uint64_t id, Element* obj );
+	void Add ( uint64_t id, Element* element );
 	bool Exists ( uint64_t id ) const;
 
-	ElementSet& GetElements()
-	{
-		return m_objects;
-	}
+	Button* CreateButton( uint64_t id, const std::string& name);
+	Element* GetElementByName ( const std::string& name );
+
+	std::vector <Element*>& GetElements ();
 
 private:
 	ElementMap m_mappedObjects;
-	ElementSet m_objects;
+	std::vector <Element*> m_objects;
 };
 
 #define sElementMgr ElementMgr::instance()
