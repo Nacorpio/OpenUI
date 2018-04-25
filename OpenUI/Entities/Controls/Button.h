@@ -4,7 +4,7 @@
 class Button : public Control
 {
 public:
-	Button ();
+	explicit Button ( const std::string& name );
 	~Button ();
 
 	void Initialize () override;
