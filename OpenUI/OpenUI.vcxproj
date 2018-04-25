@@ -159,6 +159,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ClientWindow.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Entities\Controls\Button.h" />
     <ClInclude Include="Entities\Objects\ObjectGuid.h" />
     <ClInclude Include="Entities\Objects\Object.h" />
@@ -175,6 +177,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClientWindow.cpp" />
+    <ClCompile Include="Constants.cpp" />
     <ClCompile Include="Entities\Controls\Button.cpp" />
     <ClCompile Include="Entities\Objects\ObjectGuid.cpp" />
     <ClCompile Include="Entities\Objects\Object.cpp" />
