@@ -5,6 +5,7 @@
 #include "Common/Constants.h"
 #include "Entities/Elements/Element.h"
 
+
 namespace OpenUI
 {
 	struct RenderWindowSettings final
@@ -37,6 +38,8 @@ namespace OpenUI
 		void Initialize () override;
 		void Update () override;
 		void Draw ( const GraphicsContext& gContext ) override;
+
+		sf::RenderWindow& GetRenderWindow () const;
 
 	private:
 		friend class Element;

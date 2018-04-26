@@ -32,3 +32,8 @@ void OpenUI::ClientWindow::Update ()
 void OpenUI::ClientWindow::Draw ( const GraphicsContext& gContext )
 {
 }
+
+sf::RenderWindow& OpenUI::ClientWindow::GetRenderWindow () const
+{
+	return *m_renderWindow;
+}

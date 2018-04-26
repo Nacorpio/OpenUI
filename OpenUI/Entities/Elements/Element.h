@@ -33,6 +33,9 @@ namespace OpenUI
 		ClientWindow* GetClientWindow() const { return m_clientWindow; }
 		Element* GetParent () const { return m_parent; }
 		uint16_t GetDrawOrder () const { return m_drawOrder; }
+		std::vector <Element*> GetChildren() const { return m_children; }
+		IntVector & GetSize() { return m_size; }
+		IntVector & GetPosition() { return m_position; }
 
 		IntVector GetPosition() const { return m_position; }
 		IntVector GetSize() const { return m_size; }
@@ -40,6 +43,8 @@ namespace OpenUI
 		std::vector<Element*> GetChildren() const { return m_children; }
 
 		void SetParent(Element* element);
+		void SetSize(IntVector p_value) { m_size = p_value; }
+		void SetPosition(IntVector p_value) { m_position = p_value; }
 
 		void AddChild ( Element* element );
 		void RemoveChild ( Element* element );
