@@ -16,7 +16,7 @@ namespace OpenUI
 	{
 	}
 
-	void Control::Draw ()
+	void Control::Draw ( const GraphicsContext& gContext )
 	{
 	}
 }

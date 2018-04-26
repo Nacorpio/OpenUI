@@ -2,6 +2,8 @@
 
 namespace OpenUI
 {
+	class GraphicsContext;
+
 	class GraphicMgr
 	{
 	public:
@@ -11,7 +13,7 @@ namespace OpenUI
 			return &instance;
 		}
 
-		static void Draw ();
+		static void Draw ( const GraphicsContext& gContext );
 	};
 }
 

@@ -37,11 +37,14 @@ namespace OpenUI
 		void Start () override;
 		void Initialize () override;
 		void Update () override;
-		void Draw () override;
+		void Draw ( const GraphicsContext& gContext ) override;
 
 		sf::RenderWindow& GetRenderWindow () const;
 
 	private:
+		friend class Element;
+
+		std::set<Element*> m_descendants{};
 		sf::RenderWindow* m_renderWindow { };
 	};
 }

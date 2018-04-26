@@ -29,7 +29,7 @@ void OpenUI::ClientWindow::Update ()
 {
 }
 
-void OpenUI::ClientWindow::Draw ()
+void OpenUI::ClientWindow::Draw ( const GraphicsContext& gContext )
 {
 }
 
