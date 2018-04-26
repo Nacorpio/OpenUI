@@ -46,14 +46,20 @@ namespace OpenUI
 		element->SetDrawOrder ( m_children.size () );
 
 		// If there is no client window, the current element must be the client window.
-		if ( !m_clientWindow )
-		{
-			// Set the element's client window to this element.
-			element->m_clientWindow = this->ToClientWindow ();
-		}
+		//if ( !m_clientWindow )
+		//{
+		//	// Set the element's client window to this element.
+		//	element->m_clientWindow = this->ToClientWindow ();
+		//} 
+		//else
+		//{
+		//	element->m_clientWindow = m_clientWindow;
+		//}
+
+		element->m_clientWindow = m_clientWindow ? m_clientWindow : this->ToClientWindow();
+		element->m_clientWindow->m_descendants.insert(element);
 
 		m_children.emplace_back ( element );
-		element->m_clientWindow->m_descendants.insert ( element );
 
 		// Invoke the OnChildAdded callback.
 		OnChildAdded ( *element );

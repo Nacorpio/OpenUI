@@ -44,7 +44,7 @@ namespace OpenUI
 	private:
 		friend class Element;
 
-		std::set<Element*> m_descendants{};
+		std::set<Element*> m_descendants { };
 		sf::RenderWindow* m_renderWindow { };
 	};
 }
