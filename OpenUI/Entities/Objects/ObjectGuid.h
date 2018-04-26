@@ -17,7 +17,9 @@ namespace OpenUI
 			None,
 			Panel,
 			Button,
-			Label
+			Label,
+			Window,
+			ClientWindow,
 		};
 
 		ObjectGuid ( const TypeId typeId, const Detail detail )
@@ -42,8 +44,6 @@ namespace OpenUI
 			return m_detail;
 		}
 
-	
-
 		bool IsObject () const { return m_typeId == TypeId::Object; }
 		bool IsElement () const { return m_typeId == TypeId::Element; }
 		bool IsControl () const { return m_typeId == TypeId::Control; }
@@ -51,6 +51,8 @@ namespace OpenUI
 		bool IsPanel () const { return m_detail == Detail::Panel; }
 		bool IsButton () const { return m_detail == Detail::Button; }
 		bool IsLabel () const { return m_detail == Detail::Label; }
+		bool IsWindow() const { return m_detail == Detail::Window; }
+		bool IsClientWindow() const { return m_detail == Detail::ClientWindow; }
 
 		bool operator == ( const ObjectGuid& rhs ) const
 		{

@@ -7,6 +7,7 @@ namespace OpenUI
 	Button::Button ( const std::string& name )
 		: Control ( name )
 	{
+		m_guidDetail = ObjectGuid::Detail::Button;
 	}
 
 	Button::~Button ()

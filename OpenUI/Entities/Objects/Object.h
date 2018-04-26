@@ -5,6 +5,7 @@
 namespace OpenUI
 {
 	class Button;
+	class ClientWindow;
 
 	class Object
 	{
@@ -12,15 +13,15 @@ namespace OpenUI
 		virtual ~Object () = default;
 
 		Object ()
-			: m_guid ( ObjectGuid::TypeId::Object, ObjectGuid::Detail::None )
+			: m_guidTypeId ( ObjectGuid::TypeId::Object ), m_guidDetail ( ObjectGuid::Detail::None )
 		{
 		}
 
-		ObjectGuid& GetGuid () { return m_guid; }
-
 		Button* ToButton() { return reinterpret_cast <Button*> (this); }
+		ClientWindow* ToClientWindow() { return reinterpret_cast<ClientWindow*>(this); }
 
 	protected:
-		ObjectGuid m_guid;
+		ObjectGuid::TypeId m_guidTypeId;
+		ObjectGuid::Detail m_guidDetail;
 	};
 }

@@ -1,10 +1,12 @@
 #pragma once
 #include <unordered_map>
+#include "Entities/Elements/Windows/ClientWindow.h"
 
 namespace OpenUI
 {
 	class Element;
 	class Button;
+	class ClientWindow;
 
 	typedef std::unordered_map <uint64_t, Element*> ElementMap;
 
@@ -24,15 +26,20 @@ namespace OpenUI
 		void Add ( uint64_t id, Element* element );
 		bool Exists ( uint64_t id ) const;
 
+		ClientWindow* CreateClientWindow ( uint64_t id, const std::string& name, const RenderWindowSettings& settings = RenderWindowSettings() );
 		Button* CreateButton ( uint64_t id, const std::string& name );
+
 		Element* GetElementByName ( const std::string& name );
 
-		std::vector <Element*>& GetElements ();
+		const std::vector <Element*>& GetElements () const;
+		const std::set <ClientWindow*>& GetClientWindows() const;
 
 	private:
 		ElementMap m_mappedObjects;
+
+		std::set <ClientWindow*> m_clientWindows;
 		std::vector <Element*> m_elements;
 	};
 }
 
-#define sElementMgr ElementMgr::instance()
+#define sElementMgr OpenUI::ElementMgr::instance()
