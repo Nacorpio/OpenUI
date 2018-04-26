@@ -28,7 +28,7 @@ namespace OpenUI
 		std::cout << "Button updated" << std::endl;
 	}
 
-	void Button::Draw ()
+	void Button::Draw ( const GraphicsContext& gContext )
 	{
 		std::cout << "Button drawn" << std::endl;
 	}

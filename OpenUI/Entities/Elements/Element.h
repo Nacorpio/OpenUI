@@ -3,28 +3,41 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <Entities/Objects/Object.h>
+#include <Math/Vector2.h>
 #include <SFML/Graphics/Drawable.hpp>
-#include "Entities/Objects/Object.h"
-#include "Math/Vector2.h"
 
 namespace OpenUI
 {
 	class ClientWindow;
+	class GraphicsContext;
 
 	class Element : public Object
 	{
 	public:
-		explicit Element (const std::string& name)
-			: m_name ( name )
+		enum class ElementFlags : uint32_t
 		{
-			m_guidTypeId = ObjectGuid::TypeId::Element;
-		}
+			CaptureMouse,
+			CaptureKeyboard,
+			AllowChildOverlapping,
+			AllowScissorTest,
 
+			Interactable = CaptureMouse | CaptureKeyboard
+		};
+
+		explicit Element ( const std::string& name );
 		~Element() = default;
 
 		const std::string& GetName () const { return m_name; }
+
+		ClientWindow* GetClientWindow() const { return m_clientWindow; }
 		Element* GetParent () const { return m_parent; }
 		uint16_t GetDrawOrder () const { return m_drawOrder; }
+
+		IntVector GetPosition() const { return m_position; }
+		IntVector GetSize() const { return m_size; }
+
+		std::vector<Element*> GetChildren() const { return m_children; }
 
 		void SetParent(Element* element);
 
@@ -42,16 +55,12 @@ namespace OpenUI
 		virtual void Update () = 0;
 
 		/* Draws the element. */
-		virtual void Draw ()
-		{
-			for (auto it = m_drawables.begin (); it != m_drawables.end(); ++it)
-			{
-				// it._Ptr->_Myval->draw ()
-			}
-		}
+		virtual void Draw ( const GraphicsContext& gContext );
 
 		virtual void OnChildAdded ( Element& child ) { child.Initialize(); }
 		virtual void OnChildRemoved ( Element& child ) {}
+
+		virtual void OnParentChanged( Element& newParent) {}
 
 		bool operator == ( const Element& rhs ) const;
 		bool operator != ( const Element& rhs ) const;

@@ -10,6 +10,6 @@ namespace OpenUI
 
 		void Initialize () override;
 		void Update () override;
-		void Draw () override;
+		void Draw ( const GraphicsContext& gContext ) override;
 	};
 }

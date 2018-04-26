@@ -3,6 +3,8 @@
 
 namespace OpenUI
 {
+	class GraphicsContext;
+
 	class Button : public Control
 	{
 	public:
@@ -12,6 +14,6 @@ namespace OpenUI
 		void Start () override;
 		void Initialize () override;
 		void Update () override;
-		void Draw () override;
+		void Draw ( const GraphicsContext& gContext ) override;
 	};
 }

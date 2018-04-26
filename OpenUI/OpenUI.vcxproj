@@ -175,6 +175,7 @@
     <ClInclude Include="Entities\Objects\ObjectGuid.h" />
     <ClInclude Include="Entities\Objects\Object.h" />
     <ClInclude Include="Common\Enums.h" />
+    <ClInclude Include="Graphic\GraphicsContext.h" />
     <ClInclude Include="Graphic\GraphicProperties.h" />
     <ClInclude Include="Managers\GraphicMgr.h" />
     <ClInclude Include="Managers\ElementMgr.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="Entities\Objects\ObjectGuid.cpp" />
     <ClCompile Include="Entities\Objects\Object.cpp" />
     <ClCompile Include="Common\Enums.cpp" />
+    <ClCompile Include="Graphic\GraphicsContext.cpp" />
     <ClCompile Include="Graphic\GraphicProperties.cpp" />
     <ClCompile Include="Managers\GraphicMgr.cpp" />
     <ClCompile Include="Managers\ElementMgr.cpp" />

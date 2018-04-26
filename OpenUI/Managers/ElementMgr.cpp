@@ -48,6 +48,11 @@ namespace OpenUI
 		const std::string& name,
 		const RenderWindowSettings& settings )
 	{
+		if ( Exists ( id ) )
+		{
+			return nullptr;
+		}
+
 		if ( auto* clientWindow = new ClientWindow ( name, settings ) )
 		{
 			Add ( id, clientWindow );
@@ -61,6 +66,11 @@ namespace OpenUI
 
 	Button* ElementMgr::CreateButton ( const uint64_t id, const std::string& name )
 	{
+		if ( Exists ( id ) )
+		{
+			return nullptr;
+		}
+
 		if ( auto* button = new Button ( name ) )
 		{
 			Add ( id, button );
@@ -90,7 +100,7 @@ namespace OpenUI
 		return m_elements;
 	}
 
-	const std::set<ClientWindow*>& ElementMgr::GetClientWindows () const
+	const std::set <ClientWindow*>& ElementMgr::GetClientWindows () const
 	{
 		return m_clientWindows;
 	}
