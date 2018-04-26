@@ -72,7 +72,7 @@
     <ClInclude Include="Common\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MouseStateManager.h">
+    <ClInclude Include="Managers\MouseStateManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -131,7 +131,7 @@
     <ClCompile Include="Common\Enums.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MouseStateManager.cpp">
+    <ClCompile Include="Managers\MouseStateManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

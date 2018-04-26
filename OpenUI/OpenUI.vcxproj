@@ -184,7 +184,7 @@
     <ClInclude Include="Math\Point.h" />
     <ClInclude Include="Math\Size.h" />
     <ClInclude Include="Math\Vector2.h" />
-    <ClInclude Include="MouseStateManager.h" />
+    <ClInclude Include="Managers\MouseStateManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -204,7 +204,7 @@
     <ClCompile Include="Math\Point.cpp" />
     <ClCompile Include="Math\Size.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
-    <ClCompile Include="MouseStateManager.cpp" />
+    <ClCompile Include="Managers\MouseStateManager.cpp" />
     <ClCompile Include="OpenUI.cpp" />
     <ClCompile Include="Managers\ResourceMgr.cpp" />
     <ClCompile Include="stdafx.cpp">
