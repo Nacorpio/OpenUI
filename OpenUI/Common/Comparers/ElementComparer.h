@@ -1,9 +1,11 @@
 ﻿#pragma once
 
-class Element;
-
-struct ElementComparer
+namespace OpenUI
 {
-	bool operator () ( const Element* lhs, const Element* rhs ) const;
-};
+	class Element;
 
+	struct ElementComparer
+	{
+		bool operator () ( const Element* lhs, const Element* rhs ) const;
+	};
+}

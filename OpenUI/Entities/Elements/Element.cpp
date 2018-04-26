@@ -3,68 +3,79 @@
 #include <algorithm>
 #include "../../Common/Comparers/ElementComparer.h"
 #include "../../Managers/ElementMgr.h"
+#include "../../Entities/Elements/ClientWindow.h"
 #include <iostream>
 
-void Element::SetParent ( Element* element )
+namespace OpenUI
 {
-	if ( element->GetParent () )
+	void Element::SetParent ( Element* element )
 	{
-		element->GetParent ()->RemoveChild ( element );
+		if ( element->GetParent () )
+		{
+			element->GetParent ()->RemoveChild ( element );
+		}
+
+		m_parent = element;
 	}
 
-	m_parent = element;
-}
-
-void Element::AddChild ( Element* element )
-{
-	if (HasChild ( element ))
+	void Element::AddChild ( Element* element )
 	{
-		std::cout << "Element " << std::endl;
-		return;
+		if ( HasChild ( element ) )
+		{
+			std::cout << "Element " << std::endl;
+			return;
+		}
+
+		element->SetParent ( this );
+		element->SetDrawOrder ( m_children.size () );
+
+		if ( !m_clientWindow )
+		{
+			element->m_clientWindow = dynamic_cast <ClientWindow*> (this);
+		}
+
+		m_children.emplace_back ( element );
+		OnChildAdded ( *element );
 	}
 
-	element->SetParent ( this );
-	element->SetDrawOrder ( m_children.size () );
-
-	m_children.emplace_back ( element );
-	OnChildAdded ( *element );
-}
-
-void Element::RemoveChild ( Element* element )
-{
-	if ( !HasChild ( element ) )
+	void Element::RemoveChild ( Element* element )
 	{
-		return;
+		if ( !HasChild ( element ) )
+		{
+			return;
+		}
+
+		const auto it = std::find ( m_children.begin (), m_children.end (), element );
+		m_children.erase ( it );
+
+		m_parent = nullptr;
+
+		OnChildRemoved ( *element );
 	}
 
-	const auto it = std::find ( m_children.begin (), m_children.end (), element );
-	m_children.erase ( it );
+	bool Element::HasChild ( const Element* element )
+	{
+		return std::find ( m_children.begin (), m_children.end (), element ) != m_children.end ();
+	}
 
-	OnChildRemoved ( *element );
-}
+	bool Element::operator== ( const Element& rhs ) const
+	{
+		return m_name == rhs.m_name;
+	}
 
-bool Element::HasChild ( const Element* element )
-{
-	return std::find ( m_children.begin (), m_children.end (), element ) != m_children.end ();
-}
+	bool Element::operator!= ( const Element& rhs ) const
+	{
+		return !( *this == rhs );
+	}
 
-bool Element::operator== ( const Element& rhs ) const
-{
-	return m_name == rhs.m_name;
-}
+	void Element::SetDrawOrder ( const uint16_t value )
+	{
+		m_drawOrder = value;
+		std::sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparer () );
+	}
 
-bool Element::operator!= ( const Element& rhs ) const
-{
-	return !( *this == rhs );
-}
-
-void Element::SetDrawOrder ( const uint16_t value )
-{
-	m_drawOrder = value;
-	std::sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparer () );
-}
-
-void Element::Sort () const
-{
-	std::sort(m_parent->m_children.begin(), m_parent->m_children.end(), ElementComparer());
+	void Element::Sort () const
+	{
+		std::sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparer () );
+	}
 }

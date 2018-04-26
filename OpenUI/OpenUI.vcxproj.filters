@@ -45,21 +45,6 @@
     <ClInclude Include="Managers\ResourceMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Structures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventArgs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enums.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Math\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -69,7 +54,22 @@
     <ClInclude Include="Graphic\GraphicProperties.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="common.h">
+    <ClInclude Include="Common\Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Elements\Windows\ClientWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Size.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Enums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -104,28 +104,28 @@
     <ClCompile Include="Managers\ResourceMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Structures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EventArgs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enums.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Math\Vector2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Constants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Common\Comparers\ElementComparer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graphic\GraphicProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Elements\Windows\ClientWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Size.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Enums.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

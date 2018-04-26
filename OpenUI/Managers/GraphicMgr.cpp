@@ -3,10 +3,13 @@
 #include "ElementMgr.h"
 #include "../Entities/Elements/Element.h"
 
-void GraphicMgr::Draw ()
+namespace OpenUI
 {
-	for ( Element* element : sElementMgr->GetElements () )
+	void GraphicMgr::Draw ()
 	{
-		element->Draw ();
+		for ( Element* element : sElementMgr->GetElements () )
+		{
+			element->Draw ();
+		}
 	}
 }
