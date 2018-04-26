@@ -2,53 +2,76 @@
 
 #include <string>
 #include <vector>
+#include <set>
+#include <SFML/Graphics/Drawable.hpp>
+#include "Entities/Objects/Object.h"
+#include "Math/Vector2.h"
 
-#include "../Objects/Object.h"
-#include "../../Math/Vector2.h"
-
-class Element : public Object
+namespace OpenUI
 {
-protected:
-	~Element () = default;
+	class ClientWindow;
 
-public:
-	explicit Element (const std::string& name)
-		: m_name ( name )
+	class Element : public Object
 	{
-	}
+	public:
+		explicit Element (const std::string& name)
+			: m_name ( name )
+		{
+		}
 
-	const std::string& GetName () const { return m_name; }
-	Element* GetParent () const { return m_parent; }
-	uint16_t GetDrawOrder () const { return m_drawOrder; }
+		~Element() = default;
 
-	void SetParent(Element* element);
+		const std::string& GetName () const { return m_name; }
+		Element* GetParent () const { return m_parent; }
+		uint16_t GetDrawOrder () const { return m_drawOrder; }
 
-	void AddChild ( Element* element );
-	void RemoveChild ( Element* element );
-	bool HasChild ( const Element* element );
+		void SetParent(Element* element);
 
-	virtual void Initialize () = 0;
-	virtual void Update () = 0;
+		void AddChild ( Element* element );
+		void RemoveChild ( Element* element );
+		bool HasChild ( const Element* element );
 
-	virtual void Draw () {}
+		/* Parent is not guarenteed to be set. */
+		virtual void Start() = 0;
 
-	virtual void OnChildAdded ( const Element& child ) {}
-	virtual void OnChildRemoved ( const Element& child ) {}
+		/* Parent is guaranteed to be set. */
+		virtual void Initialize () = 0;
 
-	bool operator == ( const Element& rhs ) const;
-	bool operator != ( const Element& rhs ) const;
+		/* Updates the state of the element. */
+		virtual void Update () = 0;
 
-protected:
-	void SetDrawOrder ( uint16_t value );
+		/* Draws the element. */
+		virtual void Draw ()
+		{
+			for (auto it = m_drawables.begin (); it != m_drawables.end(); ++it)
+			{
+				// it._Ptr->_Myval->draw ()
+			}
+		}
 
-private:
-	void Sort() const;
+		virtual void OnChildAdded ( Element& child ) { child.Initialize(); }
+		virtual void OnChildRemoved ( Element& child ) {}
 
-	const std::string m_name = "Element";
+		bool operator == ( const Element& rhs ) const;
+		bool operator != ( const Element& rhs ) const;
 
-	uint16_t m_drawOrder = 0;
-	std::vector <Element*> m_children { };
+	protected:
+		void SetDrawOrder ( uint16_t value );
 
-	IntVector m_position { };
-	Element* m_parent = nullptr;
-};
+	private:
+		void Sort() const;
+
+		const std::string m_name = "Element";
+		
+		uint16_t m_drawOrder = 0;
+
+		std::set <sf::Drawable*> m_drawables { };
+		std::vector <Element*> m_children { };
+
+		IntVector m_position { };
+		IntVector m_size { };
+
+		Element* m_parent = nullptr;
+		ClientWindow* m_clientWindow = nullptr;
+	};
+}

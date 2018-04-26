@@ -1,19 +1,22 @@
 #include "stdafx.h"
 #include "Control.h"
 
-Control::Control ( const std::string& name )
-	: Element ( name )
+namespace OpenUI
 {
-}
+	Control::Control ( const std::string& name )
+		: Element ( name )
+	{
+	}
 
-void Control::Initialize ()
-{
-}
+	void Control::Initialize ()
+	{
+	}
 
-void Control::Update ()
-{
-}
+	void Control::Update ()
+	{
+	}
 
-void Control::Draw ()
-{
+	void Control::Draw ()
+	{
+	}
 }

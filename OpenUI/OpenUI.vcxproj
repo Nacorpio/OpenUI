@@ -72,15 +72,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -90,7 +94,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Development\Libraries\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Development\OpenUI\OpenUI;C:\Development\Libraries\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -107,7 +112,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Development\Libraries\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Development\OpenUI\OpenUI;C:\Development\Libraries\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,7 +132,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Development\Libraries\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Development\OpenUI\OpenUI;C:\Development\Libraries\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,7 +154,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Development\Libraries\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Development\OpenUI\OpenUI;C:\Development\Libraries\SFML-2.4.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,40 +167,41 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ClientWindow.h" />
-    <ClInclude Include="common.h" />
+    <ClInclude Include="Common\common.h" />
+    <ClInclude Include="Entities\Elements\Windows\ClientWindow.h" />
     <ClInclude Include="Common\Comparers\ElementComparer.h" />
-    <ClInclude Include="Constants.h" />
+    <ClInclude Include="Common\Constants.h" />
     <ClInclude Include="Entities\Controls\Button.h" />
     <ClInclude Include="Entities\Objects\ObjectGuid.h" />
     <ClInclude Include="Entities\Objects\Object.h" />
-    <ClInclude Include="Enums.h" />
-    <ClInclude Include="EventArgs.h" />
+    <ClInclude Include="Common\Enums.h" />
     <ClInclude Include="Graphic\GraphicProperties.h" />
     <ClInclude Include="Managers\GraphicMgr.h" />
     <ClInclude Include="Managers\ElementMgr.h" />
     <ClInclude Include="Entities\Controls\Control.h" />
     <ClInclude Include="Entities\Elements\Element.h" />
     <ClInclude Include="Managers\ResourceMgr.h" />
+    <ClInclude Include="Math\Point.h" />
+    <ClInclude Include="Math\Size.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Structures.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ClientWindow.cpp" />
+    <ClCompile Include="Entities\Elements\Windows\ClientWindow.cpp" />
     <ClCompile Include="Common\Comparers\ElementComparer.cpp" />
-    <ClCompile Include="Constants.cpp" />
+    <ClCompile Include="Common\Constants.cpp" />
     <ClCompile Include="Entities\Controls\Button.cpp" />
     <ClCompile Include="Entities\Objects\ObjectGuid.cpp" />
     <ClCompile Include="Entities\Objects\Object.cpp" />
-    <ClCompile Include="Enums.cpp" />
-    <ClCompile Include="EventArgs.cpp" />
+    <ClCompile Include="Common\Enums.cpp" />
     <ClCompile Include="Graphic\GraphicProperties.cpp" />
     <ClCompile Include="Managers\GraphicMgr.cpp" />
     <ClCompile Include="Managers\ElementMgr.cpp" />
     <ClCompile Include="Entities\Controls\Control.cpp" />
     <ClCompile Include="Entities\Elements\Element.cpp" />
+    <ClCompile Include="Math\Point.cpp" />
+    <ClCompile Include="Math\Size.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="OpenUI.cpp" />
     <ClCompile Include="Managers\ResourceMgr.cpp" />
@@ -202,7 +211,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Structures.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

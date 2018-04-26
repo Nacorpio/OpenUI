@@ -2,22 +2,25 @@
 
 #include "ObjectGuid.h"
 
-class Button;
-
-class Object
+namespace OpenUI
 {
-public:
-	virtual ~Object () = default;
+	class Button;
 
-	Object ()
-		: m_guid ( ObjectGuid::TypeId::Object, ObjectGuid::Detail::None )
+	class Object
 	{
-	}
+	public:
+		virtual ~Object () = default;
 
-	ObjectGuid& GetGuid () { return m_guid; }
+		Object ()
+			: m_guid ( ObjectGuid::TypeId::Object, ObjectGuid::Detail::None )
+		{
+		}
 
-	Button* ToButton() { return reinterpret_cast <Button*> (this); }
+		ObjectGuid& GetGuid () { return m_guid; }
 
-protected:
-	ObjectGuid m_guid;
-};
+		Button* ToButton() { return reinterpret_cast <Button*> (this); }
+
+	protected:
+		ObjectGuid m_guid;
+	};
+}

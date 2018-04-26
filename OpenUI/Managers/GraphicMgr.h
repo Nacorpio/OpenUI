@@ -1,15 +1,18 @@
 #pragma once
 
-class GraphicMgr
+namespace OpenUI
 {
-public:
-	static GraphicMgr* instance()
+	class GraphicMgr
 	{
-		GraphicMgr instance;
-		return &instance;
-	}
+	public:
+		static GraphicMgr* instance()
+		{
+			GraphicMgr instance;
+			return &instance;
+		}
 
-	static void Draw ();
-};
+		static void Draw ();
+	};
+}
 
 #define sGraphicMgr GraphicMgr::instance()

@@ -1,13 +1,17 @@
 #pragma once
 #include "Control.h"
 
-class Button : public Control
+namespace OpenUI
 {
-public:
-	explicit Button ( const std::string& name );
-	~Button ();
+	class Button : public Control
+	{
+	public:
+		explicit Button ( const std::string& name );
+		~Button ();
 
-	void Initialize () override;
-	void Update () override;
-	void Draw () override;
-};
+		void Start () override;
+		void Initialize () override;
+		void Update () override;
+		void Draw () override;
+	};
+}
