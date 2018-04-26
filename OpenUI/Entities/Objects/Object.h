@@ -51,8 +51,8 @@ namespace OpenUI
 
 		uint32_t GetFlags() const { return m_flags; }
 
-		Button* ToButton () { return reinterpret_cast <Button*> (this); }
-		ClientWindow* ToClientWindow () { return reinterpret_cast <ClientWindow*> (this); }
+		Button* ToButton ();
+		ClientWindow* ToClientWindow ();
 
 	protected:
 		uint32_t m_flags = 0;
