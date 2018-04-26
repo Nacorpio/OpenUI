@@ -7,7 +7,7 @@
 
 namespace OpenUI
 {
-	struct RenderWindowSettings
+	struct RenderWindowSettings final
 	{
 		sf::VideoMode VideoMode = sf::VideoMode ( GLOBAL_RENDER_WINDOW_SIZE.X, GLOBAL_RENDER_WINDOW_SIZE.Y );
 		sf::String Title = GLOBAL_WINDOW_TITLE;
@@ -17,7 +17,9 @@ namespace OpenUI
 		RenderWindowSettings () = default;
 
 		RenderWindowSettings (
-			sf::VideoMode& p_videoMode, const sf::Uint32 p_style, sf::ContextSettings& p_contextSettings )
+			sf::VideoMode& p_videoMode,
+			const sf::Uint32 p_style,
+			sf::ContextSettings& p_contextSettings )
 			: VideoMode ( p_videoMode )
 			, Style ( p_style )
 			, ContextSettings ( p_contextSettings )
@@ -28,17 +30,8 @@ namespace OpenUI
 	class ClientWindow : public Element
 	{
 	public:
-		explicit ClientWindow ( const std::string& name, const RenderWindowSettings& windowSettings )
-			: Element ( name )
-			, m_renderWindowSettings ( windowSettings )
-		{
-		}
-
-		~ClientWindow ()
-		{
-			delete m_renderWindow;
-			m_renderWindow = nullptr;
-		}
+		explicit ClientWindow ( const std::string& name, const RenderWindowSettings& windowSettings );
+		~ClientWindow ();
 
 		void Start () override;
 		void Initialize () override;
@@ -47,6 +40,5 @@ namespace OpenUI
 
 	private:
 		sf::RenderWindow* m_renderWindow { };
-		RenderWindowSettings m_renderWindowSettings;
 	};
 }

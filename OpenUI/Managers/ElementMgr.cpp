@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "ElementMgr.h"
 #include <iostream>
+#include "ElementMgr.h"
 #include "Entities/Elements/Element.h"
 #include "Entities/Controls/Button.h"
 
@@ -28,11 +28,11 @@ namespace OpenUI
 
 		if ( Exists ( id ) )
 		{
-			std::cout << "Element '" << element->GetName () << "' already exists." << std::endl;
+			std::cout << "Element with identifier '" << id << "' already exists." << std::endl;
 			return;
 		}
 
-		element->Start();
+		element->Start ();
 
 		m_elements.emplace_back ( element );
 		m_mappedObjects.insert_or_assign ( id, element );
@@ -41,6 +41,22 @@ namespace OpenUI
 	bool ElementMgr::Exists ( const uint64_t id ) const
 	{
 		return m_mappedObjects.count ( id ) > 0;
+	}
+
+	ClientWindow* ElementMgr::CreateClientWindow (
+		const uint64_t id,
+		const std::string& name,
+		const RenderWindowSettings& settings )
+	{
+		if ( auto* clientWindow = new ClientWindow ( name, settings ) )
+		{
+			Add ( id, clientWindow );
+			m_clientWindows.insert ( clientWindow );
+
+			return clientWindow;
+		}
+
+		return nullptr;
 	}
 
 	Button* ElementMgr::CreateButton ( const uint64_t id, const std::string& name )
@@ -69,8 +85,13 @@ namespace OpenUI
 		return nullptr;
 	}
 
-	std::vector <Element*>& ElementMgr::GetElements ()
+	const std::vector <Element*>& ElementMgr::GetElements () const
 	{
 		return m_elements;
+	}
+
+	const std::set<ClientWindow*>& ElementMgr::GetClientWindows () const
+	{
+		return m_clientWindows;
 	}
 }

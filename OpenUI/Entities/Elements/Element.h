@@ -17,6 +17,7 @@ namespace OpenUI
 		explicit Element (const std::string& name)
 			: m_name ( name )
 		{
+			m_guidTypeId = ObjectGuid::TypeId::Element;
 		}
 
 		~Element() = default;

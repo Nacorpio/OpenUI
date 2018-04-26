@@ -1,9 +1,9 @@
 ﻿#include "stdafx.h"
 #include "Element.h"
 #include <algorithm>
-#include "../../Common/Comparers/ElementComparer.h"
-#include "../../Managers/ElementMgr.h"
-#include "../../Entities/Elements/ClientWindow.h"
+#include "Common/Comparers/ElementComparer.h"
+#include "Managers/ElementMgr.h"
+#include "Entities/Elements/Windows/ClientWindow.h"
 #include <iostream>
 
 namespace OpenUI
