@@ -36,9 +36,6 @@
     <ClInclude Include="Managers\ElementMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Managers\GraphicMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entities\Controls\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,7 +69,13 @@
     <ClInclude Include="Common\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Managers\MouseStateManager.h">
+    <ClInclude Include="Graphic\GraphicsContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\StateManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -96,9 +99,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Managers\ElementMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\GraphicMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Entities\Controls\Button.cpp">
@@ -131,7 +131,13 @@
     <ClCompile Include="Common\Enums.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Managers\MouseStateManager.cpp">
+    <ClCompile Include="Graphic\GraphicsContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\StateManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

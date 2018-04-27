@@ -21,14 +21,26 @@ OpenUI::ClientWindow::~ClientWindow ()
 
 void OpenUI::ClientWindow::Start ()
 {
+	for (Element* element : m_children)
+	{
+		element->Start();
+	}
 }
 
 void OpenUI::ClientWindow::Initialize ()
 {
+	for (Element* element : m_children)
+	{
+		element->Initialize();
+	}
 }
 
 void OpenUI::ClientWindow::Update ()
 {
+	for (Element* element : m_children)
+	{
+		element->Update();
+	}
 }
 
 void OpenUI::ClientWindow::Draw ( const GraphicsContext& gContext )

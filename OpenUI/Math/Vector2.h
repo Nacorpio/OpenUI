@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <type_traits>
+#include <SFML/System/Vector2.hpp>
 
 template < class _Ty, typename = std::enable_if_t <std::is_integral_v <_Ty>, _Ty> >
 struct Vector2
@@ -17,6 +18,11 @@ struct Vector2
 	{
 	}
 
+	explicit Vector2(const sf::Vector2f & p_sfVector)
+		: X(p_sfVector.x)
+		, Y(p_sfVector.y)
+	{
+	}
 	bool operator == ( const Vector2& rhs )
 	{
 		return X == rhs.X && Y == rhs.Y;
@@ -113,6 +119,12 @@ struct Vector2
 	Vector2 <_Ty> operator / ( const Vector2 <_Ty> & rhs )
 	{
 		return Vector2 <_Ty> ( X / rhs.X, Y / rhs.Y );
+	}
+
+	// SFML vector2f converters
+	Vector2 <_Ty> operator + (const sf::Vector2f & rhs)
+	{
+		return Vector2 <_Ty>(X + rhs.x, Y + rhs.y);
 	}
 
 };

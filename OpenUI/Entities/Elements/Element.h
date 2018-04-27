@@ -38,7 +38,8 @@ namespace OpenUI
 		Element* GetParent () const { return m_parent; }
 		uint16_t GetDrawOrder () const { return m_drawOrder; }
 
-		IntVector & GetSize() { return m_size; }
+		IntVector& GetSize ();
+
 		IntVector & GetPosition() { return m_position; }
 
 		std::vector <sf::RectangleShape*>& GetShapes ();
@@ -48,8 +49,10 @@ namespace OpenUI
 		std::vector<Element*> GetChildren() const { return m_children; }
 
 		void SetParent(Element* element);
-		void SetSize( const IntVector p_value) { m_size = p_value; }
-		void SetPosition( const IntVector p_value) { m_position = p_value; }
+
+		void SetSize (IntVector & p_value );
+
+		void SetPosition (IntVector & p_value );
 
 		void AddShape ( sf::RectangleShape * p_rectangle );
 		void RemoveShape (const int & p_index );
@@ -61,18 +64,18 @@ namespace OpenUI
 		bool HasChild ( const Element* element );
 
 		/* Parent is not guarenteed to be set. */
-		virtual void Start() = 0;
+		virtual void Start ();
 
 		/* Parent is guaranteed to be set. */
-		virtual void Initialize () = 0;
+		virtual void Initialize();
 
 		/* Updates the state of the element. */
-		virtual void Update () = 0;
+		virtual void Update();
 
 		/* Draws the element. */
 		virtual void Draw ( const GraphicsContext& gContext );
 
-		virtual void OnChildAdded ( Element& child ) { child.Initialize(); }
+		virtual void OnChildAdded ( Element& child ) {}
 		virtual void OnChildRemoved ( Element& child ) {}
 		virtual void OnParentChanged( Element& newParent) {}
 
@@ -94,8 +97,8 @@ namespace OpenUI
 		std::vector<sf::Text*> m_texts;
 		std::set <sf::Drawable*> m_drawables { };
 
-		IntVector m_position { };
-		IntVector m_size { };
+		IntVector m_position {0,0 };
+		IntVector m_size {100,100 };
 
 		Element* m_parent = nullptr;
 		ClientWindow* m_clientWindow = nullptr;

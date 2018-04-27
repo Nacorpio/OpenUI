@@ -3,7 +3,6 @@
 #include "ElementMgr.h"
 #include "Entities/Elements/Element.h"
 #include "Entities/Controls/Button.h"
-#include "GraphicMgr.h"
 
 namespace OpenUI
 {
@@ -32,8 +31,8 @@ namespace OpenUI
 			std::cout << "Element with identifier '" << id << "' already exists." << std::endl;
 			return;
 		}
-
-		element->Start ();
+		//TODO: Fix this.
+		//element->Start ();
 
 		m_elements.emplace_back ( element );
 		m_mappedObjects.insert_or_assign ( id, element );
@@ -57,8 +56,8 @@ namespace OpenUI
 		if ( auto* clientWindow = new ClientWindow ( name, settings ) )
 		{
 			Add ( id, clientWindow );
+			clientWindow->GetRenderWindow().setFramerateLimit(144);
 			m_clientWindows.insert ( clientWindow );
-
 			return clientWindow;
 		}
 
@@ -96,7 +95,7 @@ namespace OpenUI
 		return nullptr;
 	}
 
-	const std::vector <Element*>& ElementMgr::GetElements () const
+	const std::vector<Element *> & ElementMgr::GetElements () const
 	{
 		return m_elements;
 	}

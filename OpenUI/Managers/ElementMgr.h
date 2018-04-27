@@ -37,7 +37,7 @@ namespace OpenUI
 	private:
 		ElementMap m_mappedObjects;
 
-		friend class GraphicMgr;
+		friend class Controller;
 
 		std::set <ClientWindow*> m_clientWindows;
 		std::vector <Element*> m_elements;

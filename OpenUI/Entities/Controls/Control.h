@@ -2,6 +2,7 @@
 
 #include "Common/Enums.h"
 #include <string>
+#include "Common/Constants.h"
 
 namespace OpenUI
 {
@@ -30,9 +31,18 @@ namespace OpenUI
 		{
 		}
 
+		virtual void OnMouseLeave()
+		{
+		}
+
 		virtual void OnMouseHover()
 		{
 		}
+
+		virtual void OnMouseMove()
+		{
+		}
+
 		virtual void OnMouseDown()
 		{
 		}
@@ -43,7 +53,6 @@ namespace OpenUI
 
 		virtual void OnMouseClick()
 		{
-
 		}
 
 	private:

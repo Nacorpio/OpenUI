@@ -168,6 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Common\common.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="Entities\Elements\Windows\ClientWindow.h" />
     <ClInclude Include="Common\Comparers\ElementComparer.h" />
     <ClInclude Include="Common\Constants.h" />
@@ -177,7 +178,6 @@
     <ClInclude Include="Common\Enums.h" />
     <ClInclude Include="Graphic\GraphicsContext.h" />
     <ClInclude Include="Graphic\GraphicProperties.h" />
-    <ClInclude Include="Managers\GraphicMgr.h" />
     <ClInclude Include="Managers\ElementMgr.h" />
     <ClInclude Include="Entities\Controls\Control.h" />
     <ClInclude Include="Entities\Elements\Element.h" />
@@ -185,11 +185,12 @@
     <ClInclude Include="Math\Point.h" />
     <ClInclude Include="Math\Size.h" />
     <ClInclude Include="Math\Vector2.h" />
-    <ClInclude Include="Managers\MouseStateManager.h" />
+    <ClInclude Include="Managers\StateManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Entities\Elements\Windows\ClientWindow.cpp" />
     <ClCompile Include="Common\Comparers\ElementComparer.cpp" />
     <ClCompile Include="Common\Constants.cpp" />
@@ -199,14 +200,13 @@
     <ClCompile Include="Common\Enums.cpp" />
     <ClCompile Include="Graphic\GraphicsContext.cpp" />
     <ClCompile Include="Graphic\GraphicProperties.cpp" />
-    <ClCompile Include="Managers\GraphicMgr.cpp" />
     <ClCompile Include="Managers\ElementMgr.cpp" />
     <ClCompile Include="Entities\Controls\Control.cpp" />
     <ClCompile Include="Entities\Elements\Element.cpp" />
     <ClCompile Include="Math\Point.cpp" />
     <ClCompile Include="Math\Size.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
-    <ClCompile Include="Managers\MouseStateManager.cpp" />
+    <ClCompile Include="Managers\StateManager.cpp" />
     <ClCompile Include="OpenUI.cpp" />
     <ClCompile Include="Managers\ResourceMgr.cpp" />
     <ClCompile Include="stdafx.cpp">

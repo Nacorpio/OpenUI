@@ -11,38 +11,25 @@ namespace OpenUI
 		explicit Button ( const std::string& name );
 		~Button ();
 
-		void Start () override;
-		void Initialize () override;
-		void Update () override;
-		void Draw ( const GraphicsContext& gContext ) override
-		{
-			Element::Draw(gContext);
-		}
+		virtual void Start () override;
 
+		virtual void Initialize () override;
 
-		void OnMouseEnter () override
-		{
-			Control::OnMouseEnter();
-		}
+		virtual void Update () override;
 
-		void OnMouseHover () override
-		{
-			Control::OnMouseHover();
-		}
+		virtual void Draw ( const GraphicsContext & gContext ) override;
 
-		void OnMouseDown () override
-		{
-			Control::OnMouseDown();
-		}
+		void OnMouseEnter () override;
+		void OnMouseLeave() override;
 
-		void OnMouseUp () override
-		{
-			Control::OnMouseUp();
-		}
+		void OnMouseMove() override;
 
-		void OnMouseClick () override
-		{
-			Control::OnMouseClick();
-		}
+		void OnMouseHover () override;
+
+		void OnMouseDown () override;
+
+		void OnMouseUp () override;
+
+		void OnMouseClick () override;
 	};
 }

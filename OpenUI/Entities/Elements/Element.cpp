@@ -20,6 +20,13 @@ namespace OpenUI
 		SetFlag ( uint32_t ( ElementFlags::CaptureKeyboard ), true );
 	}
 
+	IntVector& Element::GetSize ()
+	{
+		return m_size;
+	}
+
+
+
 	std::vector <sf::RectangleShape *>& Element::GetShapes ()
 	{
 		return m_shapes;
@@ -44,6 +51,28 @@ namespace OpenUI
 
 		m_parent = element;
 		OnParentChanged ( *m_parent );
+	}
+
+	void Element::SetSize(IntVector & p_value)
+	{
+		for (sf::RectangleShape * shape : m_shapes)
+		{
+			const auto shapeSize = IntVector(shape->getSize() ) + (p_value - m_size);
+			shape->setSize(sf::Vector2f(shapeSize.X,shapeSize.Y));
+		}
+
+		m_size = p_value;
+	}
+
+	void Element::SetPosition (IntVector & p_value )
+	{
+		for (sf::RectangleShape * shape : m_shapes)
+		{
+			const auto shapePos = IntVector(shape->getPosition()) + (p_value - m_position);
+			shape->setPosition(sf::Vector2f(shapePos.X, shapePos.Y));
+		}
+
+		m_position = p_value;
 	}
 
 	sf::RectangleShape* Element::GetShape (const int & p_index )
@@ -155,11 +184,40 @@ namespace OpenUI
 		return std::find ( m_children.begin (), m_children.end (), element ) != m_children.end ();
 	}
 
+	void Element::Start ()
+	{
+		for (auto element : m_children)
+		{
+			element->Start();
+		}
+	}
+
+	void Element::Initialize ()
+	{
+		for (auto element : m_children)
+		{
+			element->Initialize();
+		}
+	}
+
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
-		for (auto it = m_drawables.begin(); it != m_drawables.end();++it)
+		for (auto it = m_drawables.begin(); it != m_drawables.end(); ++it)
 		{
 			m_clientWindow->GetRenderWindow().draw(*it._Ptr->_Myval, sf::RenderStates::Default);
+		}
+
+		for (auto element : m_children)
+		{
+			element->Draw(gContext);
+		}
+	}
+
+	void Element::Update ()
+	{
+		for (auto element : m_children)
+		{
+			element->Update();
 		}
 	}
 
