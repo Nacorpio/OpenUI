@@ -5,7 +5,7 @@
 namespace OpenUI
 {
 	Button::Button ( const std::string& name )
-		: Control ( name )
+		: Element(name)
 	{
 		m_guidDetail = ObjectGuid::Detail::Button;
 	}
@@ -28,8 +28,5 @@ namespace OpenUI
 		std::cout << "Button updated" << std::endl;
 	}
 
-	void Button::Draw ( const GraphicsContext& gContext )
-	{
-		std::cout << "Button drawn" << std::endl;
-	}
+
 }

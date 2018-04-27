@@ -4,7 +4,8 @@
 #include "SFML/Window/Event.hpp"
 #include "Common/Constants.h"
 #include "Entities/Elements/Element.h"
-
+#include "Managers/MouseStateManager.h"
+#include "Graphic/GraphicsContext.h"
 
 namespace OpenUI
 {
@@ -41,6 +42,22 @@ namespace OpenUI
 
 		sf::RenderWindow& GetRenderWindow () const;
 
+		void RemoveMePlox()
+		{
+			MouseStateManager myMSM;
+			myMSM.CheckMouseIntersection(this);
+			while (m_renderWindow->isOpen())
+			{
+				m_renderWindow->clear(sf::Color(43, 43, 43));
+
+				for (Element * element : GetChildren())
+				{
+					element->Draw(GraphicsContext(*this));
+				}
+
+				m_renderWindow->display();
+			}
+		}
 	private:
 		friend class Element;
 

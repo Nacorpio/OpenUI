@@ -1,7 +1,8 @@
 #pragma once
 #include "Math/Vector2.h"
-#include "Entities/Elements/Windows/ClientWindow.h"
+//#include "Entities/Elements/Windows/ClientWindow.h"
 #include <iostream>
+#include "Entities/Elements/Element.h"
 
 namespace OpenUI
 {
@@ -14,15 +15,16 @@ namespace OpenUI
 		{
 		}
 
-		Element* CheckMouseIntersection (ClientWindow * p_clientWindow ) 
+		Element* CheckMouseIntersection (Element * p_clientWindow ) 
 		{
-			m_activeClientWindow = p_clientWindow;
-			sf::Event myEvent;
-			p_clientWindow->GetRenderWindow().pollEvent ( myEvent );
-			m_mouseLocation = IntVector(60, 61);
+			//m_activeClientWindow = p_clientWindow;
+			//sf::Event myEvent;
+			//p_clientWindow->GetRenderWindow().pollEvent ( myEvent );
+			m_mouseLocation = IntVector(110, 60);
 			//m_mouseLocation = IntVector(myEvent.mouseMove.x, myEvent.mouseMove.y);
-			MouseMoved(m_activeClientWindow->GetChildren());
-			switch (myEvent.type)
+
+			MouseMoved(p_clientWindow->GetChildren())->OnMouseEnter();
+			/*switch (myEvent.type)
 			{
 
 				case sf::Event::Closed :
@@ -52,7 +54,7 @@ namespace OpenUI
 				case sf::Event::MouseLeft :
 					break;
 				default : ;
-			}
+			}*/
 			return nullptr;
 		}
 

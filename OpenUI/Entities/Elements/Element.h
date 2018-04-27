@@ -6,13 +6,16 @@
 #include <Entities/Objects/Object.h>
 #include <Math/Vector2.h>
 #include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include "Entities/Controls/Control.h"
 
 namespace OpenUI
 {
 	class ClientWindow;
 	class GraphicsContext;
 
-	class Element : public Object
+	class Element : public Object , public Control
 	{
 	public:
 		enum class ElementFlags : uint32_t
@@ -38,11 +41,20 @@ namespace OpenUI
 		IntVector & GetSize() { return m_size; }
 		IntVector & GetPosition() { return m_position; }
 
+		std::vector <sf::RectangleShape*>& GetShapes ();
+		std::vector <sf::Text*>& GetTexts ();
+		sf::RectangleShape* GetShape(const int & p_index);
+
 		std::vector<Element*> GetChildren() const { return m_children; }
 
 		void SetParent(Element* element);
 		void SetSize( const IntVector p_value) { m_size = p_value; }
 		void SetPosition( const IntVector p_value) { m_position = p_value; }
+
+		void AddShape ( sf::RectangleShape * p_rectangle );
+		void RemoveShape (const int & p_index );
+		bool HasShape (const int & p_index);
+		bool HasShape(sf::RectangleShape * p_rectangle);
 
 		void AddChild ( Element* element );
 		void RemoveChild ( Element* element );
@@ -62,7 +74,6 @@ namespace OpenUI
 
 		virtual void OnChildAdded ( Element& child ) { child.Initialize(); }
 		virtual void OnChildRemoved ( Element& child ) {}
-
 		virtual void OnParentChanged( Element& newParent) {}
 
 		bool operator == ( const Element& rhs ) const;
@@ -78,6 +89,8 @@ namespace OpenUI
 		
 		uint16_t m_drawOrder = 0;
 
+		std::vector<sf::RectangleShape*> m_shapes;
+		std::vector<sf::Text*> m_texts;
 		std::set <sf::Drawable*> m_drawables { };
 		std::vector <Element*> m_children { };
 

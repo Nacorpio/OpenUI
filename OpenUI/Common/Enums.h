@@ -2,13 +2,13 @@
 
 namespace OpenUI
 {
-	enum GraphicType
+	enum class GraphicType
 	{
 		Sprite,
 		Text
 	};
 
-	enum DockStyle
+	enum class DockStyle
 	{
 		None,
 		Left,
@@ -16,6 +16,15 @@ namespace OpenUI
 		Top,
 		Bottom,
 		Filled
+	};
+
+	enum class MouseState
+	{
+		None,
+		Entered,
+		Hovered,
+		Pressed,
+		Clicked
 	};
 }
 

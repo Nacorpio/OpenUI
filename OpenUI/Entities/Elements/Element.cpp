@@ -6,16 +6,28 @@
 #include "Entities/Elements/Windows/ClientWindow.h"
 #include "Graphic/GraphicsContext.h"
 #include <iostream>
+#include <iso646.h>
 
 namespace OpenUI
 {
 	Element::Element ( const std::string& name )
-		: m_name ( name )
+		: Control(name)
+		, m_name ( name )
 	{
 		m_guidTypeId = ObjectGuid::TypeId::Element;
 
-		SetFlag ( (uint32_t) ElementFlags::CaptureMouse, true );
-		SetFlag ( (uint32_t) ElementFlags::CaptureKeyboard, true );
+		SetFlag ( uint32_t ( ElementFlags::CaptureMouse ), true );
+		SetFlag ( uint32_t ( ElementFlags::CaptureKeyboard ), true );
+	}
+
+	std::vector <sf::RectangleShape *>& Element::GetShapes ()
+	{
+		return m_shapes;
+	}
+
+	std::vector <sf::Text *>& Element::GetTexts ()
+	{
+		return m_texts;
 	}
 
 	void Element::SetParent ( Element* element )
@@ -25,13 +37,54 @@ namespace OpenUI
 			return;
 		}
 
-		if ( element->GetParent () )
+		if ( m_parent )
 		{
-			element->GetParent ()->RemoveChild ( element );
+			m_parent->RemoveChild ( element );
 		}
 
 		m_parent = element;
 		OnParentChanged ( *m_parent );
+	}
+
+	sf::RectangleShape* Element::GetShape (const int & p_index )
+	{
+		if (sf::RectangleShape * rect = m_shapes[p_index])
+		{
+			return rect;
+		}
+
+		return nullptr;
+	}
+
+	void Element::AddShape ( sf::RectangleShape * p_rectangle )
+	{
+		if (!p_rectangle or HasShape ( p_rectangle ))
+		{
+			return;
+		}
+
+		m_drawables.insert(p_rectangle);
+		m_shapes.emplace_back ( p_rectangle );
+	}
+
+	void Element::RemoveShape (const int & p_index )
+	{
+		if (!HasShape ( p_index ))
+		{
+			return;
+		}
+
+		m_shapes.erase ( m_shapes.begin() + p_index );
+	}
+
+	bool Element::HasShape (const int & p_index )
+	{
+		return m_shapes[p_index] != nullptr;
+	}
+
+	bool Element::HasShape(sf::RectangleShape * p_rectangle)
+	{
+		return find(m_shapes.begin(), m_shapes.end(), p_rectangle) != m_shapes.end();
 	}
 
 	void Element::AddChild ( Element* element )
@@ -56,7 +109,15 @@ namespace OpenUI
 		//	element->m_clientWindow = m_clientWindow;
 		//}
 
-		element->m_clientWindow = m_clientWindow ? m_clientWindow : this->ToClientWindow();
+		if (m_clientWindow)
+		{
+			element->m_clientWindow = m_clientWindow;
+		}
+		else
+		{
+			element->m_clientWindow = this->ToClientWindow();
+		}
+
 		element->m_clientWindow->m_descendants.insert(element);
 
 		m_children.emplace_back ( element );
@@ -96,9 +157,10 @@ namespace OpenUI
 
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
-		/*for ( auto it = m_drawables.begin () ; it != m_drawables.end () ; ++it )
+		for (auto it = m_drawables.begin(); it != m_drawables.end();++it)
 		{
-		}*/
+			m_clientWindow->GetRenderWindow().draw(*it._Ptr->_Myval, sf::RenderStates::Default);
+		}
 	}
 
 	bool Element::operator== ( const Element& rhs ) const

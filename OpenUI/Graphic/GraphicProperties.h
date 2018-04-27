@@ -128,7 +128,7 @@ namespace OpenUI
 
 			switch ( p_dockStyle )
 			{
-				case Left :
+				case DockStyle::Left :
 				{
 					childBoundsChanged.left = p_parentBounds.left;
 					childBoundsChanged.top = p_parentBounds.top;
@@ -136,7 +136,7 @@ namespace OpenUI
 					break;
 				}
 
-				case Right :
+				case DockStyle::Right :
 				{
 					childBoundsChanged.left = p_parentBounds.left + p_parentBounds.width - p_childBounds.width;
 					childBoundsChanged.top = p_parentBounds.top;
@@ -144,7 +144,7 @@ namespace OpenUI
 					break;
 				}
 
-				case Top :
+				case DockStyle::Top :
 				{
 					childBoundsChanged.left = p_parentBounds.left;
 					childBoundsChanged.top = p_parentBounds.top;
@@ -152,7 +152,7 @@ namespace OpenUI
 					break;
 				}
 
-				case Bottom :
+				case DockStyle::Bottom :
 				{
 					childBoundsChanged.left = p_parentBounds.left;
 					childBoundsChanged.top = p_parentBounds.top + p_parentBounds.height - p_childBounds.height;
@@ -160,13 +160,13 @@ namespace OpenUI
 					break;
 				}
 
-				case Filled :
+				case DockStyle::Filled :
 				{
 					childBoundsChanged = p_parentBounds;
 					break;
 				}
 
-				case None :
+				case DockStyle::None :
 					break;
 				default :
 					break;
