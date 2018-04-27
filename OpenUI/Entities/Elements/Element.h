@@ -81,6 +81,7 @@ namespace OpenUI
 
 	protected:
 		void SetDrawOrder ( uint16_t value );
+		std::vector <Element*> m_children{};
 
 	private:
 		void Sort() const;
@@ -92,7 +93,6 @@ namespace OpenUI
 		std::vector<sf::RectangleShape*> m_shapes;
 		std::vector<sf::Text*> m_texts;
 		std::set <sf::Drawable*> m_drawables { };
-		std::vector <Element*> m_children { };
 
 		IntVector m_position { };
 		IntVector m_size { };

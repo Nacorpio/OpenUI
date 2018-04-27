@@ -44,7 +44,7 @@ namespace OpenUI
 
 		void RemoveMePlox()
 		{
-			MouseStateManager myMSM;
+			/*MouseStateManager myMSM;
 			myMSM.CheckMouseIntersection(this);
 			while (m_renderWindow->isOpen())
 			{
@@ -56,7 +56,7 @@ namespace OpenUI
 				}
 
 				m_renderWindow->display();
-			}
+			}*/
 		}
 	private:
 		friend class Element;

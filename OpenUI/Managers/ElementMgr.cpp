@@ -3,6 +3,7 @@
 #include "ElementMgr.h"
 #include "Entities/Elements/Element.h"
 #include "Entities/Controls/Button.h"
+#include "GraphicMgr.h"
 
 namespace OpenUI
 {
