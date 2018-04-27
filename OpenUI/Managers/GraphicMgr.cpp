@@ -1,15 +1,14 @@
 #include "stdafx.h"
 #include "GraphicMgr.h"
-#include "ElementMgr.h"
-#include "Entities/Elements/Element.h"
+#include "Entities/Elements/Windows/ClientWindow.h"
 
 namespace OpenUI
 {
-	void GraphicMgr::Draw ( const GraphicsContext& gContext )
+	void GraphicMgr::Draw ()
 	{
-		for ( Element* element : sElementMgr->GetElements () )
+		for ( auto it = m_clientWindows->begin () ; it != m_clientWindows->end () ; ++it )
 		{
-			element->Draw ( gContext );
+			it._Ptr->_Myval->Draw ( *m_graphicsContext );
 		}
 	}
 }

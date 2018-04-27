@@ -7,11 +7,11 @@ namespace OpenUI
 	class GraphicsContext final
 	{
 	public:
-		explicit GraphicsContext ( const ClientWindow& clientWindow );
+		explicit GraphicsContext ();
 
-		const ClientWindow& GetClientWindow () const;
+		ClientWindow& GetClientWindow () const;
 
 	private:
-		const ClientWindow& m_clientWindow;
+		ClientWindow* m_clientWindow = nullptr;
 	};
 }

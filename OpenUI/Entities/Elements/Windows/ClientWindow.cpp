@@ -6,6 +6,8 @@ OpenUI::ClientWindow::ClientWindow ( const std::string& name, const RenderWindow
 	, m_renderWindow
 	(
 	 new sf::RenderWindow
+
+	 		   
 	 ( windowSettings.VideoMode, windowSettings.Title, windowSettings.Style, windowSettings.ContextSettings ) )
 {
 	m_guidDetail = ObjectGuid::Detail::ClientWindow;
@@ -31,9 +33,15 @@ void OpenUI::ClientWindow::Update ()
 
 void OpenUI::ClientWindow::Draw ( const GraphicsContext& gContext )
 {
+	m_renderWindow->clear ( sf::Color::Cyan );
+
+	for ( Element* element : m_children )
+	{
+		element->Draw ( gContext );
+	}
+
+	m_renderWindow->display ();
 }
-
-
 
 sf::RenderWindow& OpenUI::ClientWindow::GetRenderWindow () const
 {

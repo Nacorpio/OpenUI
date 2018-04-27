@@ -1,12 +1,11 @@
 ﻿#include "stdafx.h"
 #include "GraphicsContext.h"
 
-OpenUI::GraphicsContext::GraphicsContext ( const ClientWindow& clientWindow )
-	: m_clientWindow ( clientWindow )
+OpenUI::GraphicsContext::GraphicsContext ()
 {
 }
 
-const OpenUI::ClientWindow& OpenUI::GraphicsContext::GetClientWindow () const
+OpenUI::ClientWindow& OpenUI::GraphicsContext::GetClientWindow () const
 {
-	return m_clientWindow;
+	return *m_clientWindow;
 }
