@@ -2,7 +2,7 @@
 #include "Math/Vector2.h"
 //#include "Entities/Elements/Windows/ClientWindow.h"
 #include <iostream>
-#include "Entities/Elements/Element.h"
+#include "Entities/Elements/Windows/ClientWindow.h"
 
 namespace OpenUI
 {
@@ -15,7 +15,7 @@ namespace OpenUI
 		{
 		}
 
-		Element* CheckMouseIntersection (Element * p_clientWindow ) 
+		Element* CheckMouseIntersection (ClientWindow * p_clientWindow ) 
 		{
 			//m_activeClientWindow = p_clientWindow;
 			//sf::Event myEvent;
@@ -23,7 +23,7 @@ namespace OpenUI
 			m_mouseLocation = IntVector(110, 60);
 			//m_mouseLocation = IntVector(myEvent.mouseMove.x, myEvent.mouseMove.y);
 
-			MouseMoved(p_clientWindow->GetChildren())->OnMouseEnter();
+			GetHighestElement(p_clientWindow->GetChildren())->OnMouseEnter();
 			/*switch (myEvent.type)
 			{
 
@@ -47,7 +47,7 @@ namespace OpenUI
 					break;
 				case sf::Event::MouseButtonReleased :
 					break;
-				case sf::Event::MouseMoved :
+				case sf::Event::GetHighestElement :
 					break;
 				case sf::Event::MouseEntered :
 					break;
@@ -59,22 +59,31 @@ namespace OpenUI
 		}
 
 	private:
-		Element * MouseMoved (const std::vector<Element*> & p_elements)
+
+		IntVector & GetMousePosition()
+		{
+			return m_mouseLocation;
+		}
+
+		/// <summary>
+		///		Gets the element that is furthest in draw order and is also intersecting with the mouse.
+		/// </summary>
+		/// <param name="p_elements">The elements to retrive the highest element from</param>
+		/// <returns>The element that is furthest in draw order and is intersecting the mouse</returns>
+		Element * GetHighestElement (const std::vector<Element*> & p_elements) const
 		{
 			for (Element * element: p_elements)
 			{
 				IntVector & elementPos = element->GetPosition();
-				IntVector & elementSize = element->GetSize();
 
 				// Checks to see if the mouse location is within the bounds of the element.
-				if(elementPos <= m_mouseLocation && elementPos + elementSize >= m_mouseLocation)
+				if(elementPos <= m_mouseLocation && elementPos + element->GetSize() >= m_mouseLocation)
 				{
 					// Returns a nullptr if the element doesn't have any children.
-					Element *const elementChild = MouseMoved ( element->GetChildren() );
+					Element * const elementChild = GetHighestElement ( element->GetChildren() );
 
-					if (elementChild == nullptr && !m_interactedElement)
+					if (elementChild == nullptr )
 					{
-						m_interactedElement = element;
 						std::cout << "Interacted element found: " << element->GetName() << std::endl;
 						return element;
 					}
@@ -84,8 +93,8 @@ namespace OpenUI
 		}
 
 
-		IntVector m_mouseLocation = IntVector(0,0);
-		Element * m_interactedElement = nullptr;
+		IntVector m_mouseLocation;
+		Element * m_interactedElement;
 		ClientWindow * m_activeClientWindow = nullptr;
 	};
 }
