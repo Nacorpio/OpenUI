@@ -2,7 +2,6 @@
 #include "Element.h"
 #include <algorithm>
 #include "Common/Comparers/ElementComparer.h"
-#include "Managers/ElementMgr.h"
 #include "Entities/Elements/Windows/ClientWindow.h"
 #include "Graphic/GraphicsContext.h"
 #include <iostream>
@@ -19,13 +18,6 @@ namespace OpenUI
 		SetFlag ( uint32_t ( ElementFlags::CaptureMouse ), true );
 		SetFlag ( uint32_t ( ElementFlags::CaptureKeyboard ), true );
 	}
-
-	IntVector& Element::GetSize ()
-	{
-		return m_size;
-	}
-
-
 
 	std::vector <sf::RectangleShape *>& Element::GetShapes ()
 	{
@@ -53,26 +45,33 @@ namespace OpenUI
 		OnParentChanged ( *m_parent );
 	}
 
-	void Element::SetSize(IntVector & p_value)
+	void Element::SetBounds ( const IntRect & p_value )
 	{
+		m_bounds = p_value;
 		for (sf::RectangleShape * shape : m_shapes)
 		{
-			const auto shapeSize = IntVector(shape->getSize() ) + (p_value - m_size);
-			shape->setSize(sf::Vector2f(shapeSize.X,shapeSize.Y));
+			shape->setSize((p_value.Size - m_bounds.Size + shape->getSize()).sfVector2f);
+			shape->setPosition((p_value.Position - m_bounds.Position + shape->getPosition()).sfVector2f);
 		}
-
-		m_size = p_value;
 	}
 
-	void Element::SetPosition (IntVector & p_value )
+	void Element::SetSize(const IntVector & p_value)
 	{
+		m_bounds.Size = p_value;
 		for (sf::RectangleShape * shape : m_shapes)
 		{
-			const auto shapePos = IntVector(shape->getPosition()) + (p_value - m_position);
-			shape->setPosition(sf::Vector2f(shapePos.X, shapePos.Y));
+			auto x = (p_value - m_bounds.Size + shape->getSize()).sfVector2f;
+			shape->setSize((p_value - m_bounds.Size + shape->getSize()).sfVector2f);
 		}
+	}
 
-		m_position = p_value;
+	void Element::SetPosition (const IntVector & p_value )
+	{
+		m_bounds.Position = p_value;
+		for (sf::RectangleShape * shape : m_shapes)
+		{
+			shape->setPosition((p_value - m_bounds.Position + shape->getPosition()).sfVector2f);
+		}
 	}
 
 	sf::RectangleShape* Element::GetShape (const int & p_index )
@@ -124,8 +123,10 @@ namespace OpenUI
 			return;
 		}
 
-		element->SetParent ( this );
-		element->SetDrawOrder ( m_children.size () );
+		element->m_parent = this;
+		element->m_drawOrder = uint16_t ( m_children.size() );
+		element->m_height = uint16_t(m_height + m_children.size() +1);
+		element->m_level = ++m_level;
 
 		// If there is no client window, the current element must be the client window.
 		//if ( !m_clientWindow )
@@ -157,7 +158,7 @@ namespace OpenUI
 
 	void Element::RemoveChild ( Element* element )
 	{
-		const auto it = std::find ( m_children.begin (), m_children.end (), element );
+		const auto it = find ( m_children.begin (), m_children.end (), element );
 
 		if (it == m_children.end ())
 		{
@@ -181,7 +182,7 @@ namespace OpenUI
 			return false;
 		}
 
-		return std::find ( m_children.begin (), m_children.end (), element ) != m_children.end ();
+		return find ( m_children.begin (), m_children.end (), element ) != m_children.end ();
 	}
 
 	void Element::Start ()
@@ -198,6 +199,10 @@ namespace OpenUI
 		{
 			element->Initialize();
 		}
+	}
+
+	void Element::Input ( InputContext & p_inputContext )
+	{
 	}
 
 	void Element::Draw ( const GraphicsContext& gContext )
@@ -234,11 +239,13 @@ namespace OpenUI
 	void Element::SetDrawOrder ( const uint16_t value )
 	{
 		m_drawOrder = value;
-		std::sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparer () );
+		sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparerDrawOrder () );
 	}
 
-	void Element::Sort () const
+	void Element::SortDrawOrder () const
 	{
-		std::sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparer () );
+		sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparerDrawOrder () );
 	}
+
+
 }

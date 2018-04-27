@@ -5,10 +5,12 @@
 #include <set>
 #include <Entities/Objects/Object.h>
 #include <Math/Vector2.h>
+#include <Rectangle.h>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "Entities/Controls/Control.h"
+#include "InputContext.h"
 
 namespace OpenUI
 {
@@ -38,21 +40,34 @@ namespace OpenUI
 		Element* GetParent () const { return m_parent; }
 		uint16_t GetDrawOrder () const { return m_drawOrder; }
 
-		IntVector& GetSize ();
+		/// <summary>
+		/// 	The height of an element is the number of connections on the longest path between that element and the root element.
+		/// </summary>
+		/// <returns>The height of this element.</returns>
+		uint16_t GetHeight() const { return m_height; }
 
-		IntVector & GetPosition() { return m_position; }
+		/// <summary>
+		///		The level of an element is defined by 1 + (the number of connections between the element and the root element).
+		/// </summary>
+		/// <returns>The level of this element.</returns>
+		uint16_t GetLevel() const { return m_level; }
+
+		const IntRect & GetBounds() const { return m_bounds;	}
+		IntVector& GetSize() { return m_bounds.Size; }
+		IntVector & GetPosition() { return m_bounds.Position; }
 
 		std::vector <sf::RectangleShape*>& GetShapes ();
 		std::vector <sf::Text*>& GetTexts ();
 		sf::RectangleShape* GetShape(const int & p_index);
 
-		std::vector<Element*> GetChildren() const { return m_children; }
+		std::vector<Element*> & GetChildren()  { return m_children; }
 
 		void SetParent(Element* element);
 
-		void SetSize (IntVector & p_value );
+		void SetBounds ( const IntRect & p_value );
 
-		void SetPosition (IntVector & p_value );
+		void SetSize (const IntVector & p_value );
+		void SetPosition (const IntVector & p_value );
 
 		void AddShape ( sf::RectangleShape * p_rectangle );
 		void RemoveShape (const int & p_index );
@@ -69,6 +84,8 @@ namespace OpenUI
 		/* Parent is guaranteed to be set. */
 		virtual void Initialize();
 
+		virtual void Input(InputContext & p_inputContext);
+
 		/* Updates the state of the element. */
 		virtual void Update();
 
@@ -84,22 +101,24 @@ namespace OpenUI
 
 	protected:
 		void SetDrawOrder ( uint16_t value );
+
 		std::vector <Element*> m_children{};
 
 	private:
-		void Sort() const;
+		void SortDrawOrder() const;
 
 		const std::string m_name = "Element";
 		
 		uint16_t m_drawOrder = 0;
+		uint16_t m_height = 0;
+		uint16_t m_level = 0;
 
 		std::vector<sf::RectangleShape*> m_shapes;
 		std::vector<sf::Text*> m_texts;
 		std::set <sf::Drawable*> m_drawables { };
 
-		IntVector m_position {0,0 };
-		IntVector m_size {100,100 };
-
+		IntRect m_bounds;
+		
 		Element* m_parent = nullptr;
 		ClientWindow* m_clientWindow = nullptr;
 	};

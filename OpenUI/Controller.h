@@ -2,6 +2,7 @@
 #include "Entities/Elements/Windows/ClientWindow.h"
 #include "Managers/ElementMgr.h"
 #include "Managers/StateManager.h"
+#include "InputContext.h"
 
 namespace OpenUI
 {
@@ -17,6 +18,7 @@ namespace OpenUI
 		void Start()
 		{
 			m_clientWindows = &sElementMgr->m_clientWindows;
+			//m_inputContext = new InputContext(m_stateManager, m_stateManager.GetMousePosition());
 			StartAndInitWindows();
 			DrawAndUpdateWindows();
 			ProgramLoop();
@@ -66,6 +68,7 @@ namespace OpenUI
 		std::set <ClientWindow*> * m_clientWindows;
 		GraphicsContext* m_graphicsContext;
 		StateManager m_stateManager{};
+		InputContext * m_inputContext = nullptr;
 	};
 	
 }

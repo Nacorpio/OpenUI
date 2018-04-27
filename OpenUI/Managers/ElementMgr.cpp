@@ -31,8 +31,6 @@ namespace OpenUI
 			std::cout << "Element with identifier '" << id << "' already exists." << std::endl;
 			return;
 		}
-		//TODO: Fix this.
-		//element->Start ();
 
 		m_elements.emplace_back ( element );
 		m_mappedObjects.insert_or_assign ( id, element );

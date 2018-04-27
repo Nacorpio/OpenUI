@@ -38,42 +38,35 @@ namespace OpenUI
 	void Button::OnMouseEnter ()
 	{
 		Control::OnMouseEnter();
-		LOG(GetName());
 	}
 
 	void Button::OnMouseLeave ()
 	{
 		Control::OnMouseLeave();
-		LOG(GetName());
 	}
 
 	void Button::OnMouseMove ()
 	{
 		Control::OnMouseMove();
-		LOG(GetName());
 	}
 
 	void Button::OnMouseHover ()
 	{
 		Control::OnMouseHover();
-		LOG(GetName());
 	}
 
 	void Button::OnMouseDown ()
 	{
 		Control::OnMouseDown();
-		LOG(GetName());
 	}
 
 	void Button::OnMouseUp ()
 	{
 		Control::OnMouseUp();
-		LOG(GetName());
 	}
 
 	void Button::OnMouseClick ()
 	{
 		Control::OnMouseClick();
-		LOG(GetName());
 	}
 }

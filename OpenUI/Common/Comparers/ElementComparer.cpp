@@ -4,8 +4,13 @@
 
 namespace OpenUI
 {
-	bool ElementComparer::operator() ( const Element* lhs, const Element* rhs ) const
+	bool ElementComparerDrawOrder::operator() ( const Element* lhs, const Element* rhs ) const
 	{
 		return lhs->GetDrawOrder () < rhs->GetDrawOrder ();
+	}
+
+	bool ElementComparerHeight::operator() (const Element* lhs, const Element* rhs) const
+	{
+		return lhs->GetHeight() > rhs->GetHeight();
 	}
 }

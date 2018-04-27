@@ -45,9 +45,6 @@
     <ClInclude Include="Math\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Comparers\ElementComparer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Graphic\GraphicProperties.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -76,6 +73,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Managers\StateManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Comparers\ElementComparer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,9 +116,6 @@
     <ClCompile Include="Math\Vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Common\Comparers\ElementComparer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Graphic\GraphicProperties.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -138,6 +141,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Managers\StateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Comparers\ElementComparer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rectangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

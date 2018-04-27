@@ -2,9 +2,27 @@
 #include "Math/Vector2.h"
 #include <iostream>
 #include "Entities/Elements/Windows/ClientWindow.h"
+#include "Common/Comparers/ElementComparer.h"
 
 namespace OpenUI
 {
+
+	struct HighestElementInfo
+	{
+		Element * HighestElement;
+		bool IntersectingMouse = false;
+
+		HighestElementInfo(Element * p_element,bool p_intersectingMouse)
+			: HighestElement( p_element ), IntersectingMouse ( p_intersectingMouse )
+		{
+		}
+
+		void Reset()
+		{
+			HighestElement = nullptr;
+			IntersectingMouse = false;
+		}
+	};
 
 	class StateManager
 	{
@@ -21,11 +39,19 @@ namespace OpenUI
 			// Pools the event data from the active clientwindow.
 			p_clientWindow->GetRenderWindow().pollEvent ( m_event );
 
-			m_mouseLocation = IntVector(m_event.mouseMove.x, m_event.mouseMove.y);
+			m_mouseLocation.X = m_event.mouseMove.x;
+			m_mouseLocation.Y = m_event.mouseMove.y;
+			m_highestElementInfo.Reset();
+			//auto x = GetHighestElement(p_clientWindow->GetChildren());
+			GetHighestElement(p_clientWindow->GetChildren());
+			SetMouseState(m_highestElementInfo.HighestElement);
 
-			SetMouseState(GetHighestElement(p_clientWindow->GetChildren()));
-	
-			
+			if(m_hoveredElements.size() > 0 && m_highestElementInfo.HighestElement)
+			{
+		/*		std::cout << "Size: " << m_hoveredElements.size() << " Name: " << GetHighestElement()->GetName() << " Height: " << GetHighestElement()->GetHeight() 
+							<< " HighestElement: " << m_highestElementInfo.HighestElement->GetName() << " IntersectingMouse: " << m_highestElementInfo.IntersectingMouse << std::endl;
+*/
+			}
 			/*switch (myEvent.type)
 			{
 
@@ -60,6 +86,21 @@ namespace OpenUI
 			return nullptr;
 		}
 
+		IntVector & GetMousePosition ()
+		{
+			return m_mouseLocation;
+		}
+
+		void AddHoveringElement(Element * p_element)
+		{
+			m_hoveredElements.insert(p_element);
+		}
+
+		void RemoveHoveredElement(Element * p_element)
+		{
+			m_hoveredElements.erase(p_element);
+		}
+
 	private:
 
 		void SetMouseState(Element * p_element)
@@ -74,35 +115,48 @@ namespace OpenUI
 			{
 				m_activeElement = p_element;
 				m_activeElement->OnMouseEnter();
+				m_hoveredElements.insert(m_activeElement);
 				return;
 			}
-
+			
 			// Element is the same as the active element, therefore call OnMouseMove.
 			if(p_element == m_activeElement)
 			{
 				p_element->OnMouseMove();
+				
 				return;
 			}
 
 			if (p_element != m_activeElement)
 			{
 				m_activeElement->OnMouseLeave();
+				if(!m_highestElementInfo.IntersectingMouse)
+				{
+					m_hoveredElements.erase(m_activeElement);
+				}
+
 				m_activeElement = p_element;
 				m_activeElement->OnMouseEnter();
+
+				m_hoveredElements.insert(p_element);
 			}			
 		}
 
-		IntVector & GetMousePosition()
+		Element * GetHighestElement() const
 		{
-			return m_mouseLocation;
+			if(m_hoveredElements.size() > 0)
+			{
+				return m_hoveredElements.begin()._Ptr->_Myval;
+			}
+			return nullptr;
 		}
 
 		/// <summary>
-		///		Gets the element that is furthest in draw order and is also intersecting with the mouse.
+		///		Gets the highest element that is also intersecting with the mouse.
 		/// </summary>
 		/// <param name="p_elements">The elements to retrive the highest element from</param>
-		/// <returns>The element that is furthest in draw order and is intersecting the mouse</returns>
-		Element * GetHighestElement (const std::vector<Element*> & p_elements) const
+		/// <returns>The element that is highest and is intersecting the mouse</returns>
+		void GetHighestElement (const std::vector<Element*> & p_elements)
 		{
 			for (Element * element: p_elements)
 			{
@@ -112,31 +166,33 @@ namespace OpenUI
 				if(elementPos <= m_mouseLocation && elementPos + element->GetSize() >= m_mouseLocation)
 				{
 					// Returns a nullptr if the element doesn't have any children.
-					Element * elementChild = GetHighestElement ( element->GetChildren() );
+					GetHighestElement ( element->GetChildren() );
 
-			
-					if (elementChild != nullptr && m_foundElement == false)
+					// Returns the element child back to the previous function.
+					if (m_highestElementInfo.HighestElement != nullptr )
 					{
-						std::cout << "Interacted elementChild found: " << elementChild->GetName() << std::endl;
-						m_foundElement = true;
-						return elementChild;
+						m_highestElementInfo.HighestElement = element;
+						m_highestElementInfo.IntersectingMouse = true;
+						return;
 					}
-					if (elementChild == nullptr && m_foundElement == false)
+
+					// Returns the element back to where the function was first called.
+					if (m_highestElementInfo.HighestElement == nullptr && element->GetHeight() > m_highestElementInfo.HighestElement->GetHeight())
 					{
-						std::cout << "Interacted element found: " << element->GetName() << std::endl;
-						m_foundElement = true;
-						return element;
+						m_highestElementInfo.HighestElement = element;
+						m_highestElementInfo.IntersectingMouse = true;
+						return;
 					}
 				}
 			}
-
-			return nullptr;
+			m_highestElementInfo.Reset();
 		}
 
-		mutable bool m_foundElement = false;
 		sf::Event m_event;
-		IntVector m_mouseLocation;
+		IntVector m_mouseLocation{};
 		Element * m_activeElement = nullptr;
 		ClientWindow * m_activeClientWindow = nullptr;
+		HighestElementInfo m_highestElementInfo = HighestElementInfo(nullptr,false);
+		std::set<Element*,ElementComparerHeight> m_hoveredElements;
 	};
 }
