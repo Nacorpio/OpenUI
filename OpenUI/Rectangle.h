@@ -43,9 +43,14 @@ namespace OpenUI
 		{
 		}
 
-		bool Contains(const IntVector & p_value)
+		bool Contains(const Vector2<_Ty> & p_value)
 		{
-			return X <= p_value.X && Y <= p_value.Y && X + Width >= p_value.X && Y + Height > - p_value.Y;
+			return X <= p_value.X && Y <= p_value.Y && X + Width >= p_value.X && Y + Height > p_value.Y;
+		}
+
+		bool Contains(Vector2<_Ty> & p_value)
+		{
+			return X <= p_value.X && Y <= p_value.Y && X + Width >= p_value.X && Y + Height > p_value.Y;
 		}
 
 		//bool Intersects(const Rectangle& p_rhs, Rectangle& p_intersection)

@@ -40,6 +40,14 @@ namespace OpenUI
 
 		sf::RenderWindow& GetRenderWindow () const;
 
+		void Input ( InputContext * p_inputContext ) override
+		{
+			for (Element * element : m_children)
+			{
+				element->Input(p_inputContext);
+			}
+		}
+
 	private:
 		friend class Element;
 

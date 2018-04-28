@@ -11,6 +11,7 @@ OpenUI::ClientWindow::ClientWindow ( const std::string& name, const RenderWindow
 	 ( windowSettings.VideoMode, windowSettings.Title, windowSettings.Style, windowSettings.ContextSettings ) )
 {
 	m_guidDetail = ObjectGuid::Detail::ClientWindow;
+	SetBounds({ 0,0,600,600 });
 }
 
 OpenUI::ClientWindow::~ClientWindow ()

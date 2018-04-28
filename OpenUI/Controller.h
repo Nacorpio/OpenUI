@@ -18,7 +18,6 @@ namespace OpenUI
 		void Start()
 		{
 			m_clientWindows = &sElementMgr->m_clientWindows;
-			//m_inputContext = new InputContext(m_stateManager, m_stateManager.GetMousePosition());
 			StartAndInitWindows();
 			DrawAndUpdateWindows();
 			ProgramLoop();
@@ -59,7 +58,11 @@ namespace OpenUI
 			for (auto it = m_clientWindows->begin(); it != m_clientWindows->end(); ++it)
 			{
 				clientWindow = it._Ptr->_Myval;
-				m_stateManager.CheckMouseIntersection(clientWindow);
+
+				m_inputContext.PoolEvent(clientWindow->GetRenderWindow());
+				clientWindow->Input(&m_inputContext);
+				m_inputContext.EndInput();
+
 				clientWindow->Update();
 				clientWindow->Draw(*m_graphicsContext);
 			}
@@ -68,7 +71,7 @@ namespace OpenUI
 		std::set <ClientWindow*> * m_clientWindows;
 		GraphicsContext* m_graphicsContext;
 		StateManager m_stateManager{};
-		InputContext * m_inputContext = nullptr;
+		InputContext m_inputContext{};
 	};
 	
 }

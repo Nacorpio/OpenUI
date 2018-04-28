@@ -10,12 +10,13 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "Entities/Controls/Control.h"
-#include "InputContext.h"
+
 
 namespace OpenUI
 {
 	class ClientWindow;
 	class GraphicsContext;
+	struct InputContext;
 
 	class Element : public Object , public Control
 	{
@@ -52,7 +53,7 @@ namespace OpenUI
 		/// <returns>The level of this element.</returns>
 		uint16_t GetLevel() const { return m_level; }
 
-		const IntRect & GetBounds() const { return m_bounds;	}
+		IntRect & GetBounds()  { return m_bounds;	}
 		IntVector& GetSize() { return m_bounds.Size; }
 		IntVector & GetPosition() { return m_bounds.Position; }
 
@@ -84,7 +85,7 @@ namespace OpenUI
 		/* Parent is guaranteed to be set. */
 		virtual void Initialize();
 
-		virtual void Input(InputContext & p_inputContext);
+		virtual void Input(InputContext * p_inputContext);
 
 		/* Updates the state of the element. */
 		virtual void Update();

@@ -38,11 +38,13 @@ namespace OpenUI
 	void Button::OnMouseEnter ()
 	{
 		Control::OnMouseEnter();
+		GetShape(0)->setFillColor(sf::Color::Red);
 	}
 
 	void Button::OnMouseLeave ()
 	{
 		Control::OnMouseLeave();
+		GetShape(0)->setFillColor(sf::Color::Black);
 	}
 
 	void Button::OnMouseMove ()

@@ -6,6 +6,7 @@
 #include "Graphic/GraphicsContext.h"
 #include <iostream>
 #include <iso646.h>
+#include "InputContext.h"
 
 namespace OpenUI
 {
@@ -50,8 +51,8 @@ namespace OpenUI
 		m_bounds = p_value;
 		for (sf::RectangleShape * shape : m_shapes)
 		{
-			shape->setSize((p_value.Size - m_bounds.Size + shape->getSize()).sfVector2f);
-			shape->setPosition((p_value.Position - m_bounds.Position + shape->getPosition()).sfVector2f);
+			shape->setSize(sf::Vector2f(p_value.Size.sfVector)); //((p_value.Size - m_bounds.Size + shape->getSize()).sfVector2f);
+			shape->setPosition(sf::Vector2f(p_value.Position.sfVector));//shape->setPosition((p_value.Position - m_bounds.Position + shape->getPosition()).sfVector2f);
 		}
 	}
 
@@ -61,7 +62,7 @@ namespace OpenUI
 		for (sf::RectangleShape * shape : m_shapes)
 		{
 			auto x = (p_value - m_bounds.Size + shape->getSize()).sfVector2f;
-			shape->setSize((p_value - m_bounds.Size + shape->getSize()).sfVector2f);
+			shape->setSize(sf::Vector2f(p_value.sfVector)); //((p_value - m_bounds.Size + shape->getSize()).sfVector2f);
 		}
 	}
 
@@ -70,7 +71,7 @@ namespace OpenUI
 		m_bounds.Position = p_value;
 		for (sf::RectangleShape * shape : m_shapes)
 		{
-			shape->setPosition((p_value - m_bounds.Position + shape->getPosition()).sfVector2f);
+			shape->setPosition(sf::Vector2f(p_value.sfVector)); //((p_value - m_bounds.Position + shape->getPosition()).sfVector2f);
 		}
 	}
 
@@ -201,9 +202,15 @@ namespace OpenUI
 		}
 	}
 
-	void Element::Input ( InputContext & p_inputContext )
+	void Element::Input ( InputContext * p_inputContext )
 	{
+		p_inputContext->CheckMouseIntersection(this);
+		for (Element * element : m_children)
+		{
+			element->Input(p_inputContext);
+		}
 	}
+
 
 	void Element::Draw ( const GraphicsContext& gContext )
 	{

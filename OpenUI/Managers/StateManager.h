@@ -176,13 +176,13 @@ namespace OpenUI
 						return;
 					}
 
-					// Returns the element back to where the function was first called.
-					if (m_highestElementInfo.HighestElement == nullptr && element->GetHeight() > m_highestElementInfo.HighestElement->GetHeight())
-					{
-						m_highestElementInfo.HighestElement = element;
-						m_highestElementInfo.IntersectingMouse = true;
-						return;
-					}
+					//// Returns the element back to where the function was first called.
+					//if (m_highestElementInfo.HighestElement == nullptr && element->GetHeight() > m_highestElementInfo.HighestElement->GetHeight())
+					//{
+					//	m_highestElementInfo.HighestElement = element;
+					//	m_highestElementInfo.IntersectingMouse = true;
+					//	return;
+					//}
 				}
 			}
 			m_highestElementInfo.Reset();
