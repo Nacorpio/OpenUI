@@ -204,7 +204,7 @@ namespace OpenUI
 
 	void Element::Input ( InputContext * p_inputContext )
 	{
-		p_inputContext->CheckMouseIntersection(this);
+		p_inputContext->CheckMouseContained(this);
 		for (Element * element : m_children)
 		{
 			element->Input(p_inputContext);

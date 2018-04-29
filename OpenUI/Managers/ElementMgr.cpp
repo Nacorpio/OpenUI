@@ -54,7 +54,8 @@ namespace OpenUI
 		if ( auto* clientWindow = new ClientWindow ( name, settings ) )
 		{
 			Add ( id, clientWindow );
-			clientWindow->GetRenderWindow().setFramerateLimit(144);
+			clientWindow->GetRenderWindow().setFramerateLimit ( 144 );
+			clientWindow->GetRenderWindow();
 			m_clientWindows.insert ( clientWindow );
 			return clientWindow;
 		}

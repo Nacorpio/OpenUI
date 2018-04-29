@@ -4,6 +4,7 @@
 #include "SFML/Window/Event.hpp"
 #include "Common/Constants.h"
 #include "Entities/Elements/Element.h"
+#include "InputContext.h"
 
 namespace OpenUI
 {
@@ -40,12 +41,15 @@ namespace OpenUI
 
 		sf::RenderWindow& GetRenderWindow () const;
 
-		void Input ( InputContext * p_inputContext ) override
-		{
+		void Input ( ) 
+		{	
+			m_inputContext.PollEvent(m_renderWindow);
+
 			for (Element * element : m_children)
 			{
-				element->Input(p_inputContext);
+				element->Input(&m_inputContext);
 			}
+			m_inputContext.EndInput();
 		}
 
 	private:
@@ -53,5 +57,6 @@ namespace OpenUI
 
 		std::set<Element*> m_descendants { };
 		sf::RenderWindow* m_renderWindow { };
+		InputContext m_inputContext{};
 	};
 }

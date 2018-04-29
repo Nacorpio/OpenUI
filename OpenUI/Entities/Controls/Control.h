@@ -3,6 +3,7 @@
 #include "Common/Enums.h"
 #include <string>
 #include "Common/Constants.h"
+#include <iostream>
 
 namespace OpenUI
 {
@@ -24,38 +25,51 @@ namespace OpenUI
 
 		void SetState(MouseState p_state)
 		{
+			if(p_state == m_mouseState)
+			{
+				return;
+			}
+
+			LOG(p_state);
 			m_mouseState = p_state;
 		}
 
 		virtual void OnMouseEnter()
 		{
+			SetState (MouseState::Entered);
 		}
 
 		virtual void OnMouseLeave()
 		{
+			SetState(MouseState::None);
 		}
 
 		virtual void OnMouseHover()
 		{
+			SetState(MouseState::Hovered);
 		}
 
 		virtual void OnMouseMove()
 		{
+			SetState(MouseState::Moved);
 		}
 
 		virtual void OnMouseDown()
 		{
+			SetState(MouseState::Pressed);
 		}
 
 		virtual void OnMouseUp()
 		{
+			SetState(MouseState::Released);
 		}
 
 		virtual void OnMouseClick()
 		{
+			SetState(MouseState::Clicked);
 		}
 
 	private:
-		MouseState m_mouseState = MouseState::None;
+		MouseState m_mouseState;
 	};
 }
