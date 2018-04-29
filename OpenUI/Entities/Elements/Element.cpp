@@ -48,12 +48,18 @@ namespace OpenUI
 
 	void Element::SetBounds ( const IntRect & p_value )
 	{
-		m_bounds = p_value;
+		auto delta = m_bounds - p_value;
 		for (sf::RectangleShape * shape : m_shapes)
 		{
-			shape->setSize(sf::Vector2f(p_value.Size.sfVector)); //((p_value.Size - m_bounds.Size + shape->getSize()).sfVector2f);
-			shape->setPosition(sf::Vector2f(p_value.Position.sfVector));//shape->setPosition((p_value.Position - m_bounds.Position + shape->getPosition()).sfVector2f);
+			if(m_bounds.Size != p_value.Size)
+			{
+				shape->setSize(sf::Vector2f(p_value.Size.sfVector)); 
+			}
+
+			shape->setPosition(sf::Vector2f(p_value.Position.sfVector));
 		}
+		m_bounds = p_value;
+		OnBoundsChanged(delta);
 	}
 
 	void Element::SetSize(const IntVector & p_value)
@@ -62,7 +68,7 @@ namespace OpenUI
 		for (sf::RectangleShape * shape : m_shapes)
 		{
 			auto x = (p_value - m_bounds.Size + shape->getSize()).sfVector2f;
-			shape->setSize(sf::Vector2f(p_value.sfVector)); //((p_value - m_bounds.Size + shape->getSize()).sfVector2f);
+			shape->setSize(sf::Vector2f(p_value.sfVector));
 		}
 	}
 
@@ -71,7 +77,7 @@ namespace OpenUI
 		m_bounds.Position = p_value;
 		for (sf::RectangleShape * shape : m_shapes)
 		{
-			shape->setPosition(sf::Vector2f(p_value.sfVector)); //((p_value - m_bounds.Position + shape->getPosition()).sfVector2f);
+			shape->setPosition(sf::Vector2f(p_value.sfVector));
 		}
 	}
 
@@ -214,6 +220,7 @@ namespace OpenUI
 
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
+		m_scissorTest.SetScissorTest();
 		for (auto it = m_drawables.begin(); it != m_drawables.end(); ++it)
 		{
 			m_clientWindow->GetRenderWindow().draw(*it._Ptr->_Myval, sf::RenderStates::Default);
@@ -223,6 +230,7 @@ namespace OpenUI
 		{
 			element->Draw(gContext);
 		}
+		m_scissorTest.RestorePreviousScissorTest();
 	}
 
 	void Element::Update ()
@@ -230,6 +238,20 @@ namespace OpenUI
 		for (auto element : m_children)
 		{
 			element->Update();
+		}
+	}
+
+	void Element::OnBoundsChanged ( IntRect & p_delta )
+	{
+		OnParentBoundsChanged(p_delta);
+	}
+
+	void Element::OnParentBoundsChanged ( IntRect & p_delta )
+	{
+		m_scissorTest.UpdateScissorRectangle(m_bounds);
+		for (Element * child : m_children)
+		{
+			child->OnParentBoundsChanged ( p_delta );
 		}
 	}
 

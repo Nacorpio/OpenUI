@@ -5,12 +5,13 @@
 #include <set>
 #include <Entities/Objects/Object.h>
 #include <Math/Vector2.h>
-#include <Rectangle.h>
+
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "Entities/Controls/Control.h"
-
+#include "Math/Rectangle.h"
+#include "Graphic/ScissorTest.h"
 
 namespace OpenUI
 {
@@ -97,6 +98,9 @@ namespace OpenUI
 		virtual void OnChildRemoved ( Element& child ) {}
 		virtual void OnParentChanged( Element& newParent) {}
 
+		virtual void OnBoundsChanged ( IntRect & p_delta );
+		virtual void OnParentBoundsChanged ( IntRect & p_delta );
+
 		bool operator == ( const Element& rhs ) const;
 		bool operator != ( const Element& rhs ) const;
 
@@ -109,7 +113,7 @@ namespace OpenUI
 		void SortDrawOrder() const;
 
 		const std::string m_name = "Element";
-		
+		ScissorTest m_scissorTest;
 		uint16_t m_drawOrder = 0;
 		uint16_t m_height = 0;
 		uint16_t m_level = 0;

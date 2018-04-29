@@ -69,19 +69,22 @@
     <ClInclude Include="Graphic\GraphicsContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Controller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Managers\StateManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Common\Comparers\ElementComparer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rectangle.h">
+    <ClInclude Include="InputContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InputContext.h">
+    <ClInclude Include="Managers\Controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Rectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic\ScissorTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -137,19 +140,22 @@
     <ClCompile Include="Graphic\GraphicsContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Managers\StateManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Common\Comparers\ElementComparer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rectangle.cpp">
+    <ClCompile Include="InputContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputContext.cpp">
+    <ClCompile Include="Managers\Controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Rectangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic\ScissorTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
