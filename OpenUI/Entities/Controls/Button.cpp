@@ -39,20 +39,17 @@ namespace OpenUI
 	{
 		Control::OnMouseEnter();
 		//LOG("Button: " << GetName() << " Height: " << GetHeight());
-		GetShape(0)->setFillColor(sf::Color(75,75,75));
 	}
 
 	void Button::OnMouseLeave ()
 	{
 		Control::OnMouseLeave();
 		//LOG("		Button: " << GetName() << " Height: " << GetHeight());
-		GetShape(0)->setFillColor(sf::Color(45, 45, 45));
 	}
 
 	void Button::OnMouseMove ()
 	{
 		Control::OnMouseMove();
-		GetShape(0)->setFillColor(sf::Color(75, 75, 75));
 	}
 
 	void Button::OnMouseHover ()
@@ -63,18 +60,15 @@ namespace OpenUI
 	void Button::OnMouseDown ()
 	{
 		Control::OnMouseDown();
-		GetShape(0)->setFillColor(sf::Color(125, 125, 125));
 	}
 
 	void Button::OnMouseUp ()
 	{
 		Control::OnMouseUp();
-		GetShape(0)->setFillColor(sf::Color(45, 45, 45));
 	}
 
 	void Button::OnMouseClick ()
 	{
 		Control::OnMouseClick();
-		GetShape(0)->setFillColor(sf::Color(75, 75, 75));
 	}
 }

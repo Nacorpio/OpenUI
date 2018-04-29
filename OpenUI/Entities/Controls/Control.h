@@ -31,7 +31,13 @@ namespace OpenUI
 			}
 
 			LOG(p_state);
+			OnStateChanged(p_state);
 			m_mouseState = p_state;
+		}
+
+		virtual void OnStateChanged(MouseState p_state)
+		{
+			
 		}
 
 		virtual void OnMouseEnter()

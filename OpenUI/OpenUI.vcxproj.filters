@@ -87,6 +87,12 @@
     <ClInclude Include="Graphic\ScissorTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Graphic\ColorScheme.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -156,6 +162,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graphic\ScissorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic\ColorScheme.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

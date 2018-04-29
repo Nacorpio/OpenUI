@@ -3,6 +3,22 @@
 
 namespace OpenUI
 {
+	enum class ElementType
+	{
+		Button,
+		Label,
+		ClientWindow,
+		WindowHeader,
+		WindowContainer,
+	};
+
+	enum class ColorType
+	{
+		BackgroundColor,
+		ForegroundColor,
+		OutlineColor
+	};
+
 	enum class GraphicType
 	{
 		Sprite,

@@ -5,13 +5,13 @@
 #include <set>
 #include <Entities/Objects/Object.h>
 #include <Math/Vector2.h>
-
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "Entities/Controls/Control.h"
 #include "Math/Rectangle.h"
 #include "Graphic/ScissorTest.h"
+#include "Graphic/ColorScheme.h"
 
 namespace OpenUI
 {
@@ -112,12 +112,21 @@ namespace OpenUI
 	private:
 		void SortDrawOrder() const;
 
+	public:
+		void OnStateChanged ( MouseState p_state ) override
+		{
+			m_shapes[0]->setFillColor(*m_scheme.GetColor(ColorType::BackgroundColor,p_state));
+			
+		}
+
+	private:
 		const std::string m_name = "Element";
 		ScissorTest m_scissorTest;
 		uint16_t m_drawOrder = 0;
 		uint16_t m_height = 0;
 		uint16_t m_level = 0;
 
+		ColorScheme m_scheme;
 		std::vector<sf::RectangleShape*> m_shapes;
 		std::vector<sf::Text*> m_texts;
 		std::set <sf::Drawable*> m_drawables { };
