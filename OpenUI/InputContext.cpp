@@ -16,20 +16,20 @@ namespace OpenUI
 	/// <param name="p_element">The element to be checked</param>
 	void InputContext::CheckMouseContained ( Element * p_element )
 	{
-		++m_elementCount;
+		++ElementCount;
 
 		if (IsMouseContained ( p_element->GetBounds() ))
 		{
 			if (!HighestElement)
 			{
-				IsMouseDownOnHighestElement = true;
+				m_isMouseDownOnHighestElement = true;
 				HighestElement = p_element;
 				return;
 			}
 
 			if (p_element->GetHeight() > HighestElement->GetHeight())
 			{
-				IsMouseDownOnHighestElement = true;
+				m_isMouseDownOnHighestElement = true;
 				HighestElement = p_element;
 			}
 		}
@@ -41,7 +41,7 @@ namespace OpenUI
 				ActiveElement = nullptr;
 			}
 
-			if (p_element == PressedElement && IsMouseReleased)
+			if (p_element == PressedElement && m_isMouseReleased)
 			{
 				PressedElement->OnMouseUp();
 				LOG("PressedElement - OnMouseUp");
@@ -65,8 +65,8 @@ namespace OpenUI
 		HandleMouseStates ( IsActiveElementChanged() );
 
 		HighestElement = nullptr;
-		IsMouseMoved = false;
-		m_elementCount = 0;
+		m_isMouseMoved = false;
+		ElementCount = 0;
 	}
 
 	bool InputContext::IsActiveElementChanged ()
@@ -88,7 +88,7 @@ namespace OpenUI
 			return true;
 		}
 
-		if (ActiveElement == HighestElement && !IsMouseDownOnHighestElement)
+		if (ActiveElement == HighestElement && !m_isMouseDownOnHighestElement)
 		{
 			ChangeActiveElement();
 			return true;
@@ -115,20 +115,20 @@ namespace OpenUI
 
 	void InputContext::PollEvent ( sf::RenderWindow * p_renderWindow )
 	{
-		EventChanged = p_renderWindow->pollEvent ( SfEvent );
-		IsMouseMoved = SfEvent.type == sf::Event::MouseMoved && EventChanged;
-		IsMouseDown = SfEvent.type == sf::Event::MouseButtonPressed && EventChanged;
-		IsMouseReleased = SfEvent.type == sf::Event::MouseButtonReleased && EventChanged;
+		m_eventChanged = p_renderWindow->pollEvent ( m_sfEvent );
+		m_isMouseMoved = m_sfEvent.type == sf::Event::MouseMoved && m_eventChanged;
+		m_isMouseDown = m_sfEvent.type == sf::Event::MouseButtonPressed && m_eventChanged;
+		m_isMouseReleased = m_sfEvent.type == sf::Event::MouseButtonReleased && m_eventChanged;
 
-		if (IsMouseMoved)
+		if (m_isMouseMoved)
 		{
-			MousePosition.X = SfEvent.mouseMove.x;
-			MousePosition.Y = SfEvent.mouseMove.y;
+			MousePosition.X = m_sfEvent.mouseMove.x;
+			MousePosition.Y = m_sfEvent.mouseMove.y;
 		}
 
-		if (IsMouseDown || IsMouseReleased)
+		if (m_isMouseDown || m_isMouseReleased)
 		{
-			MouseButton = SfEvent.mouseButton.button;
+			m_mouseButton = m_sfEvent.mouseButton.button;
 		}
 	}
 
@@ -140,7 +140,7 @@ namespace OpenUI
 	void InputContext::HandleMouseStates ( bool p_wasActiveElementChanged )
 	{
 		// Mouse is released on the active element and the pressed element is the same as active element. Call OnMouseClick.
-		if (IsMouseReleased && ActiveElement == PressedElement)
+		if (m_isMouseReleased && ActiveElement == PressedElement)
 		{
 			PressedElement = nullptr;
 
@@ -150,7 +150,7 @@ namespace OpenUI
 		}
 
 		// Mouse is released on the active element and it's not the pressed element. Call OnMouseUp on the pressed element and OnMouseEnter on the active element.
-		if (IsMouseReleased && PressedElement)
+		if (m_isMouseReleased && PressedElement)
 		{
 			PressedElement->OnMouseUp();
 			LOG("PressedElement OnMouseUp " << PressedElement->GetName());
@@ -161,7 +161,7 @@ namespace OpenUI
 			return;
 		}
 
-		if (IsMouseDown && !PressedElement)
+		if (m_isMouseDown && !PressedElement)
 		{
 			PressedElement = ActiveElement;
 			ActiveElement->OnMouseDown();

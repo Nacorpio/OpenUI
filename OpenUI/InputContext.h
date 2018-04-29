@@ -14,15 +14,7 @@ namespace OpenUI
 		Element * HighestElement = nullptr;
 		Element * PressedElement = nullptr;
 		IntVector MousePosition{0,0};
-		sf::Event SfEvent;
-		sf::Mouse::Button MouseButton;
-		bool EventChanged = false;
-		bool IsMouseMoved = false;
-		bool IsMouseDown = false;
-		bool IsMouseReleased = false;
-		bool IsMouseDownOnHighestElement = false;
-		bool IsMouseDownOnActiveElement = false;
-
+		uint16_t ElementCount = 0;
 		InputContext ();
 
 		void CheckMouseContained ( Element * p_element );
@@ -36,7 +28,15 @@ namespace OpenUI
 		void PollEvent(sf::RenderWindow * p_renderWindow);
 
 	private:
-		uint16_t m_elementCount = 0;
+		bool m_eventChanged = false;
+		bool m_isMouseMoved = false;
+		bool m_isMouseDown = false;
+		bool m_isMouseReleased = false;
+		bool m_isMouseDownOnHighestElement = false;
+		bool m_isMouseDownOnActiveElement = false;
+		sf::Event m_sfEvent;
+		sf::Mouse::Button m_mouseButton;
+
 		bool IsMouseContained ( IntRect & p_value );
 
 		bool IsActiveElementChanged ();
