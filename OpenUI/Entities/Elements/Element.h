@@ -9,7 +9,9 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "Entities/Controls/Control.h"
-
+#include "Common/Enums.h"
+#include "Graphic/ColorScheme.h"
+#include "Graphic/ScissorTest.h"
 
 namespace OpenUI
 {
@@ -80,13 +82,24 @@ namespace OpenUI
 		virtual void Start () const;
 		virtual void Initialize() const;
 
+		virtual void OnMouseLeave () override;
+		virtual void OnMouseHover () override;
+		virtual void OnMouseMove () override;
+		virtual void OnMouseEnter() override;
+
+		virtual void OnMouseDown ( const sf::Event::MouseButtonEvent& event ) override;
+		virtual void OnMouseUp ( const sf::Event::MouseButtonEvent& event ) override;
+		virtual void OnDrop(const InputContext::MouseDropEvent & event) override;
+
 		virtual void Update();
+		void OnBoundsChanged ( IntRect& p_delta );
 		virtual void Draw ( const GraphicsContext& gContext );
 
 		virtual void OnChildAdded ( Element& child ) {}
 		virtual void OnChildRemoved ( Element& child ) {}
 		virtual void OnParentChanged( Element& newParent) {}
 
+		void OnParentBoundsChanged ( IntRect& p_delta );
 		bool operator == ( const Element& rhs ) const;
 		bool operator != ( const Element& rhs ) const;
 
@@ -101,12 +114,13 @@ namespace OpenUI
 	public:
 		void OnStateChanged ( MouseState p_state ) override
 		{
-			m_shapes[0]->setFillColor(m_scheme[p_state].BackColor);
+			m_shapes[0]->setFillColor(m_colorScheme[p_state].BackColor);
 			
 		}
 
 	private:
 		const std::string m_name = "Element";
+		ColorScheme m_colorScheme;
 		ScissorTest m_scissorTest;
 		uint16_t m_drawOrder = 0;
 		uint16_t m_height = 0;

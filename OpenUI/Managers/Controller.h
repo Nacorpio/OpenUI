@@ -1,7 +1,6 @@
 #pragma once
 #include "Entities/Elements/Windows/ClientWindow.h"
 #include "Managers/ElementMgr.h"
-#include "Managers/StateManager.h"
 
 namespace OpenUI
 {

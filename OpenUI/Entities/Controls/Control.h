@@ -6,6 +6,7 @@
 
 namespace OpenUI
 {
+	enum class MouseState;
 	class Element;
 
 	class Control
@@ -47,6 +48,8 @@ namespace OpenUI
 
 		virtual void OnDrop ( const InputContext::MouseDropEvent& );
 		virtual void OnDragDrop ( const InputContext::MouseDragDropEvent& );
+
+		virtual void OnStateChanged(MouseState p_state) {}
 
 	private:
 		friend struct InputContext;

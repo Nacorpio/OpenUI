@@ -1,7 +1,7 @@
 #pragma once
 #include "Math/Vector2.h"
 #include <SFML/Window/Event.hpp>
-#include "Rectangle.h"
+#include "Math/Rectangle.h"
 
 namespace OpenUI
 {

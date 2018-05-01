@@ -61,14 +61,14 @@ namespace OpenUI
 		/// </summary>
 		/// <param name="p_state">The input state to get the color state from.</param>
 		/// <returns>If found, returns a color. If not found returns default sf::color(White).</returns>
-		const ColorState & GetColor(MouseState p_state)
+		const ColorState & GetColor(const MouseState p_state)
 		{
 			if(ContainColorState (p_state ))
 			{
 				return m_it._Ptr->_Myval.second;
 			}
 
-			LOG("A color state with input state:" << p_state << " was not found!");
+			// LOG("A color state with input state:" << p_state << " was not found!");
 			return m_it._Ptr->_Myval.second;
 		}
 

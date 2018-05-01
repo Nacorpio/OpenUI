@@ -73,8 +73,6 @@ namespace OpenUI
 			State(Entered, "Entered");
 			State(Hovered, "Hovered");
 			State(Pressed, "Pressed");
-			State(Released, "Released");
-			State(Clicked, "Clicked");
 			default: ;
 		}
 
