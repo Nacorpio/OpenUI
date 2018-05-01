@@ -1,75 +1,67 @@
 #pragma once
 
-#include "Common/Enums.h"
 #include <string>
-#include "Common/Constants.h"
-#include <iostream>
+#include <SFML/Window/Event.hpp>
+#include "InputContext.h"
 
 namespace OpenUI
 {
+	class Element;
+
 	class Control
 	{
 	public:
-		virtual ~Control () = default;
+		enum ControlState
+		{
+			None = 1 << 0,
+			Entered = 1 << 1,
+			Hovered = 1 << 2,
+			Pressed = 1 << 3,
+			Dragged = 1 << 4,
+		};
 
+		virtual ~Control () = default;
 		explicit Control ( const std::string& name );
 
-		//void Initialize () override;
-		//void Update () override;
-		//void Draw ( const GraphicsContext& gContext ) override;
+		ControlState GetState () const;
 
-		MouseState GetState() const
-		{
-			return m_mouseState;
-		}
+		bool IsBeingDragged () const { return m_st & Dragged; }
+		bool IsCursorInside () const { return m_st & Entered; }
+		bool IsBeingPressed () const { return m_st & Pressed; }
+		bool IsBeingHovered () const { return m_st & Hovered; }
 
-		void SetState(MouseState p_state)
-		{
-			if(p_state == m_mouseState)
-			{
-				return;
-			}
+	protected:
+		virtual void OnMouseEnter ();
+		virtual void OnMouseLeave ();
+		virtual void OnMouseHover ();
+		virtual void OnMouseMove ();
 
-			LOG(p_state);
-			m_mouseState = p_state;
-		}
+		virtual void OnMouseDown ( const sf::Event::MouseButtonEvent& event );
+		virtual void OnMouseUp(const sf::Event::MouseButtonEvent& event);
 
-		virtual void OnMouseEnter()
-		{
-			SetState (MouseState::Entered);
-		}
+		virtual void OnMouseClick (const sf::Event::MouseButtonEvent& event );
 
-		virtual void OnMouseLeave()
-		{
-			SetState(MouseState::None);
-		}
+		virtual void OnDragBegin ();
+		virtual void OnDragEnter ( Element* );
+		virtual void OnDragMove ( Element* );
 
-		virtual void OnMouseHover()
-		{
-			SetState(MouseState::Hovered);
-		}
-
-		virtual void OnMouseMove()
-		{
-			SetState(MouseState::Moved);
-		}
-
-		virtual void OnMouseDown()
-		{
-			SetState(MouseState::Pressed);
-		}
-
-		virtual void OnMouseUp()
-		{
-			SetState(MouseState::Released);
-		}
-
-		virtual void OnMouseClick()
-		{
-			SetState(MouseState::Clicked);
-		}
+		virtual void OnDrop ( const InputContext::MouseDropEvent& );
+		virtual void OnDragDrop ( const InputContext::MouseDragDropEvent& );
 
 	private:
-		MouseState m_mouseState;
+		friend struct InputContext;
+
+		void SetState(ControlState state);
+		void SetState(const int state) { SetState((ControlState)state); }
+
+		void AddState(const ControlState state) { SetState(m_st | state); }
+		void RemoveState(const ControlState state) { SetState(m_st & ~state); }
+		void ToggleState(const ControlState state) { SetState(m_st ^ state); }
+
+		union
+		{
+			ControlState m_state;
+			int m_st = None;
+		};
 	};
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <ostream>
+#include "Entities/Controls/Control.h"
 
 namespace OpenUI
 {
@@ -18,34 +19,20 @@ namespace OpenUI
 		Bottom,
 		Filled
 	};
-	enum class MouseState
-	{
-		None,
-		Entered,
-		Moved,
-		Hovered,
-		Pressed,
-		Released,
-		Clicked
-	};
 
-#define State(type, name) case MouseState::##type: os << name; break
+	#define State(type, name) case Control::ControlState::##type: os << name; break
 
-	inline std::ostream& operator<<(std::ostream& os, const MouseState& p_state)
+	inline std::ostream& operator<< ( std::ostream& os, const Control::ControlState& p_state )
 	{
-		switch (p_state)
+		switch ( p_state )
 		{
 			State(None,"None");
 			State(Entered, "Entered");
-			State(Moved, "Moved");
 			State(Hovered, "Hovered");
 			State(Pressed, "Pressed");
-			State(Released, "Released");
-			State(Clicked, "Clicked");
-			default: ;
+			State(Dragged, "Left");
+			default : ;
 		}
 		return os;
-
 	}
 }
-

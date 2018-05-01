@@ -5,6 +5,7 @@
 #include "Common/Constants.h"
 #include "Entities/Elements/Element.h"
 #include "InputContext.h"
+#include "Common/Comparers/ElementComparer.h"
 
 namespace OpenUI
 {
@@ -34,29 +35,26 @@ namespace OpenUI
 		explicit ClientWindow ( const std::string& name, const RenderWindowSettings& windowSettings );
 		~ClientWindow ();
 
-		void Start () override;
-		void Initialize () override;
+		void Start () const override;
+		void Initialize () const override;
 		void Update () override;
 		void Draw ( const GraphicsContext& gContext ) override;
 
 		sf::RenderWindow& GetRenderWindow () const;
 
-		void Input ( ) 
-		{	
-			m_inputContext.PollEvent(m_renderWindow);
-
-			for (Element * element : m_children)
-			{
-				element->Input(&m_inputContext);
-			}
-			m_inputContext.EndInput();
-		}
+		void Input ( long delta );
 
 	private:
 		friend class Element;
 
-		std::set<Element*> m_descendants { };
+		bool m_isMouseInside = false;
+
+		sf::Event m_event;
+		sf::Event m_lastEvent;
+
+		std::set <Element*, ElementComparerTree> m_descendants { };
 		sf::RenderWindow* m_renderWindow { };
-		InputContext m_inputContext{};
+
+		InputContext m_inputContext { };
 	};
 }

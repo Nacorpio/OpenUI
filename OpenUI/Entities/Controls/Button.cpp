@@ -5,76 +5,82 @@
 namespace OpenUI
 {
 	Button::Button ( const std::string& name )
-		: Element(name)
+		: Element ( name )
 	{
 		m_guidDetail = ObjectGuid::Detail::Button;
-		AddShape(new sf::RectangleShape({100,100}));
+		AddShape ( new sf::RectangleShape ( { 100, 100 } ) );
 	}
 
 	Button::~Button ()
 	{
 	}
 
-	void Button::Start ()
+	void Button::Start () const
 	{
-		Element::Start();
+		Element::Start ();
 	}
 
-	void Button::Initialize ()
+	void Button::Initialize () const
 	{
-		Element::Initialize();
+		Element::Initialize ();
 	}
 
 	void Button::Update ()
 	{
-		Element::Update();
+		Element::Update ();
 	}
 
-	void Button::Draw ( const GraphicsContext & gContext )
+	void Button::Draw ( const GraphicsContext& gContext )
 	{
 		Element::Draw ( gContext );
 	}
 
 	void Button::OnMouseEnter ()
 	{
-		Control::OnMouseEnter();
-		//LOG("Button: " << GetName() << " Height: " << GetHeight());
-		GetShape(0)->setFillColor(sf::Color(75,75,75));
+		Element::OnMouseEnter ();
+		GetShape ( 0 )->setFillColor ( sf::Color ( 75, 75, 75 ) );
 	}
 
 	void Button::OnMouseLeave ()
 	{
-		Control::OnMouseLeave();
-		//LOG("		Button: " << GetName() << " Height: " << GetHeight());
-		GetShape(0)->setFillColor(sf::Color(45, 45, 45));
+		Element::OnMouseLeave ();
+		GetShape ( 0 )->setFillColor ( sf::Color ( 45, 45, 45 ) );
 	}
 
 	void Button::OnMouseMove ()
 	{
-		Control::OnMouseMove();
-		GetShape(0)->setFillColor(sf::Color(75, 75, 75));
+		Element::OnMouseMove ();
 	}
 
 	void Button::OnMouseHover ()
 	{
-		Control::OnMouseHover();
+		Element::OnMouseHover ();
 	}
 
-	void Button::OnMouseDown ()
+	void Button::OnMouseDown ( const sf::Event::MouseButtonEvent& event )
 	{
-		Control::OnMouseDown();
-		GetShape(0)->setFillColor(sf::Color(125, 125, 125));
+		Element::OnMouseDown ( event );
+		GetShape ( 0 )->setFillColor ( sf::Color ( 125, 125, 125 ) );
 	}
 
-	void Button::OnMouseUp ()
+	void Button::OnMouseClick ( const sf::Event::MouseButtonEvent& event )
 	{
-		Control::OnMouseUp();
-		GetShape(0)->setFillColor(sf::Color(45, 45, 45));
+		Element::OnMouseClick ( event );
+		GetShape ( 0 )->setFillColor ( sf::Color ( 75, 75, 75 ) );
 	}
 
-	void Button::OnMouseClick ()
+	void Button::OnMouseUp ( const sf::Event::MouseButtonEvent& event )
 	{
-		Control::OnMouseClick();
-		GetShape(0)->setFillColor(sf::Color(75, 75, 75));
+		Element::OnMouseUp ( event );
+	}
+
+	void Button::OnDrop ( const InputContext::MouseDropEvent& event )
+	{
+		Element::OnDrop ( event );
+	}
+
+	void Button::OnDragBegin ()
+	{
+		Element::OnDragBegin ();
 	}
 }

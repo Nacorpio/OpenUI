@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "InputContext.h"
-#include <iso646.h>
-#include <iostream>
-#include <cfenv>
+#include "Entities/Elements/Element.h"
 
 namespace OpenUI
 {
@@ -10,175 +8,164 @@ namespace OpenUI
 	{
 	}
 
-	/// <summary>
-	///		Checks if an element is contains the mouse cursor and compares it against the highest element.
-	/// </summary>
-	/// <param name="p_element">The element to be checked</param>
-	void InputContext::CheckMouseContained ( Element * p_element )
+	bool InputContext::IsMouseWithin ( Element* element ) const
 	{
-		++ElementCount;
+		return IsMouseWithin ( element->GetBounds (), MousePosition );
+	}
 
-		if (IsMouseContained ( p_element->GetBounds() ))
+	void InputContext::Refresh ( sf::Event::MouseMoveEvent& event )
+	{
+		MousePosition.X = event.x;
+		MousePosition.Y = event.y;
+	}
+
+	void InputContext::OnMouseEnter ( Element* element )
+	{
+		element->OnMouseEnter ();
+
+		// TODO: Should the elements be able to send data to themselves?
+		if ( m_dragDropSource )
 		{
-			if (!HighestElement)
+			m_dragDropTarget = element;
+			element->OnDragEnter ( m_dragDropSource );
+		}
+	}
+
+	void InputContext::OnDragBegin ( Element* source )
+	{
+		source->OnDragBegin ();
+	}
+
+	void InputContext::OnMouseLeave ( Element* element )
+	{
+		element->OnMouseLeave ();
+
+		// The mouse is being held down outside of the element's borders.
+		if ( element->IsBeingPressed () && !element->IsBeingDragged () )
+		{
+			m_dragDropSource = element;
+			OnDragBegin ( element );
+		}
+	}
+
+	void InputContext::OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, const long delta )
+	{
+		element->OnMouseDown ( event );
+	}
+
+	void InputContext::OnMouseMove ( Element* element )
+	{
+		const bool isMouseWithin = IsMouseWithin ( element );
+
+		if ( isMouseWithin )
+		{
+			if ( !m_activeElement )
 			{
-				m_isMouseDownOnHighestElement = true;
-				HighestElement = p_element;
+				m_activeElement = element;
+			}
+
+			if ( element->GetHeight () > m_activeElement->GetHeight () )
+			{
+				m_activeElement->OnMouseLeave ();
+				m_activeElement = element;
+			}
+
+			if ( element != m_activeElement )
+			{
 				return;
 			}
 
-			if (p_element->GetHeight() > HighestElement->GetHeight())
+			if ( element->IsCursorInside () )
 			{
-				m_isMouseDownOnHighestElement = true;
-				HighestElement = p_element;
-			}
-		}
-		else
-		{
-			if (ActiveElement == p_element && !PressedElement)
-			{
-				ActiveElement->OnMouseLeave();
-				ActiveElement = nullptr;
+				if ( element == m_dragDropTarget )
+				{
+					element->OnDragMove ( m_dragDropSource );
+				}
+
+				element->OnMouseMove ();
+				return;
 			}
 
-			if (p_element == PressedElement && m_isMouseReleased)
+			OnMouseEnter ( element );
+			return;
+		}
+
+		if ( element->IsCursorInside () )
+		{
+			m_activeElement = nullptr;
+			OnMouseLeave ( element );
+		}
+	}
+
+	void InputContext::OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, const long delta )
+	{
+		if ( m_pressedElement == m_activeElement )
+		{
+			m_pressedElement = nullptr;
+			element->OnMouseClick ( event );
+
+			return;
+		}
+
+		element->OnMouseUp ( event );
+	}
+
+	void InputContext::HandleElementEvent ( Element* element, const sf::Event& event, const long delta )
+	{
+		switch ( event.type )
+		{
+			case sf::Event::MouseMoved :
 			{
-				PressedElement->OnMouseUp();
-				LOG("PressedElement - OnMouseUp");
-				PressedElement = nullptr;
+				OnMouseMove ( element );
+				break;
 			}
 
-			if (HighestElement == p_element)
+			case sf::Event::MouseButtonPressed :
 			{
-				HighestElement = nullptr;
+				if ( !element->IsCursorInside () || element->IsBeingPressed())
+				{
+					return;
+				}
+
+				m_pressedElement = element;
+				OnMouseDown ( element, event.mouseButton, delta );
+
+				return;
 			}
+
+			case sf::Event::MouseButtonReleased :
+			{
+				if ( !element->IsBeingPressed () )
+				{
+					return;
+				}
+
+				if ( element->IsBeingDragged () && m_dragDropSource == element )
+				{
+					m_dragDropSource = nullptr;
+
+					if ( !m_dragDropTarget )
+					{
+						return;
+					}
+
+					m_dragDropTarget->OnDrop ( MouseDropEvent ( *element ) );
+					m_dragDropTarget = nullptr;
+
+					element->OnDragDrop ( MouseDragDropEvent ( *m_dragDropTarget ) );
+				}
+
+				OnMouseUp ( element, event.mouseButton, delta );
+				break;
+			}
+
+			default : ;
 		}
 	}
 
-	void InputContext::EndInput ()
+	template < typename _Ty >
+	bool InputContext::IsMouseWithin ( IntRect& rectangle, Vector2 <_Ty> point )
 	{
-		if (!HighestElement)
-		{
-			return;
-		}
-
-		HandleMouseStates ( IsActiveElementChanged() );
-
-		HighestElement = nullptr;
-		m_isMouseMoved = false;
-		ElementCount = 0;
-	}
-
-	bool InputContext::IsActiveElementChanged ()
-	{
-		if (!ActiveElement)
-		{
-			ChangeActiveElement();
-			return true;
-		}
-
-		if (ActiveElement == HighestElement)
-		{
-			return false;
-		}
-
-		if (ActiveElement->GetHeight() < HighestElement->GetHeight())
-		{
-			ChangeActiveElement();
-			return true;
-		}
-
-		if (ActiveElement == HighestElement && !m_isMouseDownOnHighestElement)
-		{
-			ChangeActiveElement();
-			return true;
-		}
-
-		if (!IsMouseContained ( ActiveElement->GetBounds() ))
-		{
-			ChangeActiveElement();
-			return true;
-		}
-
-		return false;
-	}
-
-	void InputContext::ChangeActiveElement ()
-	{
-		if (ActiveElement && ActiveElement != PressedElement)
-		{
-			ActiveElement->OnMouseLeave();
-		}
-
-		ActiveElement = HighestElement;
-	}
-
-	void InputContext::PollEvent ( sf::RenderWindow * p_renderWindow )
-	{
-		m_eventChanged = p_renderWindow->pollEvent ( m_sfEvent );
-		m_isMouseMoved = m_sfEvent.type == sf::Event::MouseMoved && m_eventChanged;
-		m_isMouseDown = m_sfEvent.type == sf::Event::MouseButtonPressed && m_eventChanged;
-		m_isMouseReleased = m_sfEvent.type == sf::Event::MouseButtonReleased && m_eventChanged;
-
-		if (m_isMouseMoved)
-		{
-			MousePosition.X = m_sfEvent.mouseMove.x;
-			MousePosition.Y = m_sfEvent.mouseMove.y;
-		}
-
-		if (m_isMouseDown || m_isMouseReleased)
-		{
-			m_mouseButton = m_sfEvent.mouseButton.button;
-		}
-	}
-
-	bool InputContext::IsMouseContained ( IntRect & p_value )
-	{
-		return p_value.Contains ( MousePosition );
-	}
-
-	void InputContext::HandleMouseStates ( bool p_wasActiveElementChanged )
-	{
-		// Mouse is released on the active element and the pressed element is the same as active element. Call OnMouseClick.
-		if (m_isMouseReleased && ActiveElement == PressedElement)
-		{
-			PressedElement = nullptr;
-
-			ActiveElement->OnMouseClick();
-			LOG("OnMouseClick " << ActiveElement->GetName());
-			return;
-		}
-
-		// Mouse is released on the active element and it's not the pressed element. Call OnMouseUp on the pressed element and OnMouseEnter on the active element.
-		if (m_isMouseReleased && PressedElement)
-		{
-			PressedElement->OnMouseUp();
-			LOG("PressedElement OnMouseUp " << PressedElement->GetName());
-			PressedElement = nullptr;
-
-			ActiveElement->OnMouseEnter();
-			LOG("OnMouseEnter " << ActiveElement->GetName());
-			return;
-		}
-
-		if (m_isMouseDown && !PressedElement)
-		{
-			PressedElement = ActiveElement;
-			ActiveElement->OnMouseDown();
-			LOG("OnMouseDown " << ActiveElement->GetName());
-			return;
-		}
-
-		if (!p_wasActiveElementChanged && !PressedElement)
-		{
-			ActiveElement->OnMouseMove();
-			return;
-		}
-
-		if (p_wasActiveElementChanged && !PressedElement)
-		{
-			ActiveElement->OnMouseEnter();
-			LOG("OnMouseEnter " << ActiveElement->GetName());
-		}
+		return rectangle.Contains ( point );
 	}
 }

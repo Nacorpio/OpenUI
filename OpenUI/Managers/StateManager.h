@@ -193,6 +193,6 @@ namespace OpenUI
 		Element * m_activeElement = nullptr;
 		ClientWindow * m_activeClientWindow = nullptr;
 		HighestElementInfo m_highestElementInfo = HighestElementInfo(nullptr,false);
-		std::set<Element*,ElementComparerHeight> m_hoveredElements;
+		std::set<Element*,ElementComparerTree> m_hoveredElements;
 	};
 }

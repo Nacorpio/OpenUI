@@ -20,38 +20,26 @@ OpenUI::ClientWindow::~ClientWindow ()
 	m_renderWindow = nullptr;
 }
 
-void OpenUI::ClientWindow::Start ()
+void OpenUI::ClientWindow::Start () const
 {
-	for (Element* element : m_children)
-	{
-		element->Start();
-	}
+	Element::Start();
 }
 
-void OpenUI::ClientWindow::Initialize ()
+void OpenUI::ClientWindow::Initialize () const
 {
-	for (Element* element : m_children)
-	{
-		element->Initialize();
-	}
+	Element::Initialize();
 }
 
 void OpenUI::ClientWindow::Update ()
 {
-	for (Element* element : m_children)
-	{
-		element->Update();
-	}
+	Element::Update();
 }
 
 void OpenUI::ClientWindow::Draw ( const GraphicsContext& gContext )
 {
 	m_renderWindow->clear ( sf::Color::Cyan );
 
-	for ( Element* element : m_children )
-	{
-		element->Draw ( gContext );
-	}
+	Element::Draw(gContext);
 
 	m_renderWindow->display ();
 }
@@ -59,4 +47,47 @@ void OpenUI::ClientWindow::Draw ( const GraphicsContext& gContext )
 sf::RenderWindow& OpenUI::ClientWindow::GetRenderWindow () const
 {
 	return *m_renderWindow;
+}
+
+void OpenUI::ClientWindow::Input ( const long delta )
+{
+	if ( !m_renderWindow->pollEvent ( m_event ) )
+	{
+		return;
+	}
+
+	m_lastEvent = m_event;
+
+	switch ( m_event.type )
+	{
+		case sf::Event::MouseEntered :
+		{
+			OnMouseEnter ();
+			return;
+		}
+
+		case sf::Event::MouseLeft :
+		{
+			OnMouseLeave ();
+			return;
+		}
+
+		case sf::Event::MouseMoved :
+		{
+			m_inputContext.Refresh ( m_event.mouseMove );
+			break;
+		}
+
+		default : ;
+	}
+
+	if ( !IsCursorInside () )
+	{
+		return;
+	}
+
+	for ( Element* element : m_descendants )
+	{
+		m_inputContext.HandleElementEvent ( element, m_event, delta );
+	}
 }

@@ -9,8 +9,13 @@ namespace OpenUI
 		return lhs->GetDrawOrder () < rhs->GetDrawOrder ();
 	}
 
-	bool ElementComparerHeight::operator() (const Element* lhs, const Element* rhs) const
+	bool ElementComparerTree::operator() ( const Element* lhs, const Element* rhs ) const
 	{
-		return lhs->GetHeight() > rhs->GetHeight();
+		if ( lhs->GetLevel () == rhs->GetLevel () )
+		{
+			return lhs->GetDrawOrder () < rhs->GetDrawOrder ();
+		}
+
+		return lhs->GetLevel () < rhs->GetLevel ();
 	}
 }

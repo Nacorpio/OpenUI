@@ -2,8 +2,6 @@
 #include "Entities/Elements/Windows/ClientWindow.h"
 #include "Managers/ElementMgr.h"
 #include "Managers/StateManager.h"
-#include "InputContext.h"
-#include <iso646.h>
 
 namespace OpenUI
 {
@@ -19,8 +17,7 @@ namespace OpenUI
 		void Start()
 		{
 			m_clientWindows = &sElementMgr->m_clientWindows;
-			StartAndInitWindows();
-			InputAndUpdateWindows();
+			Initialize();
 			ProgramLoop();
 		}
 
@@ -34,9 +31,10 @@ namespace OpenUI
 		void ProgramLoop() const
 		{
 			sf::Clock clock;
+
 			static const int ticksPerSecond = 60;
-			const int skipTicks = 1000 / ticksPerSecond;
-			const int maxFrameSkips = 10;
+			static const int skipTicks = 1000 / ticksPerSecond;
+			static const int maxFrameSkips = 10;
 
 			int nextTick = clock.getElapsedTime().asMilliseconds();
 			int elapsedTime = 0;
@@ -44,19 +42,20 @@ namespace OpenUI
 			long previousUpdate = 1, currentUpdate = 1, delta = 0,previousFPSUpdate = 0, nextFPSUpdate = nextTick + 1000;
 			float interpolation = 0;
 
-			double frames = 0;
-			double frameTime = 0;
-			const bool enablePerformanceProfiler = false;
+			static double frames = 0;
+			static double frameTime = 0;
+
+			static const bool enablePerformanceProfiler = false;
 
 			while (true)
 			{
 				elapsedTime = clock.getElapsedTime().asMilliseconds();
-
 				loops = 0;
 
 				while (elapsedTime > nextTick && loops < maxFrameSkips)
 				{
-					InputAndUpdateWindows();
+					Update(delta);
+
 					nextTick += skipTicks;
 					++loops;
 				}
@@ -64,7 +63,9 @@ namespace OpenUI
 				previousUpdate = currentUpdate;
 				currentUpdate = elapsedTime;
 
-				DrawWindows();
+				delta = currentUpdate - previousUpdate;
+
+				Draw();
 
 				if(enablePerformanceProfiler)
 				{
@@ -84,32 +85,32 @@ namespace OpenUI
 		/// <summary>
 		///		Starts and initializes the windows which will start and initialize the elements.
 		/// </summary>
-		void StartAndInitWindows() const
+		void Initialize() const
 		{
 			ClientWindow * clientWindow = nullptr;
 			for (auto it = m_clientWindows->begin(); it != m_clientWindows->end(); ++it)
 			{
 				clientWindow = it._Ptr->_Myval;
-				clientWindow->Start();
 				clientWindow->Initialize();
+				clientWindow->Start();
 			}
 		}
 
 		/// <summary>
-		///		Input and update the clientwindow(s).
+		///		Input and update the client window(s).
 		/// </summary>
-		void InputAndUpdateWindows() const
+		void Update(const long delta) const
 		{
 			ClientWindow * clientWindow = nullptr;
 			for (auto it = m_clientWindows->begin(); it != m_clientWindows->end(); ++it)
 			{
 				clientWindow = it._Ptr->_Myval;
-				clientWindow->Input();
+				clientWindow->Input(delta);
 				clientWindow->Update();
 			}
 		}
 
-		void DrawWindows() const
+		void Draw() const
 		{
 			ClientWindow * clientWindow = nullptr;
 			for (auto it = m_clientWindows->begin(); it != m_clientWindows->end(); ++it)

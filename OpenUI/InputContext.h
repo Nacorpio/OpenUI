@@ -1,49 +1,62 @@
 #pragma once
 #include "Math/Vector2.h"
 #include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include "Entities/Elements/Element.h"
-
-
+#include "Rectangle.h"
 
 namespace OpenUI
 {
+	class Element;
+
 	struct InputContext
-	{		
-		Element * ActiveElement = nullptr;
-		Element * HighestElement = nullptr;
-		Element * PressedElement = nullptr;
-		IntVector MousePosition{0,0};
-		uint16_t ElementCount = 0;
+	{
+		struct MouseDropEvent
+		{
+			explicit MouseDropEvent ( const Element& source )
+				: Source ( source )
+			{
+			}
+
+			const Element& Source;
+		};
+
+		struct MouseDragDropEvent
+		{
+			explicit MouseDragDropEvent ( const Element& target )
+				: Target ( target )
+			{
+			}
+
+			const Element& Target;
+		};
+
+		IntVector MousePosition { 0, 0 };
 		InputContext ();
 
-		void CheckMouseContained ( Element * p_element );
+		void Refresh ( sf::Event::MouseMoveEvent& event );
 
-		void EndInput ();
+		bool IsMouseWithin ( Element* element ) const;
 
-		/// <summary>
-		///		Pools the event to be used with input handling from a specified render window.
-		/// </summary>
-		/// <param name="p_renderWindow"></param>
-		void PollEvent(sf::RenderWindow * p_renderWindow);
+		template < typename _Ty >
+		static bool IsMouseWithin ( IntRect& p_value, Vector2 <_Ty> point );
+
+		void OnDragBegin ( Element* source );
+
+		void OnMouseEnter ( Element* element );
+		void OnMouseLeave ( Element* element );
+		void OnMouseMove ( Element* element );
+
+		void OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, long delta );
+		void OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, long delta );
+
+		void HandleElementEvent ( Element* element, const sf::Event& event, long delta );
 
 	private:
-		bool m_eventChanged = false;
-		bool m_isMouseMoved = false;
-		bool m_isMouseDown = false;
-		bool m_isMouseReleased = false;
-		bool m_isMouseDownOnHighestElement = false;
-		bool m_isMouseDownOnActiveElement = false;
-		sf::Event m_sfEvent;
-		sf::Mouse::Button m_mouseButton;
+		Element* m_activeElement;
+		Element* m_pressedElement;
 
-		bool IsMouseContained ( IntRect & p_value );
+		Element* m_dragDropSource;
+		Element* m_dragDropTarget;
 
-		bool IsActiveElementChanged ();
-
-		void ChangeActiveElement ();
-		
-		void HandleMouseStates ( bool p_wasActiveElementChanged );
+		sf::Event m_event;
 	};
 }
-

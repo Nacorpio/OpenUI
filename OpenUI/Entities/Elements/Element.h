@@ -10,7 +10,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "Entities/Controls/Control.h"
-
+#include <SFML/Window/Event.hpp>
 
 namespace OpenUI
 {
@@ -37,7 +37,6 @@ namespace OpenUI
 		const std::string& GetName () const { return m_name; }
 
 		ClientWindow* GetClientWindow() const { return m_clientWindow; }
-
 		Element* GetParent () const { return m_parent; }
 		uint16_t GetDrawOrder () const { return m_drawOrder; }
 
@@ -53,15 +52,15 @@ namespace OpenUI
 		/// <returns>The level of this element.</returns>
 		uint16_t GetLevel() const { return m_level; }
 
-		IntRect & GetBounds()  { return m_bounds;	}
+		IntRect& GetBounds()  { return m_bounds;	}
 		IntVector& GetSize() { return m_bounds.Size; }
-		IntVector & GetPosition() { return m_bounds.Position; }
+		IntVector& GetPosition() { return m_bounds.Position; }
 
 		std::vector <sf::RectangleShape*>& GetShapes ();
 		std::vector <sf::Text*>& GetTexts ();
-		sf::RectangleShape* GetShape(const int & p_index);
+		std::vector <Element*>& GetChildren() { return m_children; }
 
-		std::vector<Element*> & GetChildren()  { return m_children; }
+		sf::RectangleShape* GetShape(const int & p_index);
 
 		void SetParent(Element* element);
 
@@ -79,23 +78,28 @@ namespace OpenUI
 		void RemoveChild ( Element* element );
 		bool HasChild ( const Element* element );
 
-		/* Parent is not guarenteed to be set. */
-		virtual void Start ();
+		virtual void Start () const;
+		virtual void Initialize() const;
 
-		/* Parent is guaranteed to be set. */
-		virtual void Initialize();
-
-		virtual void Input(InputContext * p_inputContext);
-
-		/* Updates the state of the element. */
 		virtual void Update();
-
-		/* Draws the element. */
 		virtual void Draw ( const GraphicsContext& gContext );
 
 		virtual void OnChildAdded ( Element& child ) {}
 		virtual void OnChildRemoved ( Element& child ) {}
 		virtual void OnParentChanged( Element& newParent) {}
+
+		void OnMouseEnter () override;
+		void OnMouseLeave () override;
+		void OnMouseHover () override;
+		void OnMouseMove () override;
+
+		void OnMouseDown ( const sf::Event::MouseButtonEvent& event) override;
+		void OnMouseUp ( const sf::Event::MouseButtonEvent& event ) override;
+
+		virtual void OnDrop ( const InputContext::MouseDropEvent& event ) override;
+		virtual void OnDragDrop( const InputContext::MouseDragDropEvent& event ) override;
+		virtual void OnDragEnter ( Element* source ) override;
+		virtual void OnDragMove ( Element* source ) override;
 
 		bool operator == ( const Element& rhs ) const;
 		bool operator != ( const Element& rhs ) const;
@@ -114,6 +118,9 @@ namespace OpenUI
 		uint16_t m_height = 0;
 		uint16_t m_level = 0;
 
+		long m_lastMouseDown = 0;
+		long m_lastMouseRelease = 0;
+
 		std::vector<sf::RectangleShape*> m_shapes;
 		std::vector<sf::Text*> m_texts;
 		std::set <sf::Drawable*> m_drawables { };
@@ -121,6 +128,7 @@ namespace OpenUI
 		IntRect m_bounds;
 		
 		Element* m_parent = nullptr;
+
 		ClientWindow* m_clientWindow = nullptr;
 	};
 }
