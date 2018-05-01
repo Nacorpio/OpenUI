@@ -167,8 +167,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ColorManager.h" />
+    <ClInclude Include="Graphic\ColorScheme.h" />
     <ClInclude Include="Common\common.h" />
-    <ClInclude Include="Controller.h" />
+    <ClInclude Include="Managers\Controller.h" />
     <ClInclude Include="Entities\Elements\Windows\ClientWindow.h" />
     <ClInclude Include="Common\Comparers\ElementComparer.h" />
     <ClInclude Include="Common\Constants.h" />
@@ -187,12 +189,15 @@
     <ClInclude Include="Math\Size.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Managers\StateManager.h" />
-    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Math\Rectangle.h" />
+    <ClInclude Include="Graphic\ScissorTest.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="ColorManager.cpp" />
+    <ClCompile Include="Graphic\ColorScheme.cpp" />
+    <ClCompile Include="Managers\Controller.cpp" />
     <ClCompile Include="Entities\Elements\Windows\ClientWindow.cpp" />
     <ClCompile Include="Common\Comparers\ElementComparer.cpp" />
     <ClCompile Include="Common\Constants.cpp" />
@@ -212,7 +217,8 @@
     <ClCompile Include="Managers\StateManager.cpp" />
     <ClCompile Include="OpenUI.cpp" />
     <ClCompile Include="Managers\ResourceMgr.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Math\Rectangle.cpp" />
+    <ClCompile Include="Graphic\ScissorTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

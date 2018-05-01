@@ -5,12 +5,11 @@
 #include <set>
 #include <Entities/Objects/Object.h>
 #include <Math/Vector2.h>
-#include <Rectangle.h>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "Entities/Controls/Control.h"
-#include <SFML/Window/Event.hpp>
+
 
 namespace OpenUI
 {
@@ -88,19 +87,6 @@ namespace OpenUI
 		virtual void OnChildRemoved ( Element& child ) {}
 		virtual void OnParentChanged( Element& newParent) {}
 
-		void OnMouseEnter () override;
-		void OnMouseLeave () override;
-		void OnMouseHover () override;
-		void OnMouseMove () override;
-
-		void OnMouseDown ( const sf::Event::MouseButtonEvent& event) override;
-		void OnMouseUp ( const sf::Event::MouseButtonEvent& event ) override;
-
-		virtual void OnDrop ( const InputContext::MouseDropEvent& event ) override;
-		virtual void OnDragDrop( const InputContext::MouseDragDropEvent& event ) override;
-		virtual void OnDragEnter ( Element* source ) override;
-		virtual void OnDragMove ( Element* source ) override;
-
 		bool operator == ( const Element& rhs ) const;
 		bool operator != ( const Element& rhs ) const;
 
@@ -112,14 +98,19 @@ namespace OpenUI
 	private:
 		void SortDrawOrder() const;
 
+	public:
+		void OnStateChanged ( MouseState p_state ) override
+		{
+			m_shapes[0]->setFillColor(m_scheme[p_state].BackColor);
+			
+		}
+
+	private:
 		const std::string m_name = "Element";
-		
+		ScissorTest m_scissorTest;
 		uint16_t m_drawOrder = 0;
 		uint16_t m_height = 0;
 		uint16_t m_level = 0;
-
-		long m_lastMouseDown = 0;
-		long m_lastMouseRelease = 0;
 
 		std::vector<sf::RectangleShape*> m_shapes;
 		std::vector<sf::Text*> m_texts;
