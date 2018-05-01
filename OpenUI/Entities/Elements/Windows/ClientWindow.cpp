@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ClientWindow.h"
+#include "Contexts.h"
 
 OpenUI::ClientWindow::ClientWindow ( const std::string& name, const RenderWindowSettings& windowSettings )
 	: Element ( name )
@@ -35,9 +36,9 @@ void OpenUI::ClientWindow::Initialize () const
 	Element::Initialize();
 }
 
-void OpenUI::ClientWindow::Update ()
+void OpenUI::ClientWindow::Update (const UpdateContext & p_updateContext)
 {
-	Element::Update();
+	Element::Update(p_updateContext);
 }
 
 void OpenUI::ClientWindow::Draw ( const GraphicsContext& gContext )
@@ -54,7 +55,7 @@ sf::RenderWindow& OpenUI::ClientWindow::GetRenderWindow () const
 	return *m_renderWindow;
 }
 
-void OpenUI::ClientWindow::Input ( const long delta )
+void OpenUI::ClientWindow::Input ( const InputContext & p_inputContext )
 {
 	if ( !m_renderWindow->pollEvent ( m_event ) )
 	{
@@ -79,7 +80,7 @@ void OpenUI::ClientWindow::Input ( const long delta )
 
 		case sf::Event::MouseMoved :
 		{
-			m_inputContext.Refresh ( m_event.mouseMove );
+			m_inputHandler.Refresh ( m_event.mouseMove );
 			break;
 		}
 
@@ -93,6 +94,6 @@ void OpenUI::ClientWindow::Input ( const long delta )
 
 	for ( Element* element : m_descendants )
 	{
-		m_inputContext.HandleElementEvent ( element, m_event, delta );
+		m_inputHandler.HandleElementEvent ( element, m_event, p_inputContext);
 	}
 }

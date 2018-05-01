@@ -2,7 +2,7 @@
 
 #include <string>
 #include <SFML/Window/Event.hpp>
-#include "InputContext.h"
+#include "InputHandler.h"
 
 namespace OpenUI
 {
@@ -46,13 +46,13 @@ namespace OpenUI
 		virtual void OnDragEnter ( Element* );
 		virtual void OnDragMove ( Element* );
 
-		virtual void OnDrop ( const InputContext::MouseDropEvent& );
-		virtual void OnDragDrop ( const InputContext::MouseDragDropEvent& );
+		virtual void OnDrop ( const InputHandler::MouseDropEvent& );
+		virtual void OnDragDrop ( const InputHandler::MouseDragDropEvent& );
 
 		virtual void OnStateChanged(MouseState p_state) {}
 
 	private:
-		friend struct InputContext;
+		friend struct InputHandler;
 
 		void SetState(ControlState state);
 		void SetState(const int state) { SetState((ControlState)state); }

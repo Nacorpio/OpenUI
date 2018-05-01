@@ -31,6 +31,7 @@ namespace OpenUI
 				return;
 			}
 
+			// TODO: Cache this down the hierarchy
 			m_scissorTestWasEnabled = glIsEnabled(GL_SCISSOR_TEST);
 			if (CheckIntersection && m_scissorTestWasEnabled)
 			{

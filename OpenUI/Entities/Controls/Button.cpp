@@ -25,9 +25,9 @@ namespace OpenUI
 		Element::Initialize ();
 	}
 
-	void Button::Update ()
+	void Button::Update (const UpdateContext & p_updateContext)
 	{
-		Element::Update ();
+		Element::Update (p_updateContext);
 	}
 
 	void Button::Draw ( const GraphicsContext& gContext )
@@ -74,7 +74,7 @@ namespace OpenUI
 		Element::OnMouseUp ( event );
 	}
 
-	void Button::OnDrop ( const InputContext::MouseDropEvent& event )
+	void Button::OnDrop ( const InputHandler::MouseDropEvent& event )
 	{
 		Element::OnDrop ( event );
 	}

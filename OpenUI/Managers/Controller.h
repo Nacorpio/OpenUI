@@ -1,6 +1,10 @@
 #pragma once
 #include "Entities/Elements/Windows/ClientWindow.h"
 #include "Managers/ElementMgr.h"
+#include "Common/Constants.h"
+#include <iostream>
+#include "Contexts.h"
+
 
 namespace OpenUI
 {
@@ -26,8 +30,11 @@ namespace OpenUI
 		}
 
 	private:
+		InputContext m_inputContext;
+		UpdateContext m_updateContext;
 
-		void ProgramLoop() const
+
+		void ProgramLoop()
 		{
 			sf::Clock clock;
 
@@ -53,7 +60,11 @@ namespace OpenUI
 
 				while (elapsedTime > nextTick && loops < maxFrameSkips)
 				{
-					Update(delta);
+					m_inputContext.Delta = delta;
+					m_inputContext.ElapsedTime = elapsedTime;
+					m_updateContext.Delta = delta;
+					m_updateContext.ElapsedTime = elapsedTime;
+					Update();
 
 					nextTick += skipTicks;
 					++loops;
@@ -98,14 +109,14 @@ namespace OpenUI
 		/// <summary>
 		///		Input and update the client window(s).
 		/// </summary>
-		void Update(const long delta) const
+		void Update() const
 		{
 			ClientWindow * clientWindow = nullptr;
 			for (auto it = m_clientWindows->begin(); it != m_clientWindows->end(); ++it)
 			{
 				clientWindow = it._Ptr->_Myval;
-				clientWindow->Input(delta);
-				clientWindow->Update();
+				clientWindow->Input(m_inputContext);
+				clientWindow->Update(m_updateContext);
 			}
 		}
 
@@ -119,8 +130,10 @@ namespace OpenUI
 			}
 		}
 
-		std::set <ClientWindow*> * m_clientWindows = nullptr;
-		GraphicsContext* m_graphicsContext = nullptr;
+		std::set <ClientWindow*> * m_clientWindows;
+		GraphicsContext* m_graphicsContext;
+
+
 	};
 	
 }

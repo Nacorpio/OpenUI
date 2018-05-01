@@ -167,7 +167,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ColorManager.h" />
+    <ClInclude Include="Contexts.h" />
     <ClInclude Include="Graphic\ColorScheme.h" />
     <ClInclude Include="Common\common.h" />
     <ClInclude Include="Managers\Controller.h" />
@@ -180,7 +180,7 @@
     <ClInclude Include="Common\Enums.h" />
     <ClInclude Include="Graphic\GraphicsContext.h" />
     <ClInclude Include="Graphic\GraphicProperties.h" />
-    <ClInclude Include="InputContext.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Managers\ElementMgr.h" />
     <ClInclude Include="Entities\Controls\Control.h" />
     <ClInclude Include="Entities\Elements\Element.h" />
@@ -194,7 +194,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ColorManager.cpp" />
+    <ClCompile Include="Contexts.cpp" />
     <ClCompile Include="Graphic\ColorScheme.cpp" />
     <ClCompile Include="Managers\Controller.cpp" />
     <ClCompile Include="Entities\Elements\Windows\ClientWindow.cpp" />
@@ -206,7 +206,7 @@
     <ClCompile Include="Common\Enums.cpp" />
     <ClCompile Include="Graphic\GraphicsContext.cpp" />
     <ClCompile Include="Graphic\GraphicProperties.cpp" />
-    <ClCompile Include="InputContext.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Managers\ElementMgr.cpp" />
     <ClCompile Include="Entities\Controls\Control.cpp" />
     <ClCompile Include="Entities\Elements\Element.cpp" />
