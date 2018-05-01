@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "Control.h"
-#include "Common/Constants.h"
-#include <iostream>
 
 namespace OpenUI
 {
@@ -11,7 +9,7 @@ namespace OpenUI
 
 	Control::ControlState Control::GetState () const
 	{
-		return (ControlState) m_st;
+		return ControlState ( m_st );
 	}
 
 	void Control::SetState ( const ControlState state )
@@ -22,19 +20,16 @@ namespace OpenUI
 	void Control::OnMouseEnter ()
 	{
 		AddState ( Entered );
-		LOG("");
 	}
 
 	void Control::OnMouseLeave ()
 	{
 		RemoveState ( Entered );
-		LOG("");
 	}
 
 	void Control::OnMouseHover ()
 	{
 		AddState ( Hovered );
-		LOG("");
 	}
 
 	void Control::OnMouseMove ()
@@ -44,44 +39,37 @@ namespace OpenUI
 	void Control::OnMouseDown ( const sf::Event::MouseButtonEvent& event )
 	{
 		AddState ( Pressed );
-		LOG("");
 	}
 
 	void Control::OnMouseClick ( const sf::Event::MouseButtonEvent& event )
 	{
 		RemoveState ( Pressed );
-		LOG("");
 	}
 
 	void Control::OnMouseUp (const sf::Event::MouseButtonEvent& event )
 	{
 		RemoveState ( Pressed );
-		LOG("");
 	}
 
-	void Control::OnDrop ( const InputContext::MouseDropEvent& event )
+	void Control::OnDrop ( const InputHandler::MouseDropEvent& event )
 	{
-		LOG("");
 	}
 
-	void Control::OnDragDrop ( const InputContext::MouseDragDropEvent& event )
+	void Control::OnDragDrop ( const InputHandler::MouseDragDropEvent& event )
 	{
 		RemoveState ( Dragged );
 		RemoveState ( Pressed );
 
-		LOG("");
 	}
 
 	void Control::OnDragBegin ()
 	{
 		AddState ( Dragged );
-		LOG("");
 	}
 
 	void Control::OnDragEnter ( Element* )
 	{
 		AddState ( Entered );
-		LOG("");
 	}
 
 	void Control::OnDragMove ( Element* source )

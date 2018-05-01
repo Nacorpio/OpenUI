@@ -5,9 +5,10 @@
 
 namespace OpenUI
 {
+	struct InputContext;
 	class Element;
 
-	struct InputContext
+	struct InputHandler
 	{
 		struct MouseDropEvent
 		{
@@ -30,7 +31,7 @@ namespace OpenUI
 		};
 
 		IntVector MousePosition { 0, 0 };
-		InputContext ();
+		InputHandler();
 
 		void Refresh ( sf::Event::MouseMoveEvent& event );
 
@@ -45,10 +46,10 @@ namespace OpenUI
 		void OnMouseLeave ( Element* element );
 		void OnMouseMove ( Element* element );
 
-		void OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, long delta );
-		void OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, long delta );
+		void OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext);
+		void OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext);
 
-		void HandleElementEvent ( Element* element, const sf::Event& event, long delta );
+		void HandleElementEvent ( Element* element, const sf::Event& event, const InputContext & p_inputContext);
 
 	private:
 		Element* m_activeElement;

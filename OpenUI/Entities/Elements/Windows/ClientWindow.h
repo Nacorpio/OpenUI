@@ -4,8 +4,9 @@
 #include "SFML/Window/Event.hpp"
 #include "Common/Constants.h"
 #include "Entities/Elements/Element.h"
-#include "InputContext.h"
+#include "InputHandler.h"
 #include "Common/Comparers/ElementComparer.h"
+#include "Contexts.h"
 
 namespace OpenUI
 {
@@ -37,12 +38,12 @@ namespace OpenUI
 
 		void Start () const override;
 		void Initialize () const override;
-		void Update () override;
+		void Update (const UpdateContext & p_updateContext) override;
 		void Draw ( const GraphicsContext& gContext ) override;
 
 		sf::RenderWindow& GetRenderWindow () const;
 
-		void Input ( long delta );
+		void Input ( const InputContext & p_inputContext);
 
 	private:
 		friend class Element;
@@ -55,6 +56,6 @@ namespace OpenUI
 		std::set <Element*, ElementComparerTree> m_descendants { };
 		sf::RenderWindow* m_renderWindow { };
 
-		InputContext m_inputContext { };
+		InputHandler m_inputHandler { };
 	};
 }

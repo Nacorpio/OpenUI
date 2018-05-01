@@ -56,11 +56,8 @@ namespace OpenUI
 	{
 		None,
 		Entered,
-		Moved,
 		Hovered,
 		Pressed,
-		Released,
-		Clicked
 	};
 
 	#define State(type, name) case Control::ControlState::##type: os << name; break

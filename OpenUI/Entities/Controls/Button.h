@@ -14,7 +14,7 @@ namespace OpenUI
 		void Start () const override;
 		void Initialize () const override;
 
-		void Update () override;
+		void Update (const UpdateContext & p_updateContext) override;
 		void Draw ( const GraphicsContext & gContext ) override;
 
 		void OnMouseEnter () override;
@@ -26,7 +26,7 @@ namespace OpenUI
 		void OnMouseDown( const sf::Event::MouseButtonEvent& event) override;
 		void OnMouseClick (const sf::Event::MouseButtonEvent& event ) override;
 
-		void OnDrop (const InputContext::MouseDropEvent& event) override;
+		void OnDrop (const InputHandler::MouseDropEvent& event) override;
 		void OnDragBegin () override;
 	};
 }

@@ -1,25 +1,25 @@
 #include "stdafx.h"
-#include "InputContext.h"
+#include "InputHandler.h"
 #include "Entities/Elements/Element.h"
 
 namespace OpenUI
 {
-	InputContext::InputContext ()
+	InputHandler::InputHandler()
 	{
 	}
 
-	bool InputContext::IsMouseWithin ( Element* element ) const
+	bool InputHandler::IsMouseWithin ( Element* element ) const
 	{
 		return IsMouseWithin ( element->GetBounds (), MousePosition );
 	}
 
-	void InputContext::Refresh ( sf::Event::MouseMoveEvent& event )
+	void InputHandler::Refresh ( sf::Event::MouseMoveEvent& event )
 	{
 		MousePosition.X = event.x;
 		MousePosition.Y = event.y;
 	}
 
-	void InputContext::OnMouseEnter ( Element* element )
+	void InputHandler::OnMouseEnter ( Element* element )
 	{
 		element->OnMouseEnter ();
 
@@ -31,12 +31,12 @@ namespace OpenUI
 		}
 	}
 
-	void InputContext::OnDragBegin ( Element* source )
+	void InputHandler::OnDragBegin ( Element* source )
 	{
 		source->OnDragBegin ();
 	}
 
-	void InputContext::OnMouseLeave ( Element* element )
+	void InputHandler::OnMouseLeave ( Element* element )
 	{
 		element->OnMouseLeave ();
 
@@ -48,12 +48,12 @@ namespace OpenUI
 		}
 	}
 
-	void InputContext::OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, const long delta )
+	void InputHandler::OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext)
 	{
 		element->OnMouseDown ( event );
 	}
 
-	void InputContext::OnMouseMove ( Element* element )
+	void InputHandler::OnMouseMove ( Element* element )
 	{
 		const bool isMouseWithin = IsMouseWithin ( element );
 
@@ -97,7 +97,7 @@ namespace OpenUI
 		}
 	}
 
-	void InputContext::OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, const long delta )
+	void InputHandler::OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext)
 	{
 		if ( m_pressedElement == m_activeElement )
 		{
@@ -110,7 +110,7 @@ namespace OpenUI
 		element->OnMouseUp ( event );
 	}
 
-	void InputContext::HandleElementEvent ( Element* element, const sf::Event& event, const long delta )
+	void InputHandler::HandleElementEvent ( Element* element, const sf::Event& event, const InputContext & p_inputContext )
 	{
 		switch ( event.type )
 		{
@@ -128,7 +128,7 @@ namespace OpenUI
 				}
 
 				m_pressedElement = element;
-				OnMouseDown ( element, event.mouseButton, delta );
+				OnMouseDown ( element, event.mouseButton, p_inputContext);
 
 				return;
 			}
@@ -155,7 +155,7 @@ namespace OpenUI
 					element->OnDragDrop ( MouseDragDropEvent ( *m_dragDropTarget ) );
 				}
 
-				OnMouseUp ( element, event.mouseButton, delta );
+				OnMouseUp ( element, event.mouseButton, p_inputContext );
 				break;
 			}
 
@@ -164,7 +164,7 @@ namespace OpenUI
 	}
 
 	template < typename _Ty >
-	bool InputContext::IsMouseWithin ( IntRect& rectangle, Vector2 <_Ty> point )
+	bool InputHandler::IsMouseWithin ( IntRect& rectangle, Vector2 <_Ty> point )
 	{
 		return rectangle.Contains ( point );
 	}

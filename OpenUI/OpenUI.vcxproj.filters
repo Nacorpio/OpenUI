@@ -72,9 +72,6 @@
     <ClInclude Include="Common\Comparers\ElementComparer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InputContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Managers\Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -87,7 +84,10 @@
     <ClInclude Include="Graphic\ColorScheme.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ColorManager.h">
+    <ClInclude Include="InputHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Contexts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -146,9 +146,6 @@
     <ClCompile Include="Common\Comparers\ElementComparer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputContext.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Managers\Controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -161,7 +158,10 @@
     <ClCompile Include="Graphic\ColorScheme.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ColorManager.cpp">
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Contexts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

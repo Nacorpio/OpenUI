@@ -46,6 +46,7 @@ namespace OpenUI
 
 	void Element::SetBounds ( const IntRect& p_value )
 	{
+		IntRect delta = m_bounds - p_value;
 		m_bounds = p_value;
 		for ( sf::RectangleShape* shape : m_shapes )
 		{
@@ -53,8 +54,8 @@ namespace OpenUI
 					( sf::Vector2f ( p_value.Size.sfVector ) ); //((p_value.Size - m_bounds.Size + shape->getSize()).sfVector2f);
 			shape->setPosition
 					( sf::Vector2f ( p_value.Position.sfVector ) );
-			//shape->setPosition((p_value.Position - m_bounds.Position + shape->getPosition()).sfVector2f);
 		}
+		OnBoundsChanged(delta);
 	}
 
 	void Element::SetSize ( const IntVector& p_value )
@@ -194,6 +195,7 @@ namespace OpenUI
 
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
+		m_scissorTest.SetScissorTest();
 		for ( auto it = m_drawables.begin () ; it != m_drawables.end () ; ++it )
 		{
 			m_clientWindow->GetRenderWindow ().draw ( *it._Ptr->_Myval, sf::RenderStates::Default );
@@ -203,6 +205,7 @@ namespace OpenUI
 		{
 			element->Draw ( gContext );
 		}
+		m_scissorTest.RestorePreviousScissorTest();
 	}
 
 	void Element::OnMouseEnter ()
@@ -235,26 +238,16 @@ namespace OpenUI
 		Control::OnMouseUp ( event );
 	}
 
-	void Element::OnDrop ( const InputContext::MouseDropEvent& event )
+	void Element::OnDrop ( const InputHandler::MouseDropEvent& event )
 	{
 		Control::OnDrop ( event );
-
-		/*for (auto it = m_drawables.begin(); it != m_drawables.end(); ++it)
-		{
-			m_clientWindow->GetRenderWindow().draw(*it._Ptr->_Myval, sf::RenderStates::Default);
-		}
-
-		for (auto element : m_children)
-		{
-			element->Draw(gContext);
-		}*/
 	}
 
-	void Element::Update ()
+	void Element::Update (const UpdateContext & p_updateContext)
 	{
 		for ( auto element : m_children )
 		{
-			element->Update ();
+			element->Update (p_updateContext);
 		}
 	}
 

@@ -12,6 +12,7 @@
 #include "Common/Enums.h"
 #include "Graphic/ColorScheme.h"
 #include "Graphic/ScissorTest.h"
+#include "Contexts.h"
 
 namespace OpenUI
 {
@@ -66,7 +67,6 @@ namespace OpenUI
 		void SetParent(Element* element);
 
 		void SetBounds ( const IntRect & p_value );
-
 		void SetSize (const IntVector & p_value );
 		void SetPosition (const IntVector & p_value );
 
@@ -89,17 +89,17 @@ namespace OpenUI
 
 		virtual void OnMouseDown ( const sf::Event::MouseButtonEvent& event ) override;
 		virtual void OnMouseUp ( const sf::Event::MouseButtonEvent& event ) override;
-		virtual void OnDrop(const InputContext::MouseDropEvent & event) override;
+		virtual void OnDrop(const InputHandler::MouseDropEvent & event) override;
 
-		virtual void Update();
-		void OnBoundsChanged ( IntRect& p_delta );
+		virtual void Update(const UpdateContext & p_updateContext);
+		virtual void OnBoundsChanged ( IntRect& p_delta );
 		virtual void Draw ( const GraphicsContext& gContext );
 
 		virtual void OnChildAdded ( Element& child ) {}
 		virtual void OnChildRemoved ( Element& child ) {}
 		virtual void OnParentChanged( Element& newParent) {}
+		virtual void OnParentBoundsChanged(IntRect& p_delta);
 
-		void OnParentBoundsChanged ( IntRect& p_delta );
 		bool operator == ( const Element& rhs ) const;
 		bool operator != ( const Element& rhs ) const;
 
