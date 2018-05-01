@@ -45,10 +45,10 @@ namespace OpenUI
 		void OnMouseLeave ( Element* element );
 		void OnMouseMove ( Element* element );
 
-		void OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, long delta );
-		void OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, long delta );
+		void OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event );
+		void OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event );
 
-		void HandleElementEvent ( Element* element, const sf::Event& event, long delta );
+		void HandleElementEvent ( Element* element );
 
 	private:
 		Element* m_activeElement;

@@ -48,7 +48,7 @@ namespace OpenUI
 		}
 	}
 
-	void InputContext::OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, const long delta )
+	void InputContext::OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event )
 	{
 		element->OnMouseDown ( event );
 	}
@@ -97,7 +97,7 @@ namespace OpenUI
 		}
 	}
 
-	void InputContext::OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, const long delta )
+	void InputContext::OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event )
 	{
 		if ( m_pressedElement == m_activeElement )
 		{
@@ -110,9 +110,9 @@ namespace OpenUI
 		element->OnMouseUp ( event );
 	}
 
-	void InputContext::HandleElementEvent ( Element* element, const sf::Event& event, const long delta )
+	void InputContext::HandleElementEvent ( Element* element )
 	{
-		switch ( event.type )
+		switch ( m_event.type )
 		{
 			case sf::Event::MouseMoved :
 			{
@@ -128,11 +128,11 @@ namespace OpenUI
 				}
 
 				m_pressedElement = element;
-				OnMouseDown ( element, event.mouseButton, delta );
+				OnMouseDown ( element, m_event.mouseButton );
 
 				return;
 			}
-
+			
 			case sf::Event::MouseButtonReleased :
 			{
 				if ( !element->IsBeingPressed () )
@@ -155,7 +155,7 @@ namespace OpenUI
 					element->OnDragDrop ( MouseDragDropEvent ( *m_dragDropTarget ) );
 				}
 
-				OnMouseUp ( element, event.mouseButton, delta );
+				OnMouseUp ( element, m_event.mouseButton );
 				break;
 			}
 
