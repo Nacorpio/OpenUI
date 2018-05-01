@@ -7,66 +7,75 @@
 
 namespace OpenUI
 {
+	struct ColorState
+	{
+		sf::Color BackColor;
+		sf::Color ForeColor;
+		sf::Color OutlineColor;
 
-#define UN_ORD_COLOR_MAP(name) std::unordered_map<MouseState, sf::Color> * name
+		ColorState(const sf::Color & p_backColor,const sf::Color & p_foreColor,const sf::Color & p_outlineColor)
+			  : BackColor(p_backColor),
+				ForeColor(p_foreColor),
+				OutlineColor(p_outlineColor)
+		{			
+		}
+	};
+
 	struct ColorScheme
 	{
+		const ColorState & operator [] (MouseState p_state)
+		{
+			return GetColor(p_state);
+		}
 
 		ColorScheme()
 		{
-			m_backColors = new std::unordered_map<MouseState, sf::Color>{
-				{ MouseState::Entered,sf::Color::Red },
-				{ MouseState::None,sf::Color::Blue },
-				{ MouseState::Released,sf::Color::Blue },
-				{ MouseState::Moved,sf::Color::Red },
-				{ MouseState::Pressed,sf::Color::Green }};
+			m_colors = std::unordered_map<MouseState, ColorState>{
+				{ MouseState::Entered, ColorState(sf::Color(63, 63, 63), sf::Color(63, 63, 63), sf::Color(63, 63, 63))},
+				{ MouseState::None,ColorState(sf::Color(43,43,43), sf::Color(43, 43, 43), sf::Color(43, 43, 43))},
+				{ MouseState::Released, ColorState(sf::Color(63, 63, 63), sf::Color(63, 63, 63), sf::Color(63, 63, 63))},
+				{ MouseState::Moved, ColorState(sf::Color(63, 63, 63), sf::Color(63, 63, 63), sf::Color(63, 63, 63))},
+				{ MouseState::Clicked,ColorState(sf::Color(94, 94, 94), sf::Color(94, 94, 94), sf::Color(94, 94, 94))},
+				{ MouseState::Pressed,ColorState(sf::Color(94, 94, 94), sf::Color(94, 94, 94), sf::Color(94, 94, 94))}};
 		}
 
-		ColorScheme(UN_ORD_COLOR_MAP(p_backColor), UN_ORD_COLOR_MAP(p_foreColor), UN_ORD_COLOR_MAP(p_outlineColor))
-			: m_backColors(p_backColor), m_foreColors(p_foreColor), m_outlineColors(p_outlineColor)
+		/// <summary>
+		///		Checks whether a color state using the specified state exists within this color scheme.
+		/// </summary>
+		/// <param name="p_state">The state.</param>
+		/// <returns>Returns true if a color state exists.</returns>
+		bool ContainColorState(MouseState p_state)
 		{
-			
-		}
-
-		bool ContainColor(ColorType p_type, MouseState p_state)
-		{
-			switch (p_type) { 
-				case ColorType::BackgroundColor:
-					{
-					m_it = m_backColors->find(p_state);
-					return m_it != m_backColors->end();
-					}
-				case ColorType::ForegroundColor:
-					{
-					m_it = m_foreColors->find(p_state);
-					return m_it != m_foreColors->end();
-					}
-				case ColorType::OutlineColor:
-					{
-					m_it = m_outlineColors->find(p_state);
-					return m_it != m_outlineColors->end();
-					}
-				default: ;
-			}
-			return false;
-		}
-
-		sf::Color * GetColor(ColorType p_type,MouseState p_state) 
-		{
-			if(ContainColor ( p_type,p_state ))
+			if(m_colors.empty())
 			{
-				return &m_it._Ptr->_Myval.second;
+				LOG("This color scheme contains no color states!");
+				return false;
 			}
 
-			LOG("A color with state:" << p_state << " was not found!");
-			return new sf::Color(255,255,255);
+			m_it = m_colors.find(p_state);
+			return m_it != m_colors.end();
 		}
-		
+
+		/// <summary>
+		///		Gets a color with a specified state. 
+		/// </summary>
+		/// <param name="p_state">The input state to get the color state from.</param>
+		/// <returns>If found, returns a color. If not found returns default sf::color(White).</returns>
+		const ColorState & GetColor(MouseState p_state)
+		{
+			if(ContainColorState (p_state ))
+			{
+				return m_it._Ptr->_Myval.second;
+			}
+
+			LOG("A color state with input state:" << p_state << " was not found!");
+			return m_it._Ptr->_Myval.second;
+		}
+
 	private:
-		std::_List_iterator<std::_List_val<std::_List_simple_types<std::pair<const MouseState, sf::Color>>>> m_it;
-		std::unordered_map<MouseState, sf::Color> * m_backColors = nullptr;
-		std::unordered_map<MouseState, sf::Color> * m_foreColors = nullptr;
-		std::unordered_map<MouseState, sf::Color> * m_outlineColors = nullptr;
+		std::unordered_map<MouseState, ColorState> m_colors;
+		std::_List_iterator<std::_List_val<std::_List_simple_types<std::pair<const MouseState, ColorState>>>> m_it;
+
 	};
 }
 

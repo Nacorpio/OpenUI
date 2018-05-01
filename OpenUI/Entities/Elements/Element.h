@@ -115,7 +115,7 @@ namespace OpenUI
 	public:
 		void OnStateChanged ( MouseState p_state ) override
 		{
-			m_shapes[0]->setFillColor(*m_scheme.GetColor(ColorType::BackgroundColor,p_state));
+			m_shapes[0]->setFillColor(m_scheme[p_state].BackColor);
 			
 		}
 

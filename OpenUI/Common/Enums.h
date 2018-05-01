@@ -12,6 +12,23 @@ namespace OpenUI
 		WindowContainer,
 	};
 
+#define ElementType(type, name) case ElementType::##type: os << name; break
+
+	inline std::ostream& operator<<(std::ostream& os, const ElementType& p_state)
+	{
+		switch (p_state)
+		{
+			ElementType(Button, "Button");
+			ElementType(Label, "Label");
+			ElementType(ClientWindow, "ClientWindow");
+			ElementType(WindowHeader, "WindowHeader");
+			ElementType(WindowContainer, "WindowContainer");
+		default:;
+		}
+
+		return os;
+	}
+
 	enum class ColorType
 	{
 		BackgroundColor,
@@ -34,6 +51,7 @@ namespace OpenUI
 		Bottom,
 		Filled
 	};
+
 	enum class MouseState
 	{
 		None,
@@ -60,8 +78,7 @@ namespace OpenUI
 			State(Clicked, "Clicked");
 			default: ;
 		}
-		return os;
 
+		return os;
 	}
 }
-
