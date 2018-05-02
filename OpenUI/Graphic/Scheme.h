@@ -16,8 +16,7 @@ namespace OpenUI
 				_Ty Default, Disabled, Entered, Dragged, Pressed, Held;
 			};
 
-		private:
-			_Ty m_values[6];
+			_Ty Values[6];
 		};
 
 		State () = default;
@@ -33,12 +32,12 @@ namespace OpenUI
 		}
 
 		explicit State ( const State& other )
-			: m_values ( other.m_values )
+			: Values ( other.Values )
 		{
 		}
 
 		explicit State ( State&& other ) noexcept
-			: m_values ( std::move ( other.m_values ) )
+			: Values ( std::move ( other.Values ) )
 		{
 		}
 
@@ -49,7 +48,7 @@ namespace OpenUI
 		{
 			for ( int i = 0 ; i < 6 ; ++i )
 			{
-				if ( m_values[i] != rhs.m_values[i] )
+				if ( Values[i] != rhs.Values[i] )
 				{
 					return false;
 				}
@@ -64,7 +63,7 @@ namespace OpenUI
 
 		State& operator= ( const State& rhs )
 		{
-			m_values = rhs.m_values;
+			Values = rhs.Values;
 			return this;
 		}
 

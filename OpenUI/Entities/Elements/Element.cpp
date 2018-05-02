@@ -4,7 +4,7 @@
 #include "Common/Comparers/ElementComparer.h"
 #include "Entities/Elements/Windows/ClientWindow.h"
 #include "Graphic/GraphicsContext.h"
-#include "Graphic/ColorScheme.h"
+#include "Graphic/Scheme.h"
 #include <iostream>
 
 namespace OpenUI
