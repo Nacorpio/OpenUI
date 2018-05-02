@@ -43,13 +43,13 @@ namespace OpenUI
 		virtual void OnDrop ( const InputHandler::MouseDropEvent& );
 		virtual void OnDragDrop ( const InputHandler::MouseDragDropEvent& );
 
-		virtual void OnStateChanged(MouseState p_state) {}
+		virtual void OnStateChanged(const ControlState p_state) {}
 
 	private:
 		friend struct InputHandler;
 
 		void SetState(ControlState state);
-		void SetState(const int state) { SetState((ControlState)state); }
+		void SetState(const int state) { SetState(ControlState ( state )); }
 
 		void AddState(const ControlState state) { SetState(m_st | state); }
 		void RemoveState(const ControlState state) { SetState(m_st & ~state); }

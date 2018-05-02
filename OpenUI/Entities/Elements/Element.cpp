@@ -176,8 +176,11 @@ namespace OpenUI
 		}
 	}
 
-	void Element::Initialize () const
+	void Element::Initialize ()
 	{
+		m_background.setSize(sf::Vector2f(m_bounds.Size.sfVector));
+		m_background.setPosition(sf::Vector2f(m_bounds.Position.sfVector));
+
 		for ( auto element : m_children )
 		{
 			element->Initialize ();
@@ -187,10 +190,17 @@ namespace OpenUI
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
 		m_scissorTest.SetScissorTest();
-		for ( auto it = m_drawables.begin () ; it != m_drawables.end () ; ++it )
+
+		if(m_clientWindow)
 		{
-			m_clientWindow->GetRenderWindow ().draw ( *it._Ptr->_Myval, sf::RenderStates::Default );
+			sf::RenderWindow & renderWindow = m_clientWindow->GetRenderWindow();
+			renderWindow.draw(m_background);
+			for (auto it = m_drawables.begin(); it != m_drawables.end(); ++it)
+			{
+				renderWindow.draw(*it._Ptr->_Myval, sf::RenderStates::Default);
+			}
 		}
+
 
 		for ( auto element : m_children )
 		{
@@ -276,7 +286,7 @@ namespace OpenUI
 	{
 		sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparerDrawOrder () );
 	}
-	void Element::OnStateChanged ( const MouseState p_state )
+	void Element::OnStateChanged ( const ControlState p_state )
 	{
 		// m_shapes[0]->setFillColor ( m_colorScheme[p_state].BackColor );
 	}

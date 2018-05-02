@@ -79,7 +79,7 @@ namespace OpenUI
 		bool HasChild ( const Element* element );
 
 		virtual void Start () const;
-		virtual void Initialize () const;
+		virtual void Initialize ();
 
 		void OnMouseLeave () override;
 		void OnMouseHover () override;
@@ -100,7 +100,7 @@ namespace OpenUI
 
 		virtual void OnParentBoundsChanged ( IntRect& delta );
 
-		void OnStateChanged ( MouseState p_state ) override;
+		void OnStateChanged ( const ControlState p_state ) override;
 
 		bool operator == ( const Element& rhs ) const;
 		bool operator != ( const Element& rhs ) const;
@@ -123,6 +123,7 @@ namespace OpenUI
 		int m_height = 0;
 		int m_level = 0;
 
+		sf::RectangleShape m_background;
 		std::vector <Element*> m_children { };
 		std::vector <sf::RectangleShape*> m_shapes;
 		std::vector <sf::Text*> m_texts;
