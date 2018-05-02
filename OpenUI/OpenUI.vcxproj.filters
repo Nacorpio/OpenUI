@@ -81,13 +81,13 @@
     <ClInclude Include="Graphic\ScissorTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graphic\ColorScheme.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="InputHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Contexts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic\Scheme.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -155,13 +155,13 @@
     <ClCompile Include="Graphic\ScissorTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Graphic\ColorScheme.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="InputHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Contexts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic\Scheme.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

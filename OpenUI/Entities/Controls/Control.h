@@ -3,6 +3,7 @@
 #include <string>
 #include <SFML/Window/Event.hpp>
 #include "InputHandler.h"
+#include "Common/Enums.h"
 
 namespace OpenUI
 {
@@ -12,14 +13,7 @@ namespace OpenUI
 	class Control
 	{
 	public:
-		enum ControlState
-		{
-			None = 1 << 0,
-			Entered = 1 << 1,
-			Hovered = 1 << 2,
-			Pressed = 1 << 3,
-			Dragged = 1 << 4,
-		};
+		
 
 		virtual ~Control () = default;
 		explicit Control ( const std::string& name );
