@@ -4,6 +4,7 @@
 #include "Common/Comparers/ElementComparer.h"
 #include "Entities/Elements/Windows/ClientWindow.h"
 #include "Graphic/GraphicsContext.h"
+#include "Graphic/ColorScheme.h"
 #include <iostream>
 
 namespace OpenUI
@@ -13,19 +14,9 @@ namespace OpenUI
 		, m_name ( name )
 	{
 		m_guidTypeId = ObjectGuid::TypeId::Element;
-		m_background.setFillColor(sf::Color::White);
-		SetFlag ( uint32_t ( ElementFlags::CaptureMouse ), true );
-		SetFlag ( uint32_t ( ElementFlags::CaptureKeyboard ), true );
-	}
 
-	std::vector <sf::RectangleShape *>& Element::GetShapes ()
-	{
-		return m_shapes;
-	}
-
-	std::vector <sf::Text *>& Element::GetTexts ()
-	{
-		return m_texts;
+		AddFlag ( uint32_t ( ElementFlags::CaptureMouse ) );
+		AddFlag( uint32_t ( ElementFlags::CaptureKeyboard ) );
 	}
 
 	void Element::SetParent ( Element* element )
@@ -44,43 +35,43 @@ namespace OpenUI
 		OnParentChanged ( *m_parent );
 	}
 
-	void Element::SetBounds ( const IntRect& p_value )
+	void Element::SetBounds ( const IntRect& value )
 	{
-		IntRect delta = m_bounds - p_value;
-		m_bounds = p_value;
+		IntRect delta = m_bounds - value;
+		m_bounds = value;
 		for ( sf::RectangleShape* shape : m_shapes )
 		{
 			shape->setSize
-					( sf::Vector2f ( p_value.Size.sfVector ) ); //((p_value.Size - m_bounds.Size + shape->getSize()).sfVector2f);
+					( sf::Vector2f ( value.Size.sfVector ) ); //((p_value.Size - m_bounds.Size + shape->getSize()).sfVector2f);
 			shape->setPosition
-					( sf::Vector2f ( p_value.Position.sfVector ) );
+					( sf::Vector2f ( value.Position.sfVector ) );
 		}
 		OnBoundsChanged(delta);
 	}
 
-	void Element::SetSize ( const IntVector& p_value )
+	void Element::SetSize ( const IntVector& value )
 	{
-		m_bounds.Size = p_value;
+		m_bounds.Size = value;
 		for ( sf::RectangleShape* shape : m_shapes )
 		{
-			auto x = ( p_value - m_bounds.Size + shape->getSize () ).sfVector;
-			shape->setSize ( sf::Vector2f ( p_value.sfVector ) ); //((p_value - m_bounds.Size + shape->getSize()).sfVector2f);
+			auto x = ( value - m_bounds.Size + shape->getSize () ).sfVector2f;
+			shape->setSize ( sf::Vector2f ( value.sfVector ) ); //((p_value - m_bounds.Size + shape->getSize()).sfVector2f);
 		}
 	}
 
-	void Element::SetPosition ( const IntVector& p_value )
+	void Element::SetPosition ( const IntVector& value )
 	{
-		m_bounds.Position = p_value;
+		m_bounds.Position = value;
 		for ( sf::RectangleShape* shape : m_shapes )
 		{
 			shape->setPosition
-					( sf::Vector2f ( p_value.sfVector ) ); //((p_value - m_bounds.Position + shape->getPosition()).sfVector2f);
+					( sf::Vector2f ( value.sfVector ) ); //((p_value - m_bounds.Position + shape->getPosition()).sfVector2f);
 		}
 	}
 
-	sf::RectangleShape* Element::GetShape ( const int& p_index )
+	sf::RectangleShape* Element::GetShape ( const int& index )
 	{
-		if ( sf::RectangleShape* rect = m_shapes[p_index] )
+		if ( sf::RectangleShape* rect = m_shapes[index] )
 		{
 			return rect;
 		}
@@ -88,35 +79,35 @@ namespace OpenUI
 		return nullptr;
 	}
 
-	void Element::AddShape ( sf::RectangleShape* p_rectangle )
+	void Element::AddShape ( sf::RectangleShape* rectangle )
 	{
-		if ( !p_rectangle || HasShape ( p_rectangle ) )
+		if ( !rectangle || HasShape ( rectangle ) )
 		{
 			return;
 		}
 
-		m_drawables.insert ( p_rectangle );
-		m_shapes.emplace_back ( p_rectangle );
+		m_drawables.insert ( rectangle );
+		m_shapes.emplace_back ( rectangle );
 	}
 
-	void Element::RemoveShape ( const int& p_index )
+	void Element::RemoveShape ( const int& index )
 	{
-		if ( !HasShape ( p_index ) )
+		if ( !HasShape ( index ) )
 		{
 			return;
 		}
 
-		m_shapes.erase ( m_shapes.begin () + p_index );
+		m_shapes.erase ( m_shapes.begin () + index );
 	}
 
-	bool Element::HasShape ( const int& p_index )
+	bool Element::HasShape ( const int& index )
 	{
-		return m_shapes[p_index] != nullptr;
+		return m_shapes[index] != nullptr;
 	}
 
-	bool Element::HasShape ( sf::RectangleShape* p_rectangle )
+	bool Element::HasShape ( sf::RectangleShape* rectangle )
 	{
-		return find ( m_shapes.begin (), m_shapes.end (), p_rectangle ) != m_shapes.end ();
+		return find ( m_shapes.begin (), m_shapes.end (), rectangle ) != m_shapes.end ();
 	}
 
 	void Element::AddChild ( Element* element )
@@ -185,11 +176,8 @@ namespace OpenUI
 		}
 	}
 
-	void Element::Initialize ()
+	void Element::Initialize () const
 	{
-		m_background.setSize (sf::Vector2f(m_bounds.Size.sfVector) );
-		m_background.setPosition(sf::Vector2f(m_bounds.Position.sfVector));
-
 		for ( auto element : m_children )
 		{
 			element->Initialize ();
@@ -199,21 +187,15 @@ namespace OpenUI
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
 		m_scissorTest.SetScissorTest();
-
-		if(m_clientWindow )
+		for ( auto it = m_drawables.begin () ; it != m_drawables.end () ; ++it )
 		{
-			m_clientWindow->GetRenderWindow().draw(m_background, sf::RenderStates::Default);
-			for (auto it = m_drawables.begin(); it != m_drawables.end(); ++it)
-			{
-				m_clientWindow->GetRenderWindow().draw(*it._Ptr->_Myval, sf::RenderStates::Default);
-			}
+			m_clientWindow->GetRenderWindow ().draw ( *it._Ptr->_Myval, sf::RenderStates::Default );
 		}
 
 		for ( auto element : m_children )
 		{
 			element->Draw ( gContext );
 		}
-
 		m_scissorTest.RestorePreviousScissorTest();
 	}
 
@@ -252,25 +234,25 @@ namespace OpenUI
 		Control::OnDrop ( event );
 	}
 
-	void Element::Update (const UpdateContext & p_updateContext)
+	void Element::Update (const UpdateContext & updateContext)
 	{
 		for ( auto element : m_children )
 		{
-			element->Update (p_updateContext);
+			element->Update (updateContext);
 		}
 	}
 
-	void Element::OnBoundsChanged ( IntRect& p_delta )
+	void Element::OnBoundsChanged ( IntRect& delta )
 	{
-		OnParentBoundsChanged ( p_delta );
+		OnParentBoundsChanged ( delta );
 	}
 
-	void Element::OnParentBoundsChanged ( IntRect& p_delta )
+	void Element::OnParentBoundsChanged ( IntRect& delta )
 	{
 		m_scissorTest.UpdateScissorRectangle ( m_bounds );
 		for ( Element* child : m_children )
 		{
-			child->OnParentBoundsChanged ( p_delta );
+			child->OnParentBoundsChanged ( delta );
 		}
 	}
 
@@ -294,8 +276,8 @@ namespace OpenUI
 	{
 		sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparerDrawOrder () );
 	}
-
-	void Element::OnStateChanged ( MouseState p_state )
+	void Element::OnStateChanged ( const MouseState p_state )
 	{
+		// m_shapes[0]->setFillColor ( m_colorScheme[p_state].BackColor );
 	}
 }

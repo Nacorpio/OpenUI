@@ -9,8 +9,6 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "Entities/Controls/Control.h"
-#include "Common/Enums.h"
-#include "Graphic/ColorScheme.h"
 #include "Graphic/ScissorTest.h"
 #include "Contexts.h"
 
@@ -18,19 +16,30 @@ namespace OpenUI
 {
 	class ClientWindow;
 	class GraphicsContext;
+
 	struct InputContext;
 
-	class Element : public Object , public Control
+	class Element
+			: public Object,
+			  public Control
 	{
 	public:
+		enum class ElementFlags : int
+		{
+			CaptureMouse,
+			CaptureKeyboard,
+			AllowChildOverlapping,
+			AllowScissorTest,
 
+			Interactable = CaptureMouse | CaptureKeyboard
+		};
 
 		explicit Element ( const std::string& name );
-		~Element() = default;
+		~Element () = default;
 
 		const std::string& GetName () const { return m_name; }
 
-		ClientWindow* GetClientWindow() const { return m_clientWindow; }
+		ClientWindow* GetClientWindow () const { return m_clientWindow; }
 		Element* GetParent () const { return m_parent; }
 		uint16_t GetDrawOrder () const { return m_drawOrder; }
 
@@ -38,93 +47,90 @@ namespace OpenUI
 		/// 	The height of an element is the number of connections on the longest path between that element and the root element.
 		/// </summary>
 		/// <returns>The height of this element.</returns>
-		uint16_t GetHeight() const { return m_height; }
+		int GetHeight () const { return m_height; }
 
 		/// <summary>
 		///		The level of an element is defined by 1 + (the number of connections between the element and the root element).
 		/// </summary>
 		/// <returns>The level of this element.</returns>
-		uint16_t GetLevel() const { return m_level; }
+		int GetLevel () const { return m_level; }
 
-		IntRect& GetBounds()  { return m_bounds;	}
-		IntVector& GetSize() { return m_bounds.Size; }
-		IntVector& GetPosition() { return m_bounds.Position; }
+		IntRect& GetBounds () { return m_bounds; }
+		IntVector& GetSize () { return m_bounds.Size; }
+		IntVector& GetPosition () { return m_bounds.Position; }
 
-		std::vector <sf::RectangleShape*>& GetShapes ();
-		std::vector <sf::Text*>& GetTexts ();
-		std::vector <Element*>& GetChildren() { return m_children; }
+		std::vector <sf::RectangleShape*>::iterator GetShapes () { return m_shapes.begin (); }
+		std::vector <sf::Text*>::iterator GetTexts () { return m_texts.begin (); }
+		std::vector <Element*>::iterator GetChildren () { return m_children.begin (); }
 
-		sf::RectangleShape* GetShape(const int & p_index);
+		sf::RectangleShape* GetShape ( const int& index );
 
-		void SetParent(Element* element);
+		void SetParent ( Element* element );
 
-		void SetBounds ( const IntRect & p_value );
-		void SetSize (const IntVector & p_value );
-		void SetPosition (const IntVector & p_value );
+		void SetBounds ( const IntRect& value );
+		void SetSize ( const IntVector& value );
+		void SetPosition ( const IntVector& value );
 
-		void AddShape ( sf::RectangleShape * p_rectangle );
-		void RemoveShape (const int & p_index );
-		bool HasShape (const int & p_index);
-		bool HasShape(sf::RectangleShape * p_rectangle);
+		bool HasShape ( const int& index );
+		bool HasShape ( sf::RectangleShape* rectangle );
 
 		void AddChild ( Element* element );
 		void RemoveChild ( Element* element );
 		bool HasChild ( const Element* element );
 
 		virtual void Start () const;
-		virtual void Initialize();
+		virtual void Initialize () const;
 
-		virtual void OnMouseLeave () override;
-		virtual void OnMouseHover () override;
-		virtual void OnMouseMove () override;
-		virtual void OnMouseEnter() override;
+		void OnMouseLeave () override;
+		void OnMouseHover () override;
+		void OnMouseMove () override;
+		void OnMouseEnter () override;
 
-		virtual void OnMouseDown ( const sf::Event::MouseButtonEvent& event ) override;
-		virtual void OnMouseUp ( const sf::Event::MouseButtonEvent& event ) override;
-		virtual void OnDrop(const InputHandler::MouseDropEvent & event) override;
+		void OnMouseDown ( const sf::Event::MouseButtonEvent& event ) override;
+		void OnMouseUp ( const sf::Event::MouseButtonEvent& event ) override;
+		void OnDrop ( const InputHandler::MouseDropEvent& event ) override;
 
-		virtual void Update(const UpdateContext & p_updateContext);
-		virtual void OnBoundsChanged ( IntRect& p_delta );
+		virtual void Update ( const UpdateContext& updateContext );
+		virtual void OnBoundsChanged ( IntRect& delta );
 		virtual void Draw ( const GraphicsContext& gContext );
 
 		virtual void OnChildAdded ( Element& child ) {}
 		virtual void OnChildRemoved ( Element& child ) {}
-		virtual void OnParentChanged( Element& newParent) {}
-		virtual void OnParentBoundsChanged(IntRect& p_delta);
+		virtual void OnParentChanged ( Element& newParent ) {}
+
+		virtual void OnParentBoundsChanged ( IntRect& delta );
+
+		void OnStateChanged ( MouseState p_state ) override;
 
 		bool operator == ( const Element& rhs ) const;
 		bool operator != ( const Element& rhs ) const;
 
 	protected:
+		void AddShape ( sf::RectangleShape* rectangle );
+		void RemoveShape ( const int& index );
+
 		void SetDrawOrder ( uint16_t value );
 
-		std::vector <Element*> m_children{};
-
 	private:
-		void SortDrawOrder() const;
-
-	public:
-		void OnStateChanged ( MouseState p_state ) override;
+		void SortDrawOrder () const;
 
 	private:
 		const std::string m_name = "Element";
-		ColorScheme m_colorScheme;
+		//ColorScheme m_colorScheme;
 		ScissorTest m_scissorTest;
-		uint16_t m_drawOrder = 0;
-		uint16_t m_height = 0;
-		uint16_t m_level = 0;
 
-		sf::RectangleShape m_background;
-		sf::Text * m_text = nullptr;
+		int m_drawOrder = 0;
+		int m_height = 0;
+		int m_level = 0;
 
-		std::vector<sf::RectangleShape*> m_shapes;
-		std::vector<sf::Text*> m_texts;
+		std::vector <Element*> m_children { };
+		std::vector <sf::RectangleShape*> m_shapes;
+		std::vector <sf::Text*> m_texts;
 		std::set <sf::Drawable*> m_drawables { };
 
 		IntRect m_bounds;
-		
-		Element* m_parent = nullptr;
 
+		Element* m_parent = nullptr;
 		ClientWindow* m_clientWindow = nullptr;
 	};
 }

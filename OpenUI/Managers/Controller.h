@@ -24,9 +24,9 @@ namespace OpenUI
 			ProgramLoop();
 		}
 
-		std::set <ClientWindow*> & GetClientWindows() const
+		std::set <ClientWindow*>::iterator GetClientWindows() const
 		{
-			return *m_clientWindows;
+			return m_clientWindows->begin ();
 		}
 
 	private:

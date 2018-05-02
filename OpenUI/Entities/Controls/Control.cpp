@@ -7,7 +7,7 @@ namespace OpenUI
 	{
 	}
 
-	Control::ControlState Control::GetState () const
+	ControlState Control::GetState () const
 	{
 		return ControlState ( m_st );
 	}

@@ -18,6 +18,11 @@ OpenUI::ClientWindow::ClientWindow ( const std::string& name, const RenderWindow
 
 OpenUI::ClientWindow::~ClientWindow ()
 {
+	for (auto element : m_descendants)
+	{
+		delete element;
+	}
+
 	delete m_renderWindow;
 	m_renderWindow = nullptr;
 }

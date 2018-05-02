@@ -168,7 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Contexts.h" />
-    <ClInclude Include="Graphic\ColorScheme.h" />
+    <ClInclude Include="Graphic\Scheme.h" />
     <ClInclude Include="Common\common.h" />
     <ClInclude Include="Managers\Controller.h" />
     <ClInclude Include="Entities\Elements\Windows\ClientWindow.h" />
@@ -196,7 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Contexts.cpp" />
-    <ClCompile Include="Graphic\ColorScheme.cpp" />
+    <ClCompile Include="Graphic\Scheme.cpp" />
     <ClCompile Include="Managers\Controller.cpp" />
     <ClCompile Include="Entities\Elements\Windows\ClientWindow.cpp" />
     <ClCompile Include="Common\Comparers\ElementComparer.cpp" />

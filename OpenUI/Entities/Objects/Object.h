@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ObjectGuid.h"
-#include <cstdint>
 
 namespace OpenUI
 {
@@ -19,28 +18,31 @@ namespace OpenUI
 		{
 		}
 
-		/* Sets a bit flag to the specified value. */
-		void SetFlag ( const uint32_t flag, const bool value )
+		void SetFlag ( const int flag )
 		{
-			if ( value )
-			{
-				m_flags |= flag;
-				return;
-			}
+			m_flags = flag;
+		}
 
+		void AddFlag ( const int flag )
+		{
+			m_flags |= flag;
+		}
+
+		void RemoveFlag ( const int flag )
+		{
 			m_flags &= ~flag;
 		}
 
 		/* Toggles a bit flag. */
-		void ToggleFlag ( const uint32_t flag )
+		void ToggleFlag ( const int flag )
 		{
 			m_flags ^= flag;
 		}
 
 		/* Determines whether a bit flag is set. */
-		bool HasFlag ( const uint32_t flag ) const
+		bool HasFlag ( const int flag ) const
 		{
-			return (m_flags & flag) != 0;
+			return m_flags & flag;
 		}
 
 		/* Resets the bit flags. */
@@ -49,13 +51,13 @@ namespace OpenUI
 			m_flags = 0;
 		}
 
-		uint32_t GetFlags() const { return m_flags; }
+		int GetFlags() const { return m_flags; }
 
 		Button* ToButton ();
 		ClientWindow* ToClientWindow ();
 
 	protected:
-		uint32_t m_flags = 0;
+		int m_flags = 0;
 
 		ObjectGuid::TypeId m_guidTypeId;
 		ObjectGuid::Detail m_guidDetail;

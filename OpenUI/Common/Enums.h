@@ -1,6 +1,5 @@
 #pragma once
 #include <ostream>
-#include "Entities/Controls/Control.h"
 
 namespace OpenUI
 {
@@ -12,33 +11,6 @@ namespace OpenUI
 		WindowHeader,
 		WindowContainer,
 	};
-
-	enum class ElementFlags : uint32_t
-	{
-		CaptureMouse,
-		CaptureKeyboard,
-		AllowChildOverlapping,
-		AllowScissorTest,
-
-		Interactable = CaptureMouse | CaptureKeyboard
-	};
-
-#define ElementType(type, name) case ElementType::##type: os << name; break
-
-	inline std::ostream& operator<<(std::ostream& os, const ElementType& p_state)
-	{
-		switch (p_state)
-		{
-			ElementType(Button, "Button");
-			ElementType(Label, "Label");
-			ElementType(ClientWindow, "ClientWindow");
-			ElementType(WindowHeader, "WindowHeader");
-			ElementType(WindowContainer, "WindowContainer");
-		default:;
-		}
-
-		return os;
-	}
 
 	enum class ColorType
 	{
@@ -62,28 +34,60 @@ namespace OpenUI
 		Bottom,
 		Filled
 	};
-	enum class MouseState
+
+	enum ControlState
 	{
-		None,
-		Entered,
-		Hovered,
-		Pressed,
+		None = 1 << 0,
+		Entered = 1 << 1,
+		Hovered = 1 << 2,
+		Pressed = 1 << 3,
+		Dragged = 1 << 4,
 	};
 
-	#define State(type, name) case Control::ControlState::##type: os << name; break
+	#define ENUM_OSTREAM_SWITCH(type, name) case type: os << name; break
 
-	inline std::ostream& operator<< ( std::ostream& os, const Control::ControlState& p_state )
+	#define ENUM(name, ...) enum name \
+	{ \
+	__VA_ARGS__ \
+	}
+
+	#define ENUM_CLASS(name, ...) enum class name \
+	{ \
+	__VA_ARGS__ \
+	}
+
+	ENUM(Test, t1, t2, t3);
+
+	inline std::ostream& operator<< ( std::ostream& os, const ElementType& value )
 	{
-		switch ( p_state )
+		switch ( value )
 		{
-			State(None,"None");
-			State(Entered, "Entered");
-			State(Hovered, "Hovered");
-			State(Pressed, "Pressed");
-			default: ;
+			ENUM_OSTREAM_SWITCH(ElementType::Button, "Button");
+			ENUM_OSTREAM_SWITCH(ElementType::Label, "Label");
+			ENUM_OSTREAM_SWITCH(ElementType::ClientWindow, "ClientWindow");
+			ENUM_OSTREAM_SWITCH(ElementType::WindowHeader, "WindowHeader");
+			ENUM_OSTREAM_SWITCH(ElementType::WindowContainer, "WindowContainer");
+
+			default : ;
 		}
 
 		return os;
 	}
-}
 
+	inline std::ostream& operator<< ( std::ostream& os, const ControlState& value )
+	{
+		switch ( value )
+		{
+			ENUM_OSTREAM_SWITCH(ControlState::None,"None");
+			ENUM_OSTREAM_SWITCH(ControlState::Entered, "Entered");
+			ENUM_OSTREAM_SWITCH(ControlState::Hovered, "Hovered");
+			ENUM_OSTREAM_SWITCH(ControlState::Pressed, "Pressed");
+
+			default : ;
+		}
+
+		return os;
+	}
+
+	#undef ENUM_OSTREAM_SWITCH;
+}
