@@ -23,15 +23,7 @@ namespace OpenUI
 	class Element : public Object , public Control
 	{
 	public:
-		enum class ElementFlags : uint32_t
-		{
-			CaptureMouse,
-			CaptureKeyboard,
-			AllowChildOverlapping,
-			AllowScissorTest,
 
-			Interactable = CaptureMouse | CaptureKeyboard
-		};
 
 		explicit Element ( const std::string& name );
 		~Element() = default;
@@ -80,7 +72,7 @@ namespace OpenUI
 		bool HasChild ( const Element* element );
 
 		virtual void Start () const;
-		virtual void Initialize() const;
+		virtual void Initialize();
 
 		virtual void OnMouseLeave () override;
 		virtual void OnMouseHover () override;
@@ -112,11 +104,7 @@ namespace OpenUI
 		void SortDrawOrder() const;
 
 	public:
-		void OnStateChanged ( MouseState p_state ) override
-		{
-			m_shapes[0]->setFillColor(m_colorScheme[p_state].BackColor);
-			
-		}
+		void OnStateChanged ( MouseState p_state ) override;
 
 	private:
 		const std::string m_name = "Element";
@@ -125,6 +113,9 @@ namespace OpenUI
 		uint16_t m_drawOrder = 0;
 		uint16_t m_height = 0;
 		uint16_t m_level = 0;
+
+		sf::RectangleShape m_background;
+		sf::Text * m_text = nullptr;
 
 		std::vector<sf::RectangleShape*> m_shapes;
 		std::vector<sf::Text*> m_texts;

@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "Entities/Elements/Windows/ClientWindow.h"
+#include "WindowElement.h"
 
 namespace OpenUI
 {
@@ -27,6 +28,9 @@ namespace OpenUI
 		bool Exists ( uint64_t id ) const;
 
 		ClientWindow* CreateClientWindow ( uint64_t id, const std::string& name, const RenderWindowSettings& settings = RenderWindowSettings() );
+
+		WindowElement* CreateWindowElement ( const uint64_t id, const std::string & name, const uint16_t & headerSize );
+
 		Button* CreateButton ( uint64_t id, const std::string& name );
 
 		Element* GetElementByName ( const std::string& name );

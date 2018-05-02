@@ -13,7 +13,6 @@ namespace OpenUI
 		{
 			struct { _Ty X, Y; };
 			sf::Vector2<_Ty> sfVector;
-			sf::Vector2f sfVector2f;
 		};
 
 		Vector2 ( const _Ty p_x, const _Ty p_y )

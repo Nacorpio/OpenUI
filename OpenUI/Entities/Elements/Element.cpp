@@ -13,7 +13,7 @@ namespace OpenUI
 		, m_name ( name )
 	{
 		m_guidTypeId = ObjectGuid::TypeId::Element;
-
+		m_background.setFillColor(sf::Color::White);
 		SetFlag ( uint32_t ( ElementFlags::CaptureMouse ), true );
 		SetFlag ( uint32_t ( ElementFlags::CaptureKeyboard ), true );
 	}
@@ -63,7 +63,7 @@ namespace OpenUI
 		m_bounds.Size = p_value;
 		for ( sf::RectangleShape* shape : m_shapes )
 		{
-			auto x = ( p_value - m_bounds.Size + shape->getSize () ).sfVector2f;
+			auto x = ( p_value - m_bounds.Size + shape->getSize () ).sfVector;
 			shape->setSize ( sf::Vector2f ( p_value.sfVector ) ); //((p_value - m_bounds.Size + shape->getSize()).sfVector2f);
 		}
 	}
@@ -185,8 +185,11 @@ namespace OpenUI
 		}
 	}
 
-	void Element::Initialize () const
+	void Element::Initialize ()
 	{
+		m_background.setSize (sf::Vector2f(m_bounds.Size.sfVector) );
+		m_background.setPosition(sf::Vector2f(m_bounds.Position.sfVector));
+
 		for ( auto element : m_children )
 		{
 			element->Initialize ();
@@ -196,15 +199,21 @@ namespace OpenUI
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
 		m_scissorTest.SetScissorTest();
-		for ( auto it = m_drawables.begin () ; it != m_drawables.end () ; ++it )
+
+		if(m_clientWindow )
 		{
-			m_clientWindow->GetRenderWindow ().draw ( *it._Ptr->_Myval, sf::RenderStates::Default );
+			m_clientWindow->GetRenderWindow().draw(m_background, sf::RenderStates::Default);
+			for (auto it = m_drawables.begin(); it != m_drawables.end(); ++it)
+			{
+				m_clientWindow->GetRenderWindow().draw(*it._Ptr->_Myval, sf::RenderStates::Default);
+			}
 		}
 
 		for ( auto element : m_children )
 		{
 			element->Draw ( gContext );
 		}
+
 		m_scissorTest.RestorePreviousScissorTest();
 	}
 
@@ -284,5 +293,9 @@ namespace OpenUI
 	void Element::SortDrawOrder () const
 	{
 		sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparerDrawOrder () );
+	}
+
+	void Element::OnStateChanged ( MouseState p_state )
+	{
 	}
 }

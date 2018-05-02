@@ -150,9 +150,9 @@ namespace OpenUI
 					}
 
 					m_dragDropTarget->OnDrop ( MouseDropEvent ( *element ) );
-					m_dragDropTarget = nullptr;
-
+				
 					element->OnDragDrop ( MouseDragDropEvent ( *m_dragDropTarget ) );
+					m_dragDropTarget = nullptr;
 				}
 
 				OnMouseUp ( element, event.mouseButton, p_inputContext );

@@ -37,7 +37,7 @@ namespace OpenUI
 		~ClientWindow ();
 
 		void Start () const override;
-		void Initialize () const override;
+		void Initialize () override;
 		void Update (const UpdateContext & p_updateContext) override;
 		void Draw ( const GraphicsContext& gContext ) override;
 

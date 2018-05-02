@@ -8,7 +8,6 @@ namespace OpenUI
 		: Element ( name )
 	{
 		m_guidDetail = ObjectGuid::Detail::Button;
-		AddShape ( new sf::RectangleShape ( { 100, 100 } ) );
 	}
 
 	Button::~Button ()
@@ -20,7 +19,7 @@ namespace OpenUI
 		Element::Start ();
 	}
 
-	void Button::Initialize () const
+	void Button::Initialize () 
 	{
 		Element::Initialize ();
 	}
@@ -38,13 +37,11 @@ namespace OpenUI
 	void Button::OnMouseEnter ()
 	{
 		Element::OnMouseEnter ();
-		GetShape ( 0 )->setFillColor ( sf::Color ( 75, 75, 75 ) );
 	}
 
 	void Button::OnMouseLeave ()
 	{
 		Element::OnMouseLeave ();
-		GetShape ( 0 )->setFillColor ( sf::Color ( 45, 45, 45 ) );
 	}
 
 	void Button::OnMouseMove ()
@@ -60,13 +57,11 @@ namespace OpenUI
 	void Button::OnMouseDown ( const sf::Event::MouseButtonEvent& event )
 	{
 		Element::OnMouseDown ( event );
-		GetShape ( 0 )->setFillColor ( sf::Color ( 125, 125, 125 ) );
 	}
 
 	void Button::OnMouseClick ( const sf::Event::MouseButtonEvent& event )
 	{
 		Element::OnMouseClick ( event );
-		GetShape ( 0 )->setFillColor ( sf::Color ( 75, 75, 75 ) );
 	}
 
 	void Button::OnMouseUp ( const sf::Event::MouseButtonEvent& event )

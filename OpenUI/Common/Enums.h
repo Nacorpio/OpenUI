@@ -13,6 +13,16 @@ namespace OpenUI
 		WindowContainer,
 	};
 
+	enum class ElementFlags : uint32_t
+	{
+		CaptureMouse,
+		CaptureKeyboard,
+		AllowChildOverlapping,
+		AllowScissorTest,
+
+		Interactable = CaptureMouse | CaptureKeyboard
+	};
+
 #define ElementType(type, name) case ElementType::##type: os << name; break
 
 	inline std::ostream& operator<<(std::ostream& os, const ElementType& p_state)

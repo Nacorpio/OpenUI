@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ClientWindow.h"
 #include "Contexts.h"
+#include "iostream"
 
 OpenUI::ClientWindow::ClientWindow ( const std::string& name, const RenderWindowSettings& windowSettings )
 	: Element ( name )
@@ -26,7 +27,7 @@ void OpenUI::ClientWindow::Start () const
 	Element::Start();
 }
 
-void OpenUI::ClientWindow::Initialize () const
+void OpenUI::ClientWindow::Initialize ()
 {
 	Element::Initialize();
 }
@@ -38,7 +39,7 @@ void OpenUI::ClientWindow::Update (const UpdateContext & p_updateContext)
 
 void OpenUI::ClientWindow::Draw ( const GraphicsContext& gContext )
 {
-	m_renderWindow->clear ( sf::Color::Cyan );
+	m_renderWindow->clear ( sf::Color(43,43,43));
 
 	Element::Draw(gContext);
 

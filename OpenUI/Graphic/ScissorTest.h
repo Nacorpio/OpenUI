@@ -16,7 +16,7 @@ namespace OpenUI
 		uint16_t ClientWindowHeight = 600;
 
 		// If true, a scissor test will be enabled.
-		bool Enabled = true;
+		bool Enabled = false;
 
 		// If true, this scissor test will check what scissor the previous enabled scissor test was and resizes it accordingly. 
 		bool CheckIntersection = true;
@@ -57,7 +57,7 @@ namespace OpenUI
 		/// </summary>
 		void RestorePreviousScissorTest()
 		{
-			if (!m_scissorTestWasEnabled)
+			if (!m_scissorTestWasEnabled || !Enabled)
 			{
 				return; // No scissor test was enabled before this one.
 			}
