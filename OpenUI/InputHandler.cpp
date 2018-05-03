@@ -92,7 +92,6 @@ namespace OpenUI
 			}
 
 			m_lastMoved = element;
-			m_lastMouseMoveTime = sTimeInformation->ElapsedTime;
 
 			if ( element->IsCursorInside () )
 			{
@@ -101,14 +100,16 @@ namespace OpenUI
 					element->OnDragMove ( m_dragDropSource );
 				}
 
-				if (!element->IsBeingHovered () && element == m_lastMoved)
+				if (!element->IsBeingHovered () && element == m_lastMoved && sTimeInformation->ElapsedTime - m_lastMouseMoveTime >= 1000)
 				{
 					LOG("HOVER");
 					element->OnMouseHover();
 					return;
 				}
 
+				m_lastMouseMoveTime = sTimeInformation->ElapsedTime;
 				element->OnMouseMove ();
+
 				return;
 			}
 
