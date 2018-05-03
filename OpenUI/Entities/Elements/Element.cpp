@@ -6,6 +6,7 @@
 #include "Graphic/GraphicsContext.h"
 #include "Graphic/Scheme.h"
 #include <iostream>
+#include "Global.h"
 
 namespace OpenUI
 {
@@ -323,6 +324,11 @@ namespace OpenUI
 
 	void Element::Update ()
 	{
+		if (IsCursorInside () && !IsBeingHovered () && sTimeInformation->ElapsedTime - m_lastMoveTime >= 1000)
+		{
+			OnMouseHover();
+		}
+
 		for ( auto element : m_children )
 		{
 			element->Update ();
