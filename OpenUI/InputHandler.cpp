@@ -205,7 +205,7 @@ namespace OpenUI
 	void InputHandler::HandleInput ( Element* element )
 	{
 		const IntVector mousePos = sInputInformation->MousePosition;
-
+		
 		switch ( sInputInformation->LastEvent )
 		{
 			case sf::Event::MouseMoved :

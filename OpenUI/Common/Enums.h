@@ -89,5 +89,5 @@ namespace OpenUI
 		return os;
 	}
 
-	#undef ENUM_OSTREAM_SWITCH;
+	#undef ENUM_OSTREAM_SWITCH
 }
