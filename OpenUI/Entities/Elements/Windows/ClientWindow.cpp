@@ -56,7 +56,7 @@ sf::RenderWindow& OpenUI::ClientWindow::GetRenderWindow () const
 	return *m_renderWindow;
 }
 
-void OpenUI::ClientWindow::Input ( const InputContext & p_inputContext )
+void OpenUI::ClientWindow::Input ( const InputContext & inputContext )
 {
 	if ( !m_renderWindow->pollEvent ( m_event ) )
 	{
@@ -95,6 +95,6 @@ void OpenUI::ClientWindow::Input ( const InputContext & p_inputContext )
 
 	for ( Element* element : m_descendants )
 	{
-		m_inputHandler.HandleElementEvent ( element, m_event, p_inputContext);
+		m_inputHandler.HandleInput ( element, m_event, inputContext);
 	}
 }

@@ -13,8 +13,6 @@ namespace OpenUI
 	class Control
 	{
 	public:
-		
-
 		virtual ~Control () = default;
 		explicit Control ( const std::string& name );
 
@@ -32,9 +30,10 @@ namespace OpenUI
 		virtual void OnMouseMove ();
 
 		virtual void OnMouseDown ( const sf::Event::MouseButtonEvent& event );
-		virtual void OnMouseUp(const sf::Event::MouseButtonEvent& event);
+		virtual void OnMouseUp ( const sf::Event::MouseButtonEvent& event );
 
-		virtual void OnMouseClick (const sf::Event::MouseButtonEvent& event );
+		virtual void OnMouseClick ( const sf::Event::MouseButtonEvent& event );
+		virtual void OnMouseDoubleClick ( const sf::Event::MouseButtonEvent& event );
 
 		virtual void OnDragBegin ();
 		virtual void OnDragEnter ( Element* );
@@ -43,17 +42,19 @@ namespace OpenUI
 		virtual void OnDrop ( const InputHandler::MouseDropEvent& );
 		virtual void OnDragDrop ( const InputHandler::MouseDragDropEvent& );
 
-		virtual void OnStateChanged(const ControlState p_state) {}
+		virtual void OnStateChanged ( const ControlState p_state )
+		{
+		}
 
 	private:
 		friend struct InputHandler;
 
-		void SetState(ControlState state);
-		void SetState(const int state) { SetState(ControlState ( state )); }
+		void SetState ( ControlState state );
+		void SetState ( int state );
 
-		void AddState(const ControlState state) { SetState(m_st | state); }
-		void RemoveState(const ControlState state) { SetState(m_st & ~state); }
-		void ToggleState(const ControlState state) { SetState(m_st ^ state); }
+		void AddState ( ControlState state );
+		void RemoveState ( ControlState state );
+		void ToggleState ( ControlState state );
 
 		union
 		{

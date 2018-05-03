@@ -12,26 +12,41 @@ namespace OpenUI
 	{
 		struct MouseDropEvent
 		{
-			explicit MouseDropEvent ( const Element& source )
+			explicit MouseDropEvent ( Element& source, const IntVector& start, const IntVector& end )
 				: Source ( source )
+				, Start ( start )
+				, End ( end )
 			{
 			}
 
-			const Element& Source;
+			Element& Source;
+
+			const IntVector Start;
+			const IntVector End;
 		};
 
 		struct MouseDragDropEvent
 		{
-			explicit MouseDragDropEvent ( const Element& target )
+			explicit MouseDragDropEvent ( Element* target, const IntVector& start, const IntVector& end )
 				: Target ( target )
+				, Start ( start )
+				, End ( end )
 			{
 			}
 
-			const Element& Target;
+			Element* Target;
+
+			const IntVector Start;
+			const IntVector End;
+
+			bool DidHitTarget() const
+			{
+				return Target;
+			}
 		};
 
 		IntVector MousePosition { 0, 0 };
-		InputHandler();
+		InputHandler ();
 
 		void Refresh ( sf::Event::MouseMoveEvent& event );
 
@@ -46,12 +61,20 @@ namespace OpenUI
 		void OnMouseLeave ( Element* element );
 		void OnMouseMove ( Element* element );
 
-		void OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext);
-		void OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext);
+		void OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext& inputContext );
+		void OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext& inputContext );
 
-		void HandleElementEvent ( Element* element, const sf::Event& event, const InputContext & p_inputContext);
+		void HandleInput ( Element* element, const sf::Event& event, const InputContext& inputContext );
+		void UpdateActiveElement( Element* element );
 
 	private:
+		int m_consecutiveClicks;
+
+		long m_lastMousePress;
+		long m_lastMouseClick;
+
+		IntVector m_lastPressMousePos;
+
 		Element* m_activeElement;
 		Element* m_pressedElement;
 

@@ -11,6 +11,7 @@
 #include "Entities/Controls/Control.h"
 #include "Graphic/ScissorTest.h"
 #include "Contexts.h"
+#include "Graphic/Scheme.h"
 
 namespace OpenUI
 {
@@ -40,7 +41,9 @@ namespace OpenUI
 		const std::string& GetName () const { return m_name; }
 
 		ClientWindow* GetClientWindow () const { return m_clientWindow; }
+
 		Element* GetParent () const { return m_parent; }
+
 		uint16_t GetDrawOrder () const { return m_drawOrder; }
 
 		/// <summary>
@@ -56,16 +59,22 @@ namespace OpenUI
 		int GetLevel () const { return m_level; }
 
 		IntRect& GetBounds () { return m_bounds; }
+
 		IntVector& GetSize () { return m_bounds.Size; }
+
 		IntVector& GetPosition () { return m_bounds.Position; }
 
 		std::vector <sf::RectangleShape*>::iterator GetShapes () { return m_shapes.begin (); }
+
 		std::vector <sf::Text*>::iterator GetTexts () { return m_texts.begin (); }
+
 		std::vector <Element*>::iterator GetChildren () { return m_children.begin (); }
 
 		sf::RectangleShape* GetShape ( const int& index );
 
 		void SetParent ( Element* element );
+
+		void SetScheme ( Scheme* scheme ) { m_scheme = scheme; }
 
 		void SetBounds ( const IntRect& value );
 		void SetSize ( const IntVector& value );
@@ -86,26 +95,39 @@ namespace OpenUI
 		void OnMouseMove () override;
 		void OnMouseEnter () override;
 
+		void OnMouseClick ( const sf::Event::MouseButtonEvent& event ) override;
+		void OnMouseDoubleClick ( const sf::Event::MouseButtonEvent& event ) override;
+
 		void OnMouseDown ( const sf::Event::MouseButtonEvent& event ) override;
 		void OnMouseUp ( const sf::Event::MouseButtonEvent& event ) override;
+
 		void OnDrop ( const InputHandler::MouseDropEvent& event ) override;
+		void OnDragBegin () override;
+		void OnDragDrop ( const InputHandler::MouseDragDropEvent& ) override;
 
 		virtual void Update ( const UpdateContext& updateContext );
 		virtual void OnBoundsChanged ( IntRect& delta );
 		virtual void Draw ( const GraphicsContext& gContext );
 
-		virtual void OnChildAdded ( Element& child ) {}
-		virtual void OnChildRemoved ( Element& child ) {}
-		virtual void OnParentChanged ( Element& newParent ) {}
+		virtual void OnChildAdded ( Element& child )
+		{
+		}
+		virtual void OnChildRemoved ( Element& child )
+		{
+		}
+		virtual void OnParentChanged ( Element& newParent )
+		{
+		}
 
 		virtual void OnParentBoundsChanged ( IntRect& delta );
 
-		void OnStateChanged ( const ControlState p_state ) override;
+		void OnStateChanged ( ControlState state ) override;
 
 		bool operator == ( const Element& rhs ) const;
 		bool operator != ( const Element& rhs ) const;
 
 	protected:
+
 		void AddShape ( sf::RectangleShape* rectangle );
 		void RemoveShape ( const int& index );
 
@@ -114,9 +136,9 @@ namespace OpenUI
 	private:
 		void SortDrawOrder () const;
 
-	private:
 		const std::string m_name = "Element";
-		//ColorScheme m_colorScheme;
+
+		Scheme* m_scheme;
 		ScissorTest m_scissorTest;
 
 		int m_drawOrder = 0;

@@ -57,7 +57,7 @@ namespace OpenUI
 		/// </summary>
 		void RestorePreviousScissorTest ()
 		{
-			if ( !m_scissorTestWasEnabled )
+			if ( !m_scissorTestWasEnabled || !Enabled )
 			{
 				return; // No scissor test was enabled before this one.
 			}

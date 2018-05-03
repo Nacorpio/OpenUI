@@ -24,9 +24,12 @@ namespace OpenUI
 
 		void OnMouseUp( const sf::Event::MouseButtonEvent& event) override;
 		void OnMouseDown( const sf::Event::MouseButtonEvent& event) override;
+
 		void OnMouseClick (const sf::Event::MouseButtonEvent& event ) override;
+		void OnMouseDoubleClick ( const sf::Event::MouseButtonEvent& event ) override;
 
 		void OnDrop (const InputHandler::MouseDropEvent& event) override;
+		void OnDragDrop ( const InputHandler::MouseDragDropEvent& ) override;
 		void OnDragBegin () override;
 	};
 }

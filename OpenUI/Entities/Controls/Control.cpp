@@ -15,6 +15,27 @@ namespace OpenUI
 	void Control::SetState ( const ControlState state )
 	{
 		m_state = state;
+		OnStateChanged(state);
+	}
+
+	void Control::SetState ( const int state )
+	{
+		SetState ( ControlState ( state ) );
+	}
+
+	void Control::AddState ( const ControlState state )
+	{
+		SetState ( m_st | state );
+	}
+
+	void Control::RemoveState ( const ControlState state )
+	{
+		SetState ( m_st & ~state );
+	}
+
+	void Control::ToggleState ( const ControlState state )
+	{
+		SetState ( m_st ^ state );
 	}
 
 	void Control::OnMouseEnter ()
@@ -46,7 +67,12 @@ namespace OpenUI
 		RemoveState ( Pressed );
 	}
 
-	void Control::OnMouseUp (const sf::Event::MouseButtonEvent& event )
+	void Control::OnMouseDoubleClick ( const sf::Event::MouseButtonEvent& event )
+	{
+		RemoveState(Pressed);
+	}
+
+	void Control::OnMouseUp ( const sf::Event::MouseButtonEvent& event )
 	{
 		RemoveState ( Pressed );
 	}
@@ -59,7 +85,6 @@ namespace OpenUI
 	{
 		RemoveState ( Dragged );
 		RemoveState ( Pressed );
-
 	}
 
 	void Control::OnDragBegin ()
