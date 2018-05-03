@@ -139,6 +139,6 @@ void OpenUI::ClientWindow::Input ()
 
 	for ( Element* element : m_descendants )
 	{
-		m_inputHandler.HandleInput ( element);
+		m_inputHandler.HandleInput ( element );
 	}
 }

@@ -52,6 +52,7 @@ namespace OpenUI
 	void Button::OnMouseHover ()
 	{
 		Element::OnMouseHover ();
+		LOG("HOVER");
 	}
 
 	void Button::OnMouseDown ( )

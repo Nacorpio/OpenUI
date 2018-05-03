@@ -62,7 +62,8 @@ namespace OpenUI
 		IntVector& GetSize () { return m_bounds.Size; }
 
 		IntVector& GetPosition () { return m_bounds.Position; }
-		IntRect& GetContainerRectangle() { return m_containerRectangle; }
+
+		IntRect& GetContainerRectangle () { return m_containerRectangle; }
 
 		std::vector <sf::RectangleShape*>::iterator GetShapes () { return m_shapes.begin (); }
 
@@ -79,9 +80,9 @@ namespace OpenUI
 		void SetBounds ( const IntRect& value );
 		void SetSize ( const IntVector& value );
 		void SetPosition ( const IntVector& value );
-		void SetContainerRectangle ( const IntRect & p_value );
+		void SetContainerRectangle ( const IntRect& p_value );
 
-		void SetBackgroundColor ( const sf::Color & p_color ) const;
+		void SetBackgroundColor ( const sf::Color& p_color ) const;
 
 		bool HasShape ( const int& index );
 		bool HasShape ( sf::RectangleShape* rectangle );
@@ -89,6 +90,9 @@ namespace OpenUI
 		void AddChild ( Element* element );
 		void RemoveChild ( Element* element );
 		bool HasChild ( const Element* element );
+
+		virtual void Update ();
+		virtual void Draw ( const GraphicsContext& gContext );
 
 		virtual void Start () const;
 		virtual void Initialize ();
@@ -98,21 +102,19 @@ namespace OpenUI
 		void OnMouseMove () override;
 		void OnMouseEnter () override;
 
-		void OnMouseClick (  ) override;
-		void OnMouseDoubleClick (  ) override;
+		void OnMouseClick () override;
+		void OnMouseDoubleClick () override;
 
-		void OnMouseDown (  ) override;
-		void OnMouseUp ( ) override;
+		void OnMouseDown () override;
+		void OnMouseUp () override;
 
 		void OnDrop ( const InputHandler::MouseDropEvent& event ) override;
 		void OnDragBegin () override;
 		void OnDragDrop ( const InputHandler::MouseDragDropEvent& ) override;
 
-		virtual void Update ();
-		virtual void OnBoundsChanged (const IntRect& delta );
-		virtual void OnPositionChanged(const IntVector& delta);
-		virtual void OnSizeChanged(const IntVector& delta);
-		virtual void Draw ( const GraphicsContext& gContext );
+		virtual void OnBoundsChanged ( const IntRect& delta );
+		virtual void OnPositionChanged ( const IntVector& delta );
+		virtual void OnSizeChanged ( const IntVector& delta );
 
 		virtual void OnChildAdded ( Element& child )
 		{
@@ -125,8 +127,8 @@ namespace OpenUI
 		}
 
 		virtual void OnParentBoundsChanged ( const IntRect& delta );
-		virtual void OnParentPositionChanged(const IntVector& delta);
-		virtual void OnParentSizeChanged(const IntVector& delta);
+		virtual void OnParentPositionChanged ( const IntVector& delta );
+		virtual void OnParentSizeChanged ( const IntVector& delta );
 
 		void OnStateChanged ( ControlState state ) override;
 
@@ -152,7 +154,10 @@ namespace OpenUI
 		int m_height = 0;
 		int m_level = 0;
 
-		sf::RectangleShape * m_background;
+		friend struct InputHandler;
+		long m_lastMoveTime = 0;
+
+		sf::RectangleShape* m_background;
 		std::vector <Element*> m_children { };
 		std::vector <sf::RectangleShape*> m_shapes;
 		std::vector <sf::Text*> m_texts;

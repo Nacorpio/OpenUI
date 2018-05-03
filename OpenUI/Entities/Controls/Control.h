@@ -44,16 +44,16 @@ namespace OpenUI
 
 		virtual void OnStateChanged(const ControlState p_state) {}
 
-	private:
 		friend struct InputHandler;
 
-		void SetState ( ControlState state );
-		void SetState ( int state );
+		void SetState(ControlState state);
+		void SetState(int state);
 
 		void AddState ( ControlState state );
 		void RemoveState ( ControlState state );
 		void ToggleState ( ControlState state );
 
+	private:
 		union
 		{
 			ControlState m_state;

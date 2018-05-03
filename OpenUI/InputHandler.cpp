@@ -92,7 +92,14 @@ namespace OpenUI
 			}
 
 			m_lastMoved = element;
-			m_lastMouseMoveTime = sTimeInformation->ElapsedTime;
+
+			element->m_lastMoveTime = sTimeInformation->ElapsedTime;
+			element->OnMouseMove();
+
+			if (element->IsBeingHovered ())
+			{
+				element->RemoveState(Hovered);
+			}
 
 			if ( element->IsCursorInside () )
 			{
@@ -101,14 +108,6 @@ namespace OpenUI
 					element->OnDragMove ( m_dragDropSource );
 				}
 
-				if (!element->IsBeingHovered () && element == m_lastMoved)
-				{
-					LOG("HOVER");
-					element->OnMouseHover();
-					return;
-				}
-
-				element->OnMouseMove ();
 				return;
 			}
 
