@@ -73,11 +73,11 @@ namespace OpenUI
 			child->SetSize ( child->GetSize () - delta );
 		}
 
-		for ( sf::RectangleShape* shape : m_shapes )
-		{
-			auto x = ( value - m_bounds.Size + shape->getSize () ).sfVector2f;
-			shape->setSize ( sf::Vector2f ( value.sfVector ) );
-		}
+		//for ( sf::RectangleShape* shape : m_shapes )
+		//{
+		//	auto x = ( value - m_bounds.Size + shape->getSize () ).sfVector2f;
+		//	shape->setSize ( sf::Vector2f ( value.sfVector ) );
+		//}
 
 		OnSizeChanged(delta);
 	}
@@ -256,6 +256,7 @@ namespace OpenUI
 		{
 			element->Draw ( gContext );
 		}
+
 		m_scissorTest.RestoreParentsScissorTest();
 	}
 

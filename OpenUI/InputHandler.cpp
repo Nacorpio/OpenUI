@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "InputHandler.h"
 #include "Entities/Elements/Element.h"
-#include "Global.h"
 #include <iostream>
+#include "Common/Global.h"
 
 namespace OpenUI
 {
@@ -132,7 +132,7 @@ namespace OpenUI
 	void InputHandler::CalculateClick ( Element* element )
 	{
 		const bool isInTime = sTimeInformation->ElapsedTime - m_lastMouseClickTime <= 200;
-
+		sf::VertexArray df;
 		if ( !m_lastClicked || m_lastClicked != element || m_lastClicked == element && !isInTime )
 		{
 			m_consecutiveClicks = 1;
@@ -180,11 +180,11 @@ namespace OpenUI
 				break;
 			}
 
-				/*case 3 :
-				{
-					LOG("TRIPLE CLICK!!!");
-					break;
-				}*/
+				//case 3 :
+				//{
+				//	LOG("TRIPLE CLICK!!!");
+				//	break;
+				//}
 
 			default :
 			{

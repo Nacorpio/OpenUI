@@ -1,7 +1,6 @@
 #pragma once
 #include "Entities/Elements/Element.h"
-#include <iostream>
-#include "Global.h"
+#include "Common/Global.h"
 
 namespace OpenUI
 {

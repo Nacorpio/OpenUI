@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "Entities/Elements/Windows/ClientWindow.h"
-#include "WindowElement.h"
+#include "Entities/Elements/Windows/WindowElement.h"
 
 namespace OpenUI
 {

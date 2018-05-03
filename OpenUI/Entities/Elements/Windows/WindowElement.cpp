@@ -22,10 +22,11 @@ namespace OpenUI
 
 		const auto bounds = GetBounds();
 		m_headerBar = new sf::RectangleShape(sf::Vector2f(bounds.Size.X, m_headerHeight));
+		m_headerBar->setPosition(sf::Vector2f(bounds.Position.sfVector));
 		m_headerBar->setFillColor(sf::Color(160, 160, 160));
 		AddShape(m_headerBar);
 
-		SetContainerRectangle(IntRect(bounds.X, bounds.Y + m_headerHeight, bounds.Width - 5, bounds.Height - m_headerHeight));
+		SetContainerRectangle(IntRect(bounds.X, bounds.Y + m_headerHeight, bounds.Width, bounds.Height - m_headerHeight));
 	}
 
 	void WindowElement::Update ( )
@@ -95,7 +96,7 @@ namespace OpenUI
 	{
 		Element::OnBoundsChanged ( delta );
 		const auto bounds = GetBounds();
-		SetContainerRectangle(IntRect(bounds.X, bounds.Y + m_headerHeight, bounds.Width - 5, bounds.Height - m_headerHeight));
+		SetContainerRectangle(IntRect(bounds.X, bounds.Y + m_headerHeight, bounds.Width, bounds.Height - m_headerHeight));
 		m_headerBar->setSize ( sf::Vector2f ( bounds.Size.sfVector.x, m_headerHeight ) );
 		m_headerBar->setPosition ( sf::Vector2f (bounds.Position.sfVector ) );
 	}

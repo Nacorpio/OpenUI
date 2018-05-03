@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ClientWindow.h"
 #include "iostream"
-#include "Global.h"
+#include "Common/Global.h"
 
 OpenUI::ClientWindow::ClientWindow ( const std::string& name, const RenderWindowSettings& windowSettings )
 	: Element ( name )
@@ -58,6 +58,7 @@ void OpenUI::ClientWindow::Input ()
 	{
 		return;
 	}
+
 
 	sInputInformation->LastEvent = m_event.type;
 
