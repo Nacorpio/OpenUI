@@ -9,7 +9,7 @@ namespace OpenUI
 {
 	ElementMgr::~ElementMgr ()
 	{
-		for ( const Element* element : m_elements )
+		for ( Element* element : m_elements )
 		{
 			delete element;
 		}
@@ -58,6 +58,7 @@ namespace OpenUI
 			clientWindow->GetRenderWindow().setFramerateLimit ( 144 );
 			clientWindow->GetRenderWindow();
 			m_clientWindows.insert ( clientWindow );
+			clientWindow->Initialize();
 			return clientWindow;
 		}
 
@@ -77,8 +78,7 @@ namespace OpenUI
 		if (auto* windowElement = new WindowElement(name, headerSize))
 		{
 			Add(id, windowElement);
-			
-			
+			windowElement->Initialize();
 			return windowElement;
 		}
 
@@ -95,6 +95,7 @@ namespace OpenUI
 		if ( auto* button = new Button ( name ) )
 		{
 			Add ( id, button );
+			button->Initialize();
 			return button;
 		}
 

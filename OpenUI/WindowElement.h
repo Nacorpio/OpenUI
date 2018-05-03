@@ -1,36 +1,63 @@
 #pragma once
 #include "Entities/Elements/Element.h"
+#include <iostream>
+#include "MouseInformation.h"
 
 namespace OpenUI
 {
-	class WindowElement : public OpenUI::Element
+	class GraphicsContext;
+	class WindowElement : public Element
 	{
 	public:
 		WindowElement(const std::string& p_name, const uint16_t & p_headerSize);
 		~WindowElement();
 
-	protected:
-		void OnMouseClick ( const sf::Event::MouseButtonEvent & event ) override;
+		void Start() const override;
+		void Initialize() override;
 
-	public:
-		void Start () const override;
+		void Update ( const UpdateContext & p_updateContext ) override;
+		void Draw(const GraphicsContext & gContext) override;
 
-		void Initialize () override;
+		void OnMouseEnter() override;
+		void OnMouseLeave() override;
+		void OnMouseMove () override;
+		void OnMouseHover() override;
+		void OnMouseUp () override;
+		void OnMouseDown () override;
+		void OnMouseClick () override;
+		void OnDrop(const InputHandler::MouseDropEvent& event) override;
+		void OnDragBegin() override;
 
-		void Update ( const OpenUI::UpdateContext & p_updateContext ) override;
-
-		void OnBoundsChanged ( OpenUI::IntRect & p_delta ) override;
-
-		void Draw ( const OpenUI::GraphicsContext & gContext ) override;
-
-		void OnMouseDown ( const sf::Event::MouseButtonEvent & event ) override;
-
-		void OnMouseUp ( const sf::Event::MouseButtonEvent & event ) override;
-
-		void OnChildAdded ( Element & child ) override;
+		void OnBoundsChanged ( const IntRect & delta ) override;
 
 	private:
-		uint16_t m_headerSize = 30;
+		uint16_t m_headerHeight = 30;
+		IntVector m_mousePressedPosition;
+		bool m_isMousePressedHeader = false;
+		sf::RectangleShape * m_headerBar = nullptr;
+
+		void UpdateHeaderBarBounds()
+		{
+			m_headerBar->setSize(sf::Vector2f(GetBounds().Size.sfVector.x, m_headerHeight));
+			m_headerBar->setPosition(sf::Vector2f(GetBounds().Position.sfVector));
+		}
+
+		bool CheckMouseDownHeader()
+		{
+			if(sInputInformation->MousePosition.Y < GetPosition().Y + m_headerHeight)
+			{
+				const auto currentLocation = GetBounds().Position;
+				m_mousePressedPosition.X = sInputInformation->MousePosition.X - currentLocation.X;
+				m_mousePressedPosition.Y = sInputInformation->MousePosition.Y - currentLocation.Y;
+				return true;
+			}
+			return false;
+		}
+
+		void DragWindow()
+		{
+			SetPosition(sInputInformation->MousePosition - m_mousePressedPosition);
+		}
 	};
 
 	

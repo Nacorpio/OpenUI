@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "InputHandler.h"
 #include "Entities/Elements/Element.h"
+#include "MouseInformation.h"
+#include <iostream>
 
 namespace OpenUI
 {
@@ -10,14 +12,14 @@ namespace OpenUI
 
 	bool InputHandler::IsMouseWithin ( Element* element ) const
 	{
-		return IsMouseWithin ( element->GetBounds (), MousePosition );
+		return IsMouseWithin ( element->GetBounds (), sInputInformation->MousePosition );
 	}
 
-	void InputHandler::Refresh ( sf::Event::MouseMoveEvent& event )
-	{
-		MousePosition.X = event.x;
-		MousePosition.Y = event.y;
-	}
+	//void InputHandler::Refresh ( sf::Event::MouseMoveEvent& event )
+	//{
+	//	MousePosition.X = event.x;
+	//	MousePosition.Y = event.y;
+	//}
 
 	void InputHandler::OnMouseEnter ( Element* element )
 	{
@@ -48,12 +50,12 @@ namespace OpenUI
 		}
 	}
 
-	void InputHandler::OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext)
+	void InputHandler::OnMouseDown ( Element* element)
 	{
-		element->OnMouseDown ( event );
+		element->OnMouseDown (  );
 	}
 
-	void InputHandler::OnMouseMove ( Element* element )
+	void InputHandler::OnMouseMove ( Element* element)
 	{
 		const bool isMouseWithin = IsMouseWithin ( element );
 
@@ -97,22 +99,22 @@ namespace OpenUI
 		}
 	}
 
-	void InputHandler::OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext)
+	void InputHandler::OnMouseUp ( Element* element)
 	{
 		if ( m_pressedElement == m_activeElement )
 		{
 			m_pressedElement = nullptr;
-			element->OnMouseClick ( event );
+			element->OnMouseClick (  );
 
 			return;
 		}
 
-		element->OnMouseUp ( event );
+		element->OnMouseUp (  );
 	}
 
-	void InputHandler::HandleElementEvent ( Element* element, const sf::Event& event, const InputContext & p_inputContext )
+	void InputHandler::HandleElementEvent ( Element* element)
 	{
-		switch ( event.type )
+		switch ( sInputInformation->LastEvent )
 		{
 			case sf::Event::MouseMoved :
 			{
@@ -122,14 +124,14 @@ namespace OpenUI
 
 			case sf::Event::MouseButtonPressed :
 			{
-				if ( !element->IsCursorInside () || element->IsBeingPressed())
+
+				if ( !element->IsCursorInside ())
 				{
 					return;
 				}
 
 				m_pressedElement = element;
-				OnMouseDown ( element, event.mouseButton, p_inputContext);
-
+				OnMouseDown ( element);
 				return;
 			}
 
@@ -155,7 +157,7 @@ namespace OpenUI
 					m_dragDropTarget = nullptr;
 				}
 
-				OnMouseUp ( element, event.mouseButton, p_inputContext );
+				OnMouseUp ( element );
 				break;
 			}
 

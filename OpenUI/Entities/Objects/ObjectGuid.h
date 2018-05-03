@@ -20,6 +20,7 @@ namespace OpenUI
 			Label,
 			Window,
 			ClientWindow,
+			WindowElement
 		};
 
 		ObjectGuid ( const TypeId typeId, const Detail detail )

@@ -43,7 +43,7 @@ namespace OpenUI
 
 		sf::RenderWindow& GetRenderWindow () const;
 
-		void Input ( const InputContext & p_inputContext);
+		void Input ();
 
 	private:
 		friend class Element;
@@ -51,7 +51,6 @@ namespace OpenUI
 		bool m_isMouseInside = false;
 
 		sf::Event m_event;
-		sf::Event m_lastEvent;
 
 		std::set <Element*, ElementComparerTree> m_descendants { };
 		sf::RenderWindow* m_renderWindow { };

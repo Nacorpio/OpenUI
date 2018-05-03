@@ -14,6 +14,8 @@ namespace OpenUI
 	struct UpdateContext
 	{
 		long Delta, ElapsedTime;
+		IntVector MousePosition;
+		sf::Mouse::Button MouseButtonPressed;
 	};
 }
 

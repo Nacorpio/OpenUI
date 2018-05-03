@@ -20,7 +20,15 @@ namespace OpenUI
 		void Start()
 		{
 			m_clientWindows = &sElementMgr->m_clientWindows;
-			Initialize();
+
+			// Starts the elements after they've been initialized.
+			ClientWindow * clientWindow = nullptr;
+			for (auto it = m_clientWindows->begin(); it != m_clientWindows->end(); ++it)
+			{
+				clientWindow = it._Ptr->_Myval;
+				clientWindow->Start();
+			}
+
 			ProgramLoop();
 		}
 
@@ -30,10 +38,8 @@ namespace OpenUI
 		}
 
 	private:
-		InputContext m_inputContext;
 		UpdateContext m_updateContext;
-
-
+		
 		void ProgramLoop()
 		{
 			sf::Clock clock;
@@ -48,10 +54,9 @@ namespace OpenUI
 			long previousUpdate = 1, currentUpdate = 1, delta = 0,previousFPSUpdate = 0, nextFPSUpdate = nextTick + 1000;
 			float interpolation = 0;
 
+			static const bool enablePerformanceProfiler = false;
 			static double frames = 0;
 			static double frameTime = 0;
-
-			static const bool enablePerformanceProfiler = false;
 
 			while (true)
 			{
@@ -60,8 +65,6 @@ namespace OpenUI
 
 				while (elapsedTime > nextTick && loops < maxFrameSkips)
 				{
-					m_inputContext.Delta = delta;
-					m_inputContext.ElapsedTime = elapsedTime;
 					m_updateContext.Delta = delta;
 					m_updateContext.ElapsedTime = elapsedTime;
 					Update();
@@ -93,29 +96,15 @@ namespace OpenUI
 		}
 
 		/// <summary>
-		///		Starts and initializes the windows which will start and initialize the elements.
-		/// </summary>
-		void Initialize() const
-		{
-			ClientWindow * clientWindow = nullptr;
-			for (auto it = m_clientWindows->begin(); it != m_clientWindows->end(); ++it)
-			{
-				clientWindow = it._Ptr->_Myval;
-				clientWindow->Initialize();
-				clientWindow->Start();
-			}
-		}
-
-		/// <summary>
 		///		Input and update the client window(s).
 		/// </summary>
-		void Update() const
+		void Update() 
 		{
 			ClientWindow * clientWindow = nullptr;
 			for (auto it = m_clientWindows->begin(); it != m_clientWindows->end(); ++it)
 			{
 				clientWindow = it._Ptr->_Myval;
-				clientWindow->Input(m_inputContext);
+				clientWindow->Input();
 				clientWindow->Update(m_updateContext);
 			}
 		}

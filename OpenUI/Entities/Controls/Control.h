@@ -31,10 +31,10 @@ namespace OpenUI
 		virtual void OnMouseHover ();
 		virtual void OnMouseMove ();
 
-		virtual void OnMouseDown ( const sf::Event::MouseButtonEvent& event );
-		virtual void OnMouseUp(const sf::Event::MouseButtonEvent& event);
+		virtual void OnMouseDown ( );
+		virtual void OnMouseUp();
 
-		virtual void OnMouseClick (const sf::Event::MouseButtonEvent& event );
+		virtual void OnMouseClick ();
 
 		virtual void OnDragBegin ();
 		virtual void OnDragEnter ( Element* );

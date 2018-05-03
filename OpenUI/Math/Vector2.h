@@ -116,7 +116,7 @@ namespace OpenUI
 			return *this;
 		}
 
-		Vector2 <_Ty> operator + ( const Vector2 <_Ty>& rhs )
+		Vector2 <_Ty> operator + ( const Vector2 <_Ty>& rhs ) const
 		{
 			return Vector2 <_Ty> ( X + rhs.X, Y + rhs.Y );
 		}
@@ -126,20 +126,21 @@ namespace OpenUI
 			return Vector2 <_Ty> ( X - rhs.X, Y - rhs.Y );
 		}
 
-		Vector2 <_Ty> operator * ( const Vector2 <_Ty>& rhs )
+		Vector2 <_Ty> operator * ( const Vector2 <_Ty>& rhs )const
 		{
 			return Vector2 <_Ty> ( X * rhs.X, Y * rhs.Y );
 		}
 
-		Vector2 <_Ty> operator / ( const Vector2 <_Ty>& rhs )
+		Vector2 <_Ty> operator / ( const Vector2 <_Ty>& rhs )const
 		{
 			return Vector2 <_Ty> ( X / rhs.X, Y / rhs.Y );
 		}
 
-		Vector2 <_Ty> operator + ( const sf::Vector2f& p_rhs )
+		Vector2 <_Ty> operator + ( const sf::Vector2f& p_rhs )const
 		{
 			return Vector2 <_Ty> ( static_cast <_Ty> (X + p_rhs.x), static_cast <_Ty> (Y + p_rhs.y) );
 		}
+		// :)
 	};
 
 	typedef Vector2 <int32_t> IntVector;

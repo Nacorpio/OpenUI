@@ -30,10 +30,10 @@ namespace OpenUI
 			const Element& Target;
 		};
 
-		IntVector MousePosition { 0, 0 };
+		//IntVector MousePosition { 0, 0 };
 		InputHandler();
 
-		void Refresh ( sf::Event::MouseMoveEvent& event );
+	//	void Refresh ( sf::Event::MouseMoveEvent& event );
 
 		bool IsMouseWithin ( Element* element ) const;
 
@@ -44,12 +44,12 @@ namespace OpenUI
 
 		void OnMouseEnter ( Element* element );
 		void OnMouseLeave ( Element* element );
-		void OnMouseMove ( Element* element );
+		void OnMouseMove ( Element* element);
 
-		void OnMouseDown ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext);
-		void OnMouseUp ( Element* element, const sf::Event::MouseButtonEvent& event, const InputContext & p_inputContext);
+		void OnMouseDown ( Element* element);
+		void OnMouseUp ( Element* element);
 
-		void HandleElementEvent ( Element* element, const sf::Event& event, const InputContext & p_inputContext);
+		void HandleElementEvent ( Element* element);
 
 	private:
 		Element* m_activeElement;

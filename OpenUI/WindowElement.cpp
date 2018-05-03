@@ -4,47 +4,97 @@
 namespace OpenUI
 {
 	WindowElement::WindowElement(const std::string& p_name, const uint16_t & p_headerSize)
-		: Element("WindowElement")
-	{
-	}
+		: Element(p_name)
+	{m_guidDetail = ObjectGuid::Detail::WindowElement;	}
 
 	WindowElement::~WindowElement()
 	{
 	}
 
-	void WindowElement::OnMouseClick ( const sf::Event::MouseButtonEvent & event )
-	{
-	}
-
 	void WindowElement::Start () const
 	{
+		Element::Start();
 	}
 
-	void WindowElement::Initialize () 
+	void WindowElement::Initialize ()
 	{
+		Element::Initialize();
+
+		const auto bounds = GetBounds();
+		m_headerBar = new sf::RectangleShape(sf::Vector2f(bounds.Size.X, m_headerHeight));
+		m_headerBar->setFillColor(sf::Color(160, 160, 160));
+		AddShape(m_headerBar);
+
+		SetContainerRectangle(IntRect(bounds.X, bounds.Y + m_headerHeight, bounds.Width - 5, bounds.Height - m_headerHeight));
 	}
 
-	void WindowElement::Update ( const OpenUI::UpdateContext & p_updateContext )
+	void WindowElement::Update ( const UpdateContext & p_updateContext )
 	{
+		Element::Update ( p_updateContext );
+		if (!m_isMousePressedHeader)
+		{
+			return;
+		}
+		DragWindow();
 	}
 
-	void WindowElement::OnBoundsChanged ( OpenUI::IntRect & p_delta )
+	void WindowElement::Draw ( const GraphicsContext & gContext )
 	{
+		Element::Draw(gContext);
 	}
 
-	void WindowElement::Draw ( const OpenUI::GraphicsContext & gContext )
+	void WindowElement::OnMouseEnter ()
 	{
+		Element::OnMouseEnter();
 	}
 
-	void WindowElement::OnMouseDown ( const sf::Event::MouseButtonEvent & event )
+	void WindowElement::OnMouseLeave ()
 	{
+		Element::OnMouseLeave();
 	}
 
-	void WindowElement::OnMouseUp ( const sf::Event::MouseButtonEvent & event )
+	void WindowElement::OnMouseMove ()
 	{
+		Element::OnMouseMove();
 	}
 
-	void WindowElement::OnChildAdded ( Element & child )
+	void WindowElement::OnMouseHover ()
 	{
+		Element::OnMouseHover();
+	}
+
+	void WindowElement::OnMouseUp ()
+	{
+		m_isMousePressedHeader = false;
+	}
+
+	void WindowElement::OnMouseDown ()
+	{
+		Element::OnMouseDown();
+		m_isMousePressedHeader = CheckMouseDownHeader();
+	}
+
+	void WindowElement::OnMouseClick ()
+	{
+		m_isMousePressedHeader = false;
+	}
+
+	void WindowElement::OnDrop ( const InputHandler::MouseDropEvent & event )
+	{
+		Element::OnDrop(event);
+	}
+
+	void WindowElement::OnDragBegin ()
+	{
+		Element::OnDragBegin();
+	}
+
+	void WindowElement::OnBoundsChanged ( const IntRect & delta )
+	{
+		Element::OnBoundsChanged ( delta );
+		const auto bounds = GetBounds();
+		SetContainerRectangle(IntRect(bounds.X, bounds.Y + m_headerHeight, bounds.Width - 5, bounds.Height - m_headerHeight));
+		m_headerBar->setSize ( sf::Vector2f ( bounds.Size.sfVector.x, m_headerHeight ) );
+		m_headerBar->setPosition ( sf::Vector2f (bounds.Position.sfVector ) );
 	}
 }

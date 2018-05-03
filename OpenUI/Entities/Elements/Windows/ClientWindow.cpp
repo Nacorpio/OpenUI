@@ -2,6 +2,7 @@
 #include "ClientWindow.h"
 #include "Contexts.h"
 #include "iostream"
+#include "MouseInformation.h"
 
 OpenUI::ClientWindow::ClientWindow ( const std::string& name, const RenderWindowSettings& windowSettings )
 	: Element ( name )
@@ -14,15 +15,11 @@ OpenUI::ClientWindow::ClientWindow ( const std::string& name, const RenderWindow
 {
 	m_guidDetail = ObjectGuid::Detail::ClientWindow;
 	SetBounds({ 0,0,600,600 });
+	
 }
 
 OpenUI::ClientWindow::~ClientWindow ()
 {
-	for (auto element : m_descendants)
-	{
-		delete element;
-	}
-
 	delete m_renderWindow;
 	m_renderWindow = nullptr;
 }
@@ -56,34 +53,60 @@ sf::RenderWindow& OpenUI::ClientWindow::GetRenderWindow () const
 	return *m_renderWindow;
 }
 
-void OpenUI::ClientWindow::Input ( const InputContext & p_inputContext )
+void OpenUI::ClientWindow::Input ()
 {
 	if ( !m_renderWindow->pollEvent ( m_event ) )
 	{
 		return;
 	}
 
-	m_lastEvent = m_event;
+	sInputInformation->LastEvent = m_event.type;
 
-	switch ( m_event.type )
+	switch (m_event.type)
 	{
+		case sf::Event::MouseButtonPressed :
+			{
+				sInputInformation->MouseIsDown = true;
+				sInputInformation->LastActiveMouseButton = m_event.mouseButton.button;
+				break;
+			}
+
+		case sf::Event::MouseButtonReleased :
+			{
+				sInputInformation->MouseIsDown = false;
+				sInputInformation->LastActiveMouseButton = m_event.mouseButton.button;
+				break;
+			}
+
 		case sf::Event::MouseEntered :
-		{
-			OnMouseEnter ();
-			return;
-		}
+			{
+				OnMouseEnter();
+				return;
+			}
 
 		case sf::Event::MouseLeft :
-		{
-			OnMouseLeave ();
-			return;
-		}
+			{
+				OnMouseLeave();
+				return;
+			}
 
 		case sf::Event::MouseMoved :
-		{
-			m_inputHandler.Refresh ( m_event.mouseMove );
-			break;
-		}
+			{
+				sInputInformation->MousePosition.X = m_event.mouseMove.x;
+				sInputInformation->MousePosition.Y = m_event.mouseMove.y;
+				break;
+			}
+
+		case sf::Event::Closed:
+			{
+				exit(0);
+			}
+
+		case sf::Event::Resized:
+			{
+				// Sets the view to the new resized view to that graphics doesn't scale with the client window.
+				m_renderWindow->setView(*new sf::View(*new sf::FloatRect(0, 0, m_event.size.width, m_event.size.height)));			
+			}
 
 		default : ;
 	}
@@ -95,6 +118,6 @@ void OpenUI::ClientWindow::Input ( const InputContext & p_inputContext )
 
 	for ( Element* element : m_descendants )
 	{
-		m_inputHandler.HandleElementEvent ( element, m_event, p_inputContext);
+		m_inputHandler.HandleElementEvent ( element);
 	}
 }

@@ -58,6 +58,7 @@ namespace OpenUI
 		IntRect& GetBounds () { return m_bounds; }
 		IntVector& GetSize () { return m_bounds.Size; }
 		IntVector& GetPosition () { return m_bounds.Position; }
+		IntRect& GetContainerRectangle() { return m_containerRectangle; }
 
 		std::vector <sf::RectangleShape*>::iterator GetShapes () { return m_shapes.begin (); }
 		std::vector <sf::Text*>::iterator GetTexts () { return m_texts.begin (); }
@@ -70,6 +71,9 @@ namespace OpenUI
 		void SetBounds ( const IntRect& value );
 		void SetSize ( const IntVector& value );
 		void SetPosition ( const IntVector& value );
+		void SetContainerRectangle ( const IntRect & p_value );
+
+		void SetBackgroundColor ( const sf::Color & p_color );
 
 		bool HasShape ( const int& index );
 		bool HasShape ( sf::RectangleShape* rectangle );
@@ -86,19 +90,19 @@ namespace OpenUI
 		void OnMouseMove () override;
 		void OnMouseEnter () override;
 
-		void OnMouseDown ( const sf::Event::MouseButtonEvent& event ) override;
-		void OnMouseUp ( const sf::Event::MouseButtonEvent& event ) override;
+		void OnMouseDown ( ) override;
+		void OnMouseUp ( ) override;
 		void OnDrop ( const InputHandler::MouseDropEvent& event ) override;
 
 		virtual void Update ( const UpdateContext& updateContext );
-		virtual void OnBoundsChanged ( IntRect& delta );
+		virtual void OnBoundsChanged (const IntRect& delta );
 		virtual void Draw ( const GraphicsContext& gContext );
 
 		virtual void OnChildAdded ( Element& child ) {}
 		virtual void OnChildRemoved ( Element& child ) {}
 		virtual void OnParentChanged ( Element& newParent ) {}
 
-		virtual void OnParentBoundsChanged ( IntRect& delta );
+		virtual void OnParentBoundsChanged ( const IntRect& delta );
 
 		void OnStateChanged ( const ControlState p_state ) override;
 
@@ -106,6 +110,7 @@ namespace OpenUI
 		bool operator != ( const Element& rhs ) const;
 
 	protected:
+		friend class ElementMgr;
 		void AddShape ( sf::RectangleShape* rectangle );
 		void RemoveShape ( const int& index );
 
@@ -123,13 +128,14 @@ namespace OpenUI
 		int m_height = 0;
 		int m_level = 0;
 
-		sf::RectangleShape m_background;
+		sf::RectangleShape * m_background;
 		std::vector <Element*> m_children { };
 		std::vector <sf::RectangleShape*> m_shapes;
 		std::vector <sf::Text*> m_texts;
 		std::set <sf::Drawable*> m_drawables { };
 
 		IntRect m_bounds;
+		IntRect m_containerRectangle;
 
 		Element* m_parent = nullptr;
 		ClientWindow* m_clientWindow = nullptr;
