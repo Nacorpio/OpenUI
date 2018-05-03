@@ -42,17 +42,17 @@ namespace OpenUI
 	void Element::SetBounds ( const IntRect& value )
 	{
 
+		if(m_bounds == value)
+		{
+			return; // Return if value is the same as the current bounds.
+		}
+
+		const IntRect delta = m_bounds - value;
+
 		SetPosition(value.Position);
 		SetSize(value.Size);
 		
-		for ( sf::RectangleShape* shape : m_shapes )
-		{
-			//shape->setSize
-			//		( sf::Vector2f ( value.Size.sfVector ) ); //((p_value.Size - m_bounds.Size + shape->getSize()).sfVector2f);
-			/*shape->setPosition
-					( sf::Vector2f ( value.Position.sfVector ) );*/
-		}
-		OnBoundsChanged(value);
+		OnBoundsChanged(delta);
 	}
 
 	void Element::SetSize ( const IntVector& value )
@@ -77,6 +77,8 @@ namespace OpenUI
 			auto x = ( value - m_bounds.Size + shape->getSize () ).sfVector2f;
 			shape->setSize ( sf::Vector2f ( value.sfVector ) );
 		}
+
+		OnSizeChanged(delta);
 	}
 
 	void Element::SetPosition ( const IntVector& value )
@@ -101,7 +103,7 @@ namespace OpenUI
 			shape->setPosition
 					( sf::Vector2f ( value.sfVector ) );
 		}
-		OnBoundsChanged(IntRect());
+		OnPositionChanged(delta);
 	}
 
 	void Element::SetContainerRectangle ( const IntRect & p_value )
@@ -168,6 +170,7 @@ namespace OpenUI
 		element->m_height = uint16_t ( m_height + m_children.size () + 1 );
 		element->m_level = m_level + 1;
 		element->SetPosition(m_containerRectangle.Position + element->GetPosition() );
+		element->m_bounds.ResizeToFit(GetBounds());
 
 		if ( m_clientWindow )
 		{
@@ -235,12 +238,11 @@ namespace OpenUI
 
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
-		//m_scissorTest.SetScissorTest();
+		m_scissorTest.SetScissorTest();
 
 		if ( m_clientWindow )
 		{
 			sf::RenderWindow & renderWindow = m_clientWindow->GetRenderWindow();
-			//renderWindow.draw(m_background);
 			for (auto shape : m_shapes)
 			{
 				renderWindow.draw(*shape);
@@ -251,7 +253,7 @@ namespace OpenUI
 		{
 			element->Draw ( gContext );
 		}
-		//m_scissorTest.RestorePreviousScissorTest();
+		m_scissorTest.RestoreParentsScissorTest();
 	}
 
 	void Element::OnMouseEnter ()
@@ -323,16 +325,43 @@ namespace OpenUI
 
 	void Element::OnBoundsChanged ( const IntRect& delta )
 	{
-		OnParentBoundsChanged ( delta );
+		for (Element* child : m_children)
+		{
+			child->OnParentBoundsChanged(delta);
+		}
+	}
+
+	void Element::OnPositionChanged(const IntVector & delta)
+	{
+		m_scissorTest.UpdateScissorRectangle(m_bounds);
+		for (Element * child : m_children)
+		{
+			child->OnParentPositionChanged(delta);
+		}
+	}
+
+	void Element::OnSizeChanged(const IntVector & delta)
+	{
+		m_scissorTest.UpdateScissorRectangle(m_bounds);
+		for (Element * child : m_children)
+		{
+			child->OnParentSizeChanged(delta);
+		}
 	}
 
 	void Element::OnParentBoundsChanged (const IntRect& delta )
 	{
-		m_scissorTest.UpdateScissorRectangle ( m_bounds );
-		for ( Element* child : m_children )
-		{
-			child->OnParentBoundsChanged ( delta );
-		}
+		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
+	}
+
+	void Element::OnParentPositionChanged ( const IntVector & delta )
+	{
+		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
+	}
+
+	void Element::OnParentSizeChanged ( const IntVector & delta )
+	{
+		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
 	}
 
 	bool Element::operator== ( const Element& rhs ) const
@@ -359,4 +388,6 @@ namespace OpenUI
 	void Element::OnStateChanged ( const ControlState state )
 	{
 	}
+
+
 }

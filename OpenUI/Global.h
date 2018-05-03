@@ -14,9 +14,14 @@ namespace OpenUI
 		}
 
 		bool MouseIsDown;
+		bool KeyIsDown;
+		int MouseWheelDelta;
 		IntVector MousePosition;
 		sf::Mouse::Button LastActiveMouseButton;
 		sf::Event::EventType LastEvent;
+		sf::Event::KeyEvent LastKeyEvent;
+		sf::Event::TextEvent LastTextEvent;
+		
 	};
 
 	class TimeInformation

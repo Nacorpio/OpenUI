@@ -10,7 +10,6 @@
 #include <SFML/Graphics/Text.hpp>
 #include "Entities/Controls/Control.h"
 #include "Graphic/ScissorTest.h"
-#include "Contexts.h"
 #include "Graphic/Scheme.h"
 
 namespace OpenUI
@@ -111,6 +110,8 @@ namespace OpenUI
 
 		virtual void Update ();
 		virtual void OnBoundsChanged (const IntRect& delta );
+		virtual void OnPositionChanged(const IntVector& delta);
+		virtual void OnSizeChanged(const IntVector& delta);
 		virtual void Draw ( const GraphicsContext& gContext );
 
 		virtual void OnChildAdded ( Element& child )
@@ -124,6 +125,8 @@ namespace OpenUI
 		}
 
 		virtual void OnParentBoundsChanged ( const IntRect& delta );
+		virtual void OnParentPositionChanged(const IntVector& delta);
+		virtual void OnParentSizeChanged(const IntVector& delta);
 
 		void OnStateChanged ( ControlState state ) override;
 

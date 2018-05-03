@@ -3,11 +3,12 @@
 #include <SFML/OpenGL.hpp>
 #include "Common/Constants.h"
 
+#define FLIP_COORDINATE_SYSTEM(value) (ClientWindowHeight -value.Y - value.Height)
+
 namespace OpenUI
 {
 	struct ScissorTest
 	{
-		#define FlipCoordinateSystem(value) (ClientWindowHeight -value.Y - value.Height)
 
 		// The scissor rectangle that will be used when enabling the scissor test.
 		IntRect ScissorRectangle;
@@ -15,31 +16,15 @@ namespace OpenUI
 		// The height of the scissor test's residing client window, used for converting from the OpenGl coordinate system(Bottom-left) to the sane one(Top-Left).
 		uint16_t ClientWindowHeight = 600;
 
-		// If true, a scissor test will be enabled.
-		bool Enabled = false;
-
-		// If true, this scissor test will check what scissor the previous enabled scissor test was and resizes it accordingly. 
-		bool CheckIntersection = true;
+		// The scissor rectangle of the parent, used when restoring the scissor rectangle after all the children of the elements are finished drawing.
+		IntRect ParentScissorTest;
 
 		/// <summary>
 		///		Sets the scissor test.
 		/// </summary>
 		void SetScissorTest ()
 		{
-			if ( !Enabled )
-			{
-				return;
-			}
-
-			// TODO: Cache this down the hierarchy
-			m_scissorTestWasEnabled = glIsEnabled ( GL_SCISSOR_TEST );
-			if ( CheckIntersection && m_scissorTestWasEnabled )
-			{
-				ResizeToFit ();
-			}
-
 			EnableScissorTest ( ScissorRectangle );
-			CheckIntersection = false;
 		}
 
 		/// <summary>
@@ -49,45 +34,47 @@ namespace OpenUI
 		void UpdateScissorRectangle ( IntRect& p_value )
 		{
 			ScissorRectangle = p_value;
-			CheckIntersection = true;
 		}
 
 		/// <summary>
 		///		Restores the previous scissor test rectangle that was used before this one.
 		/// </summary>
-		void RestorePreviousScissorTest ()
+		void RestoreParentsScissorTest ()
 		{
-			if ( !m_scissorTestWasEnabled || !Enabled )
-			{
-				return; // No scissor test was enabled before this one.
-			}
-
-			EnableScissorTest ( m_previousRectangle );
+			EnableScissorTest(ParentScissorTest);
 		}
 
 	private:
-		IntRect m_previousRectangle;
-		bool m_scissorTestWasEnabled = true;
-
-		/// <summary>
-		///		Resizes the scissor rectangle to fit the previous set rectangle.
-		/// </summary>
-		void ResizeToFit ()
-		{
-			glGetIntegerv ( GL_SCISSOR_BOX, m_previousRectangle.Array ); // Retrieves the previous scissor tests rectangle.
-			m_previousRectangle.Y = FlipCoordinateSystem ( m_previousRectangle );
-
-			ScissorRectangle.ResizeToFit ( m_previousRectangle );
-		}
-
 		/// <summary>
 		///		Enable the scissor test to the specified rectangle. Remember that OpenGL coordinate system starts at the lower-left and an conversion is required.
 		/// </summary>
 		/// <param name="p_rect">The specified rectangle to set the scissor test to.</param>
 		void EnableScissorTest ( IntRect& p_rect ) const
 		{
+			if(p_rect.X < 0)
+			{
+				p_rect.X = 0;
+			}
+
+			if(p_rect.Y < 0)
+			{
+				p_rect.Y = 0;
+			}
+
+			if(p_rect.Width < 0 )
+			{
+				p_rect.Width = 0;
+			}
+
+			if (p_rect.Height < 0)
+			{
+				p_rect.Height = 0;
+			}
+
 			glEnable ( GL_SCISSOR_TEST );
-			glScissor ( p_rect.X, FlipCoordinateSystem(p_rect), p_rect.Width, p_rect.Height );
+			glScissor ( p_rect.X, FLIP_COORDINATE_SYSTEM(p_rect), p_rect.Width, p_rect.Height );
 		}
 	};
+
 }
+

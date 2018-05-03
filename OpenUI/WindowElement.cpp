@@ -65,6 +65,7 @@ namespace OpenUI
 
 	void WindowElement::OnMouseUp ()
 	{
+		Element::OnMouseUp();
 		m_isMousePressedHeader = false;
 	}
 
@@ -76,6 +77,7 @@ namespace OpenUI
 
 	void WindowElement::OnMouseClick ()
 	{
+		Element::OnMouseClick();
 		m_isMousePressedHeader = false;
 	}
 
