@@ -16,11 +16,10 @@ namespace OpenUI
 		m_guidTypeId = ObjectGuid::TypeId::Element;
 
 		AddFlag ( uint32_t ( ElementFlags::CaptureMouse ) );
-		AddFlag( uint32_t ( ElementFlags::CaptureKeyboard ) );
+		AddFlag ( uint32_t ( ElementFlags::CaptureKeyboard ) );
 
-		m_background = new sf::RectangleShape();
-		m_background->setFillColor(sf::Color::Magenta);
-		AddShape(m_background);
+		m_background = new sf::RectangleShape ();
+		AddShape ( m_background );
 	}
 
 	void Element::SetParent ( Element* element )
@@ -41,6 +40,8 @@ namespace OpenUI
 
 	void Element::SetBounds ( const IntRect& value )
 	{
+		SetPosition ( value.Position );
+		SetSize ( value.Size );
 
 		if(m_bounds == value)
 		{
@@ -59,17 +60,17 @@ namespace OpenUI
 	{
 		const IntVector delta = m_bounds.Position - value;
 
-		if (delta.X == 0 && delta.Y == 0)
+		if ( delta.X == 0 && delta.Y == 0 )
 		{
 			return;
 		}
 
 		m_bounds.Size = value;
-		m_background->setSize(sf::Vector2f(value.sfVector));
+		m_background->setSize ( sf::Vector2f ( value.sfVector ) );
 
-		for (Element * child : m_children)
+		for ( Element* child : m_children )
 		{
-			child->SetSize(child->GetSize() - delta);
+			child->SetSize ( child->GetSize () - delta );
 		}
 
 		for ( sf::RectangleShape* shape : m_shapes )
@@ -85,17 +86,17 @@ namespace OpenUI
 	{
 		const IntVector delta = m_bounds.Position - value;
 
-		if (delta.X == 0 && delta.Y == 0)
+		if ( delta.X == 0 && delta.Y == 0 )
 		{
 			return;
 		}
 
 		m_bounds.Position = value;
-		m_background->setPosition(sf::Vector2f(value.sfVector));
+		m_background->setPosition ( sf::Vector2f ( value.sfVector ) );
 
-		for (Element * child : m_children)
+		for ( Element* child : m_children )
 		{
-			child->SetPosition(child->GetPosition() - delta);
+			child->SetPosition ( child->GetPosition () - delta );
 		}
 
 		for ( sf::RectangleShape* shape : m_shapes )
@@ -106,12 +107,12 @@ namespace OpenUI
 		OnPositionChanged(delta);
 	}
 
-	void Element::SetContainerRectangle ( const IntRect & p_value )
+	void Element::SetContainerRectangle ( const IntRect& p_value )
 	{
 		m_containerRectangle = p_value;
 	}
 
-	void Element::SetBackgroundColor ( const sf::Color & p_color ) const
+	void Element::SetBackgroundColor ( const sf::Color& p_color ) const
 	{
 		m_background->setFillColor ( p_color );
 	}
@@ -219,6 +220,8 @@ namespace OpenUI
 
 	void Element::Start () const
 	{
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
+
 		for ( auto element : m_children )
 		{
 			element->Start ();
@@ -227,8 +230,8 @@ namespace OpenUI
 
 	void Element::Initialize ()
 	{
-		m_background->setSize(sf::Vector2f(m_bounds.Size.sfVector));
-		m_background->setPosition(sf::Vector2f(m_bounds.Position.sfVector));
+		m_background->setSize ( sf::Vector2f ( m_bounds.Size.sfVector ) );
+		m_background->setPosition ( sf::Vector2f ( m_bounds.Position.sfVector ) );
 
 		for ( auto element : m_children )
 		{
@@ -245,7 +248,7 @@ namespace OpenUI
 			sf::RenderWindow & renderWindow = m_clientWindow->GetRenderWindow();
 			for (auto shape : m_shapes)
 			{
-				renderWindow.draw(*shape);
+				renderWindow.draw ( *shape );
 			}
 		}
 
@@ -264,12 +267,14 @@ namespace OpenUI
 
 	void Element::OnMouseClick ()
 	{
-		Control::OnMouseClick();
+		Control::OnMouseClick ();
+		m_background->setFillColor(m_scheme->Colors.BackColor.Entered);
 	}
 
 	void Element::OnMouseDoubleClick ()
 	{
-		Control::OnMouseDoubleClick();
+		Control::OnMouseDoubleClick ();
+		m_background->setFillColor(m_scheme->Colors.BackColor.Entered);
 	}
 
 	void Element::OnMouseLeave ()
@@ -288,14 +293,15 @@ namespace OpenUI
 		Control::OnMouseMove ();
 	}
 
-	void Element::OnMouseDown ( )
+	void Element::OnMouseDown ()
 	{
-		Control::OnMouseDown (  );
+		Control::OnMouseDown ();
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Pressed );
 	}
 
-	void Element::OnMouseUp ( )
+	void Element::OnMouseUp ()
 	{
-		Control::OnMouseUp ( );
+		Control::OnMouseUp ();
 	}
 
 	void Element::OnDrop ( const InputHandler::MouseDropEvent& event )
@@ -315,11 +321,11 @@ namespace OpenUI
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
 	}
 
-	void Element::Update (  )
+	void Element::Update ()
 	{
 		for ( auto element : m_children )
 		{
-			element->Update ( );
+			element->Update ();
 		}
 	}
 
@@ -349,7 +355,7 @@ namespace OpenUI
 		}
 	}
 
-	void Element::OnParentBoundsChanged (const IntRect& delta )
+	void Element::OnParentBoundsChanged ( const IntRect& delta )
 	{
 		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
 	}
