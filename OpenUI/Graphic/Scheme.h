@@ -2,22 +2,15 @@
 #include "Common/Enums.h"
 #include <SFML/Graphics/Color.hpp>
 #include "GraphicProperties.h"
-#include "Entities/Elements/Element.h"
+#include "Math/Vector2.h"
+#include <SFML/Graphics/Text.hpp>
 
 namespace OpenUI
 {
 	template < class _Ty >
 	struct State
 	{
-		union
-		{
-			struct
-			{
-				_Ty Default, Disabled, Entered, Dragged, Pressed, Held;
-			};
-
-			_Ty Values[6];
-		};
+		_Ty Default, Disabled, Entered, Dragged, Pressed, Held, Hovered;
 
 		State () = default;
 
@@ -28,16 +21,7 @@ namespace OpenUI
 			, Dragged ( all )
 			, Pressed ( all )
 			, Held ( all )
-		{
-		}
-
-		explicit State ( const State& other )
-			: Values ( other.Values )
-		{
-		}
-
-		explicit State ( State&& other ) noexcept
-			: Values ( std::move ( other.Values ) )
+			, Hovered ( all )
 		{
 		}
 
@@ -46,25 +30,26 @@ namespace OpenUI
 
 		bool operator == ( const State& rhs )
 		{
-			for ( int i = 0 ; i < 6 ; ++i )
-			{
-				if ( Values[i] != rhs.Values[i] )
-				{
-					return false;
-				}
-			}
-
-			return true;
+			return Default == rhs.Default && Disabled == rhs.Disabled && Entered == rhs.Entered && Dragged == rhs.Dragged &&
+					Pressed == rhs.Pressed && Held == rhs.Held && Hovered == rhs.Hovered;
 		}
+
 		bool operator != ( const State& rhs )
 		{
 			return !( *this == rhs );
 		}
 
-		State& operator= ( const State& rhs )
+		State <_Ty>& operator= ( const State <_Ty>& rhs )
 		{
-			Values = rhs.Values;
-			return this;
+			Default = rhs.Default;
+			Disabled = rhs.Disabled;
+			Entered = rhs.Entered;
+			Dragged = rhs.Dragged;
+			Pressed = rhs.Pressed;
+			Held = rhs.Held;
+			Hovered = rhs.Hovered;
+
+			return *this;
 		}
 
 		static State <_Ty> CreateDefault ();
@@ -80,22 +65,23 @@ namespace OpenUI
 	typedef State <sf::Color> ColorState;
 	typedef State <int> IntState;
 	typedef State <bool> BoolState;
-	typedef State <std::string> StringState;
 	typedef State <Padding> PaddingState, MarginState;
 	typedef State <IntVector> VectorState;
+
+	class Element;
 
 	struct Scheme
 	{
 		struct
 		{
-			ColorState BackColor;
-			ColorState OutlineColor;
+			ColorState BackColor = sf::Color::White;
+			ColorState OutlineColor = sf::Color::Black;;
 		} Colors;
 
 		struct
 		{
-			ColorState Color;
-			ColorState OutlineColor;
+			ColorState Color = sf::Color::Black;
+			ColorState OutlineColor = sf::Color::White;
 
 			IntState Style = sf::Text::Style::Regular;
 			IntState OutlineThickness;
@@ -109,19 +95,19 @@ namespace OpenUI
 		PaddingState Padding;
 		MarginState Margin;
 
-		StringState Text;
-
 		BoolState ShowOutline = false;
 		BoolState Visible = true;
 
-		void Init ( Element& element )
+		explicit Scheme ()
 		{
-			// Set the default state of the element.
+			Colors.BackColor = ColorState::CreateDefault ();
+			Colors.OutlineColor = ColorState::CreateDefault ();
+
+			Padding = PaddingState::CreateDefault ();
+			Margin = MarginState::CreateDefault ();
 		}
 
-		void Update ( const ControlState state, Element& element )
-		{
-			// Set the corresponding state of the element.
-		}
+		void Init ( Element& element );
+		void Update ( ControlState state, Element& element );
 	};
 }

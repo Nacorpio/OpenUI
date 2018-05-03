@@ -237,7 +237,7 @@ namespace OpenUI
 	{
 		//m_scissorTest.SetScissorTest();
 
-		if(m_clientWindow)
+		if ( m_clientWindow )
 		{
 			sf::RenderWindow & renderWindow = m_clientWindow->GetRenderWindow();
 			//renderWindow.draw(m_background);
@@ -246,7 +246,6 @@ namespace OpenUI
 				renderWindow.draw(*shape);
 			}
 		}
-
 
 		for ( auto element : m_children )
 		{
@@ -258,11 +257,13 @@ namespace OpenUI
 	void Element::OnMouseEnter ()
 	{
 		Control::OnMouseEnter ();
+		m_background.setFillColor ( m_scheme->Colors.BackColor.Entered );
 	}
 
 	void Element::OnMouseLeave ()
 	{
 		Control::OnMouseLeave ();
+		m_background.setFillColor ( m_scheme->Colors.BackColor.Default );
 	}
 
 	void Element::OnMouseHover ()
@@ -290,11 +291,23 @@ namespace OpenUI
 		Control::OnDrop ( event );
 	}
 
-	void Element::Update (const UpdateContext & updateContext)
+	void Element::OnDragBegin ()
+	{
+		Control::OnDragBegin ();
+		m_background.setFillColor ( m_scheme->Colors.BackColor.Pressed );
+	}
+
+	void Element::OnDragDrop ( const InputHandler::MouseDragDropEvent& event )
+	{
+		Control::OnDragDrop ( event );
+		m_background.setFillColor ( m_scheme->Colors.BackColor.Default );
+	}
+
+	void Element::Update ( const UpdateContext& updateContext )
 	{
 		for ( auto element : m_children )
 		{
-			element->Update (updateContext);
+			element->Update ( updateContext );
 		}
 	}
 
@@ -332,8 +345,8 @@ namespace OpenUI
 	{
 		sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparerDrawOrder () );
 	}
-	void Element::OnStateChanged ( const ControlState p_state )
+
+	void Element::OnStateChanged ( const ControlState state )
 	{
-		// m_shapes[0]->setFillColor ( m_colorScheme[p_state].BackColor );
 	}
 }

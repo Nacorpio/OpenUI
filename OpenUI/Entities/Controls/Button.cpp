@@ -18,14 +18,14 @@ namespace OpenUI
 		Element::Start ();
 	}
 
-	void Button::Initialize () 
+	void Button::Initialize ()
 	{
 		Element::Initialize ();
 	}
 
-	void Button::Update (const UpdateContext & p_updateContext)
+	void Button::Update ( const UpdateContext& p_updateContext )
 	{
-		Element::Update (p_updateContext);
+		Element::Update ( p_updateContext );
 	}
 
 	void Button::Draw ( const GraphicsContext& gContext )
@@ -60,7 +60,14 @@ namespace OpenUI
 
 	void Button::OnMouseClick ( )
 	{
-		Element::OnMouseClick (  );
+		Element::OnMouseClick ( event );
+		LOG("SINGLE CLICK");
+	}
+
+	void Button::OnMouseDoubleClick ( const sf::Event::MouseButtonEvent& event )
+	{
+		Element::OnMouseDoubleClick ( event );
+		LOG("DOUBLE CLICK");
 	}
 
 	void Button::OnMouseUp (  )
@@ -71,6 +78,16 @@ namespace OpenUI
 	void Button::OnDrop ( const InputHandler::MouseDropEvent& event )
 	{
 		Element::OnDrop ( event );
+	}
+
+	void Button::OnDragDrop ( const InputHandler::MouseDragDropEvent& event )
+	{
+		Element::OnDragDrop ( event );
+
+		if ( !event.DidHitTarget () )
+		{
+			SetPosition ( event.End );
+		}
 	}
 
 	void Button::OnDragBegin ()

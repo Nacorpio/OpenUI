@@ -13,8 +13,6 @@ namespace OpenUI
 	class Control
 	{
 	public:
-		
-
 		virtual ~Control () = default;
 		explicit Control ( const std::string& name );
 
@@ -48,12 +46,12 @@ namespace OpenUI
 	private:
 		friend struct InputHandler;
 
-		void SetState(ControlState state);
-		void SetState(const int state) { SetState(ControlState ( state )); }
+		void SetState ( ControlState state );
+		void SetState ( int state );
 
-		void AddState(const ControlState state) { SetState(m_st | state); }
-		void RemoveState(const ControlState state) { SetState(m_st & ~state); }
-		void ToggleState(const ControlState state) { SetState(m_st ^ state); }
+		void AddState ( ControlState state );
+		void RemoveState ( ControlState state );
+		void ToggleState ( ControlState state );
 
 		union
 		{

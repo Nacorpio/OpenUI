@@ -6,7 +6,7 @@
 
 namespace OpenUI
 {
-	InputHandler::InputHandler()
+	InputHandler::InputHandler ()
 	{
 	}
 
@@ -40,10 +40,15 @@ namespace OpenUI
 
 	void InputHandler::OnMouseLeave ( Element* element )
 	{
+		if ( element->IsBeingDragged () && m_dragDropSource == element )
+		{
+			return;
+		}
+
 		element->OnMouseLeave ();
 
 		// The mouse is being held down outside of the element's borders.
-		if ( element->IsBeingPressed () && !element->IsBeingDragged () )
+		if ( element->IsBeingPressed () )
 		{
 			m_dragDropSource = element;
 			OnDragBegin ( element );
@@ -66,11 +71,20 @@ namespace OpenUI
 				m_activeElement = element;
 			}
 
-			if ( element->GetHeight () > m_activeElement->GetHeight () )
-			{
-				m_activeElement->OnMouseLeave ();
-				m_activeElement = element;
-			}
+		if ( element->GetHeight () > m_activeElement->GetHeight () )
+		{
+			OnMouseLeave ( m_activeElement );
+			m_activeElement = element;
+		}
+	}
+
+	void InputHandler::OnMouseMove ( Element* element )
+	{
+		const bool isMouseWithin = IsMouseWithin ( element );
+
+		if ( isMouseWithin )
+		{
+			UpdateActiveElement ( element );
 
 			if ( element != m_activeElement )
 			{
@@ -88,6 +102,12 @@ namespace OpenUI
 				return;
 			}
 
+			if ( element->IsBeingDragged () )
+			{
+				element->AddState ( Entered );
+				return;
+			}
+
 			OnMouseEnter ( element );
 			return;
 		}
@@ -101,15 +121,32 @@ namespace OpenUI
 
 	void InputHandler::OnMouseUp ( Element* element)
 	{
-		if ( m_pressedElement == m_activeElement )
+		if ( m_pressedElement != m_activeElement )
 		{
 			m_pressedElement = nullptr;
-			element->OnMouseClick (  );
+			element->OnMouseUp ( event );
+		}
+
+		m_pressedElement = nullptr;
+		++m_consecutiveClicks;
+
+		if ( inputContext.ElapsedTime - m_lastMouseClick <= 200 )
+		{
+			++m_consecutiveClicks;
+			m_lastMouseClick = inputContext.ElapsedTime;
+
+			if ( m_consecutiveClicks == 2 )
+			{
+				element->OnMouseDoubleClick ( event );
+			}
 
 			return;
 		}
 
-		element->OnMouseUp (  );
+		m_consecutiveClicks = 0;
+		m_lastMouseClick = inputContext.ElapsedTime;
+
+		element->OnMouseClick ( event );
 	}
 
 	void InputHandler::HandleElementEvent ( Element* element)
@@ -124,13 +161,17 @@ namespace OpenUI
 
 			case sf::Event::MouseButtonPressed :
 			{
-
-				if ( !element->IsCursorInside ())
+				if ( !element->IsCursorInside () || element->IsBeingPressed () )
 				{
 					return;
 				}
 
 				m_pressedElement = element;
+
+				m_lastPressMousePos = MousePosition;
+				m_lastMousePress = inputContext.ElapsedTime;
+
+				OnMouseDown ( element, event.mouseButton, inputContext );
 				OnMouseDown ( element);
 				return;
 			}
@@ -146,15 +187,13 @@ namespace OpenUI
 				{
 					m_dragDropSource = nullptr;
 
-					if ( !m_dragDropTarget )
-					{
-						return;
-					}
+					element->OnDragDrop ( MouseDragDropEvent ( m_dragDropTarget, m_lastPressMousePos, MousePosition ) );
 
-					m_dragDropTarget->OnDrop ( MouseDropEvent ( *element ) );
-				
-					element->OnDragDrop ( MouseDragDropEvent ( *m_dragDropTarget ) );
-					m_dragDropTarget = nullptr;
+					if ( m_dragDropTarget )
+					{
+						m_dragDropTarget->OnDrop ( MouseDropEvent ( *element, m_lastPressMousePos, MousePosition ) );
+						m_dragDropTarget = nullptr;
+					}
 				}
 
 				OnMouseUp ( element );

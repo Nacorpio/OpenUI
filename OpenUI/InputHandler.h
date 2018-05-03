@@ -12,22 +12,37 @@ namespace OpenUI
 	{
 		struct MouseDropEvent
 		{
-			explicit MouseDropEvent ( const Element& source )
+			explicit MouseDropEvent ( Element& source, const IntVector& start, const IntVector& end )
 				: Source ( source )
+				, Start ( start )
+				, End ( end )
 			{
 			}
 
-			const Element& Source;
+			Element& Source;
+
+			const IntVector Start;
+			const IntVector End;
 		};
 
 		struct MouseDragDropEvent
 		{
-			explicit MouseDragDropEvent ( const Element& target )
+			explicit MouseDragDropEvent ( Element* target, const IntVector& start, const IntVector& end )
 				: Target ( target )
+				, Start ( start )
+				, End ( end )
 			{
 			}
 
-			const Element& Target;
+			Element* Target;
+
+			const IntVector Start;
+			const IntVector End;
+
+			bool DidHitTarget() const
+			{
+				return Target;
+			}
 		};
 
 		//IntVector MousePosition { 0, 0 };
@@ -49,9 +64,17 @@ namespace OpenUI
 		void OnMouseDown ( Element* element);
 		void OnMouseUp ( Element* element);
 
-		void HandleElementEvent ( Element* element);
+		void HandleInput ( Element* element, const sf::Event& event, const InputContext& inputContext );
+		void UpdateActiveElement( Element* element );
 
 	private:
+		int m_consecutiveClicks;
+
+		long m_lastMousePress;
+		long m_lastMouseClick;
+
+		IntVector m_lastPressMousePos;
+
 		Element* m_activeElement;
 		Element* m_pressedElement;
 
