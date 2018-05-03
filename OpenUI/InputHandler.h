@@ -65,24 +65,32 @@ namespace OpenUI
 		void OnMouseUp ( Element* element);
 
 		void HandleInput ( Element* element );
-		void UpdateActiveElement( Element* element );
 
 	private:
+		void CalculateClick(Element * element);
+		void CalculateTopMost(Element* element);
+
 		int m_consecutiveClicks;
 
-		long m_lastMousePress;
-		long m_lastMouseClick;
+		long m_lastMousePressTime;
+		long m_lastMouseClickTime;
+		long m_lastMouseMoveTime;
 
-		IntVector m_lastPressMousePos;
+		sf::Mouse::Button m_lastMousePress;
+		sf::Mouse::Button m_lastMouseClick;
 
-		Element* m_activeElement;
-		Element* m_pressedElement;
+		IntVector m_lastMousePressPos;
+		IntVector m_lastMouseClickPos;
+
+		Element* m_top;
+		Element* m_pressing;
+
+		Element* m_lastClicked;
+		Element* m_lastMoved;
 
 		Element* m_dragDropSource;
 		Element* m_dragDropTarget;
 
 		sf::Event m_event;
-
-
 	};
 }
