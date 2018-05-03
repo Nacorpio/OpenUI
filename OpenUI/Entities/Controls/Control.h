@@ -9,8 +9,8 @@ namespace OpenUI
 {
 	enum class MouseState;
 	class Element;
-
 	class Control
+
 	{
 	public:
 		virtual ~Control () = default;
@@ -33,6 +33,7 @@ namespace OpenUI
 		virtual void OnMouseUp();
 
 		virtual void OnMouseClick ();
+		virtual void OnMouseDoubleClick();
 
 		virtual void OnDragBegin ();
 		virtual void OnDragEnter ( Element* );

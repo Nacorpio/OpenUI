@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "ClientWindow.h"
-#include "Contexts.h"
 #include "iostream"
-#include "MouseInformation.h"
+#include "Global.h"
 
 OpenUI::ClientWindow::ClientWindow ( const std::string& name, const RenderWindowSettings& windowSettings )
 	: Element ( name )
@@ -118,6 +117,6 @@ void OpenUI::ClientWindow::Input ()
 
 	for ( Element* element : m_descendants )
 	{
-		m_inputHandler.HandleElementEvent ( element);
+		m_inputHandler.HandleInput ( element);
 	}
 }

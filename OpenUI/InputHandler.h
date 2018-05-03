@@ -64,7 +64,7 @@ namespace OpenUI
 		void OnMouseDown ( Element* element);
 		void OnMouseUp ( Element* element);
 
-		void HandleInput ( Element* element, const sf::Event& event, const InputContext& inputContext );
+		void HandleInput ( Element* element );
 		void UpdateActiveElement( Element* element );
 
 	private:
@@ -82,5 +82,7 @@ namespace OpenUI
 		Element* m_dragDropTarget;
 
 		sf::Event m_event;
+
+
 	};
 }

@@ -25,6 +25,7 @@ namespace OpenUI
 		void OnMouseUp( ) override;
 		void OnMouseDown( ) override;
 		void OnMouseClick ( ) override;
+		void OnMouseDoubleClick() override;
 
 		void OnDrop (const InputHandler::MouseDropEvent& event) override;
 		void OnDragDrop ( const InputHandler::MouseDragDropEvent& ) override;

@@ -82,7 +82,7 @@ namespace OpenUI
 		void SetPosition ( const IntVector& value );
 		void SetContainerRectangle ( const IntRect & p_value );
 
-		void SetBackgroundColor ( const sf::Color & p_color );
+		void SetBackgroundColor ( const sf::Color & p_color ) const;
 
 		bool HasShape ( const int& index );
 		bool HasShape ( sf::RectangleShape* rectangle );
@@ -99,11 +99,11 @@ namespace OpenUI
 		void OnMouseMove () override;
 		void OnMouseEnter () override;
 
-		void OnMouseClick ( const sf::Event::MouseButtonEvent& event ) override;
-		void OnMouseDoubleClick ( const sf::Event::MouseButtonEvent& event ) override;
+		void OnMouseClick (  ) override;
+		void OnMouseDoubleClick (  ) override;
 
-		void OnMouseDown ( const sf::Event::MouseButtonEvent& event ) override;
-		void OnMouseUp ( const sf::Event::MouseButtonEvent& event ) override;
+		void OnMouseDown (  ) override;
+		void OnMouseUp ( ) override;
 
 		void OnDrop ( const InputHandler::MouseDropEvent& event ) override;
 		void OnDragBegin () override;

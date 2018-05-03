@@ -4,7 +4,7 @@
 #include "Common/Constants.h"
 #include <iostream>
 #include "Contexts.h"
-
+#include "Global.h"
 
 namespace OpenUI
 {
@@ -44,12 +44,12 @@ namespace OpenUI
 		{
 			sf::Clock clock;
 
-			static const int ticksPerSecond = 60;
-			static const int skipTicks = 1000 / ticksPerSecond;
-			static const int maxFrameSkips = 10;
+			//static const uint16_t ticksPerSecond = 60;
+			//static const int skipTicks = 1000 / ticksPerSecond;
+			//static const int maxFrameSkips = 10;
 
 			int nextTick = clock.getElapsedTime().asMilliseconds();
-			int elapsedTime = 0;
+			//int elapsedTime = 0;
 			int loops = 0;
 			long previousUpdate = 1, currentUpdate = 1, delta = 0,previousFPSUpdate = 0, nextFPSUpdate = nextTick + 1000;
 			float interpolation = 0;
@@ -60,21 +60,19 @@ namespace OpenUI
 
 			while (true)
 			{
-				elapsedTime = clock.getElapsedTime().asMilliseconds();
+				ElapsedTime = clock.getElapsedTime().asMilliseconds();
 				loops = 0;
 
-				while (elapsedTime > nextTick && loops < maxFrameSkips)
+				while (ElapsedTime > nextTick && loops < MaxFrameSkips)
 				{
-					m_updateContext.Delta = delta;
-					m_updateContext.ElapsedTime = elapsedTime;
 					Update();
 
-					nextTick += skipTicks;
+					nextTick += SkipTicks;
 					++loops;
 				}
 
 				previousUpdate = currentUpdate;
-				currentUpdate = elapsedTime;
+				currentUpdate = ElapsedTime;
 
 				delta = currentUpdate - previousUpdate;
 
@@ -85,7 +83,7 @@ namespace OpenUI
 					if (currentUpdate > nextFPSUpdate)
 					{
 						frameTime = 1000 / (frames);
-						LOG("Frames: " << frames << " frameTime: " << frameTime << " SkipTicks: " << skipTicks << " loops: " << loops);
+						LOG("Frames: " << frames << " frameTime: " << frameTime << " SkipTicks: " << SkipTicks << " loops: " << loops);
 						frames = 0;
 						nextFPSUpdate = currentUpdate + 1000;
 					}

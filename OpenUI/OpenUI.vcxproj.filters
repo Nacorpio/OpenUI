@@ -56,5 +56,6 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WindowElement.h" />
     <ClInclude Include="MouseInformation.h" />
+    <ClInclude Include="Global.h" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Button.h"
+#include <iostream>
 
 namespace OpenUI
 {
@@ -60,13 +61,13 @@ namespace OpenUI
 
 	void Button::OnMouseClick ( )
 	{
-		Element::OnMouseClick ( event );
+		Element::OnMouseClick (  );
 		LOG("SINGLE CLICK");
 	}
 
-	void Button::OnMouseDoubleClick ( const sf::Event::MouseButtonEvent& event )
+	void Button::OnMouseDoubleClick (  )
 	{
-		Element::OnMouseDoubleClick ( event );
+		Element::OnMouseDoubleClick (  );
 		LOG("DOUBLE CLICK");
 	}
 

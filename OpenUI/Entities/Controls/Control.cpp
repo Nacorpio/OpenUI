@@ -67,12 +67,12 @@ namespace OpenUI
 		RemoveState ( Pressed );
 	}
 
-	void Control::OnMouseDoubleClick ( const sf::Event::MouseButtonEvent& event )
+	void Control::OnMouseDoubleClick (  )
 	{
 		RemoveState(Pressed);
 	}
 
-	void Control::OnMouseUp ( const sf::Event::MouseButtonEvent& event )
+	void Control::OnMouseUp ( )
 	{
 		RemoveState ( Pressed );
 	}

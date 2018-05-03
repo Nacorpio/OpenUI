@@ -2,6 +2,7 @@
 #include "Entities/Elements/Element.h"
 #include <iostream>
 #include "MouseInformation.h"
+#include "Global.h"
 
 namespace OpenUI
 {

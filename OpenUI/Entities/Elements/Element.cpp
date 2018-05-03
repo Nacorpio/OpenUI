@@ -109,7 +109,7 @@ namespace OpenUI
 		m_containerRectangle = p_value;
 	}
 
-	void Element::SetBackgroundColor ( const sf::Color & p_color )
+	void Element::SetBackgroundColor ( const sf::Color & p_color ) const
 	{
 		m_background->setFillColor ( p_color );
 	}
@@ -257,13 +257,24 @@ namespace OpenUI
 	void Element::OnMouseEnter ()
 	{
 		Control::OnMouseEnter ();
-		m_background.setFillColor ( m_scheme->Colors.BackColor.Entered );
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Entered );
+	}
+
+	void Element::OnMouseClick ()
+	{
+		Control::OnMouseClick();
+	}
+
+	void Element::OnMouseDoubleClick ()
+	{
+		Control::OnMouseDoubleClick();
+
 	}
 
 	void Element::OnMouseLeave ()
 	{
 		Control::OnMouseLeave ();
-		m_background.setFillColor ( m_scheme->Colors.BackColor.Default );
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
 	}
 
 	void Element::OnMouseHover ()
@@ -294,13 +305,13 @@ namespace OpenUI
 	void Element::OnDragBegin ()
 	{
 		Control::OnDragBegin ();
-		m_background.setFillColor ( m_scheme->Colors.BackColor.Pressed );
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Pressed );
 	}
 
 	void Element::OnDragDrop ( const InputHandler::MouseDragDropEvent& event )
 	{
 		Control::OnDragDrop ( event );
-		m_background.setFillColor ( m_scheme->Colors.BackColor.Default );
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
 	}
 
 	void Element::Update ( const UpdateContext& updateContext )
