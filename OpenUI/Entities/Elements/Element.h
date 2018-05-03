@@ -109,7 +109,7 @@ namespace OpenUI
 		void OnDragBegin () override;
 		void OnDragDrop ( const InputHandler::MouseDragDropEvent& ) override;
 
-		virtual void Update ( const UpdateContext& updateContext );
+		virtual void Update ();
 		virtual void OnBoundsChanged (const IntRect& delta );
 		virtual void Draw ( const GraphicsContext& gContext );
 

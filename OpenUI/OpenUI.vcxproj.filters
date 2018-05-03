@@ -26,13 +26,11 @@
     <ClCompile Include="Graphic\ScissorTest.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="WindowElement.cpp" />
-    <ClCompile Include="MouseInformation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Contexts.h" />
     <ClInclude Include="Graphic\Scheme.h" />
     <ClInclude Include="Common\common.h" />
-    <ClInclude Include="Managers\Controller.h" />
     <ClInclude Include="Entities\Elements\Windows\ClientWindow.h" />
     <ClInclude Include="Common\Comparers\ElementComparer.h" />
     <ClInclude Include="Common\Constants.h" />
@@ -55,7 +53,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WindowElement.h" />
-    <ClInclude Include="MouseInformation.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="Managers\Controller.h" />
   </ItemGroup>
 </Project>

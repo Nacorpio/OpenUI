@@ -1,7 +1,6 @@
 #pragma once
 #include "Entities/Elements/Element.h"
 #include <iostream>
-#include "MouseInformation.h"
 #include "Global.h"
 
 namespace OpenUI
@@ -16,7 +15,7 @@ namespace OpenUI
 		void Start() const override;
 		void Initialize() override;
 
-		void Update ( const UpdateContext & p_updateContext ) override;
+		void Update (  ) override;
 		void Draw(const GraphicsContext & gContext) override;
 
 		void OnMouseEnter() override;

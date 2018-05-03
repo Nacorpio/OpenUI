@@ -24,9 +24,9 @@ namespace OpenUI
 		Element::Initialize ();
 	}
 
-	void Button::Update ( const UpdateContext& p_updateContext )
+	void Button::Update ( )
 	{
-		Element::Update ( p_updateContext );
+		Element::Update ( );
 	}
 
 	void Button::Draw ( const GraphicsContext& gContext )

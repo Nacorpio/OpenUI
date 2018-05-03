@@ -268,7 +268,6 @@ namespace OpenUI
 	void Element::OnMouseDoubleClick ()
 	{
 		Control::OnMouseDoubleClick();
-
 	}
 
 	void Element::OnMouseLeave ()
@@ -314,11 +313,11 @@ namespace OpenUI
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
 	}
 
-	void Element::Update ( const UpdateContext& updateContext )
+	void Element::Update (  )
 	{
 		for ( auto element : m_children )
 		{
-			element->Update ( updateContext );
+			element->Update ( );
 		}
 	}
 

@@ -33,9 +33,9 @@ void OpenUI::ClientWindow::Initialize ()
 	Element::Initialize();
 }
 
-void OpenUI::ClientWindow::Update (const UpdateContext & p_updateContext)
+void OpenUI::ClientWindow::Update ()
 {
-	Element::Update(p_updateContext);
+	Element::Update();
 }
 
 void OpenUI::ClientWindow::Draw ( const GraphicsContext& gContext )

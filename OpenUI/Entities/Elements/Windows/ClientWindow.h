@@ -38,7 +38,7 @@ namespace OpenUI
 
 		void Start () const override;
 		void Initialize () override;
-		void Update (const UpdateContext & p_updateContext) override;
+		void Update () override;
 		void Draw ( const GraphicsContext& gContext ) override;
 
 		sf::RenderWindow& GetRenderWindow () const;

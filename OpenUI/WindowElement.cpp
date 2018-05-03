@@ -28,9 +28,9 @@ namespace OpenUI
 		SetContainerRectangle(IntRect(bounds.X, bounds.Y + m_headerHeight, bounds.Width - 5, bounds.Height - m_headerHeight));
 	}
 
-	void WindowElement::Update ( const UpdateContext & p_updateContext )
+	void WindowElement::Update ( )
 	{
-		Element::Update ( p_updateContext );
+		Element::Update ( );
 		if (!m_isMousePressedHeader)
 		{
 			return;

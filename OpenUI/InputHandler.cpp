@@ -130,10 +130,10 @@ namespace OpenUI
 		m_pressedElement = nullptr;
 		++m_consecutiveClicks;
 
-		if ( ElapsedTime - m_lastMouseClick <= 200 )
+		if (sTimeInformation->ElapsedTime - m_lastMouseClick <= 200 )
 		{
 			++m_consecutiveClicks;
-			m_lastMouseClick = ElapsedTime;
+			m_lastMouseClick = sTimeInformation->ElapsedTime;
 
 			if ( m_consecutiveClicks == 2 )
 			{
@@ -144,7 +144,7 @@ namespace OpenUI
 		}
 
 		m_consecutiveClicks = 0;
-		m_lastMouseClick = ElapsedTime;
+		m_lastMouseClick = sTimeInformation->ElapsedTime;
 
 		element->OnMouseClick ( );
 	}
@@ -171,8 +171,7 @@ namespace OpenUI
 				m_pressedElement = element;
 
 				m_lastPressMousePos = mousePos;
-				m_lastMousePress = ElapsedTime;
-
+				m_lastMousePress = sTimeInformation->ElapsedTime;
 				OnMouseDown ( element );
 				return;
 			}
