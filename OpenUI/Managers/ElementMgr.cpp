@@ -3,6 +3,7 @@
 #include "ElementMgr.h"
 #include "Entities/Elements/Element.h"
 #include "Entities/Controls/Button.h"
+#include "ScrollBar.h"
 
 namespace OpenUI
 {
@@ -58,7 +59,29 @@ namespace OpenUI
 			clientWindow->GetRenderWindow();
 			m_clientWindows.insert ( clientWindow );
 			clientWindow->Initialize();
+
 			return clientWindow;
+		}
+
+		return nullptr;
+	}
+
+	WindowHeaderElement* ElementMgr::CreateWindowHeaderElement(
+		const uint64_t id,
+		const std::string& name)
+	{
+		if (Exists(id))
+		{
+			return nullptr;
+		}
+
+		if (auto* windowHeaderElement = new WindowHeaderElement(name))
+		{
+			Add(id, windowHeaderElement);
+			windowHeaderElement->m_allowOutOfBoundsDrawing = true;
+			windowHeaderElement->Initialize();
+
+			return windowHeaderElement;
 		}
 
 		return nullptr;
@@ -66,18 +89,18 @@ namespace OpenUI
 
 	WindowElement* ElementMgr::CreateWindowElement(
 		const uint64_t id,
-		const std::string& name,
-		const uint16_t & headerSize)
+		const std::string& name)
 	{
 		if (Exists(id))
 		{
 			return nullptr;
 		}
 
-		if (auto* windowElement = new WindowElement(name, headerSize))
+		if (auto* windowElement = new WindowElement(name))
 		{
 			Add(id, windowElement);
 			windowElement->Initialize();
+
 			return windowElement;
 		}
 
@@ -95,7 +118,26 @@ namespace OpenUI
 		{
 			Add ( id, button );
 			button->Initialize();
+
 			return button;
+		}
+
+		return nullptr;
+	}
+
+	ScrollBar * ElementMgr::CreateScrollBar ( uint64_t id, const std::string & name )
+	{
+		if (Exists(id))
+		{
+			return nullptr;
+		}
+
+		if (auto* scrollbar = new ScrollBar(name))
+		{
+			Add(id, scrollbar);
+			scrollbar->Initialize();
+
+			return scrollbar;
 		}
 
 		return nullptr;

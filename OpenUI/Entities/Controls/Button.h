@@ -11,7 +11,7 @@ namespace OpenUI
 		explicit Button ( const std::string& name );
 		~Button ();
 
-		void Start () const override;
+		void Start () override;
 		void Initialize () override;
 
 		void Update () override;

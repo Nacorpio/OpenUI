@@ -6,7 +6,7 @@
 #include "Graphic/GraphicsContext.h"
 #include "Graphic/Scheme.h"
 #include <iostream>
-#include "Global.h"
+#include "Common/Global.h"
 
 namespace OpenUI
 {
@@ -41,76 +41,67 @@ namespace OpenUI
 
 	void Element::SetBounds ( const IntRect& value )
 	{
-		SetPosition ( value.Position );
-		SetSize ( value.Size );
-
-		if(m_bounds == value)
-		{
-			return; // Return if value is the same as the current bounds.
-		}
-
-		const IntRect delta = m_bounds - value;
-
-		SetPosition(value.Position);
-		SetSize(value.Size);
-		
-		OnBoundsChanged(delta);
-	}
-
-	void Element::SetSize ( const IntVector& value )
-	{
-		const IntVector delta = m_bounds.Position - value;
-
-		if ( delta.X == 0 && delta.Y == 0 )
+		if (m_bounds == value)
 		{
 			return;
 		}
 
-		m_bounds.Size = value;
-		m_background->setSize ( sf::Vector2f ( value.sfVector ) );
+		const IntRect delta = value - m_bounds;
+
+		SetPosition ( value.Position );
+		SetSize ( value.Size );
+				
+		OnBoundsChanged(delta);
+	}
+
+	void Element::SetSize ( const IntVector& newSize )
+	{
+		if(m_bounds.Size == newSize)
+		{
+			return;
+		}
+
+		const IntVector delta = newSize - m_bounds.Size;
+
+		m_bounds.Size = newSize;
+
+		for (sf::RectangleShape* shape : m_shapes)
+		{
+			shape->setSize(sf::Vector2f(float(shape->getSize().x + delta.X),
+				float(shape->getSize().y + delta.Y)));
+		}
 
 		for ( Element* child : m_children )
 		{
-			child->SetSize ( child->GetSize () - delta );
+			child->SetSize ( child->GetSize () + delta );
 		}
-
-		//for ( sf::RectangleShape* shape : m_shapes )
-		//{
-		//	auto x = ( value - m_bounds.Size + shape->getSize () ).sfVector2f;
-		//	shape->setSize ( sf::Vector2f ( value.sfVector ) );
-		//}
 
 		OnSizeChanged(delta);
 	}
 
-	void Element::SetPosition ( const IntVector& value )
+	void Element::SetPosition ( const IntVector& newPosition )
 	{
-		const IntVector delta = m_bounds.Position - value;
-
-		if ( delta.X == 0 && delta.Y == 0 )
+		if (m_bounds.Position == newPosition)
 		{
 			return;
 		}
 
-		m_bounds.Position = value;
-		m_background->setPosition ( sf::Vector2f ( value.sfVector ) );
+		const IntVector delta = newPosition - m_bounds.Position ;
+
+		for (sf::RectangleShape* shape : m_shapes)
+		{
+			shape->setPosition(float(shape->getPosition().x + delta.X), 
+							   float(shape->getPosition().y + delta.Y));
+		}
+
+		m_bounds.Position = newPosition;
 
 		for ( Element* child : m_children )
 		{
-			child->SetPosition ( child->GetPosition () - delta );
+			child->SetPosition ( child->GetPosition () + delta );
 		}
 
-		for ( sf::RectangleShape* shape : m_shapes )
-		{
-			shape->setPosition
-					( sf::Vector2f ( value.sfVector ) );
-		}
 		OnPositionChanged(delta);
-	}
-
-	void Element::SetContainerRectangle ( const IntRect& p_value )
-	{
-		m_containerRectangle = p_value;
 	}
 
 	void Element::SetBackgroundColor ( const sf::Color& p_color ) const
@@ -126,6 +117,11 @@ namespace OpenUI
 		}
 
 		return nullptr;
+	}
+
+	Scheme& Element::GetScheme () const
+	{
+		return *m_scheme;
 	}
 
 	void Element::AddShape ( sf::RectangleShape* rectangle )
@@ -171,8 +167,9 @@ namespace OpenUI
 		element->m_drawOrder = uint16_t ( m_children.size () );
 		element->m_height = uint16_t ( m_height + m_children.size () + 1 );
 		element->m_level = m_level + 1;
-		element->SetPosition(m_containerRectangle.Position + element->GetPosition() );
-		element->m_bounds.ResizeToFit(GetBounds());
+
+		element->SetPosition(m_bounds.Position + element->GetPosition());
+		element->OnAdded();
 
 		if ( m_clientWindow )
 		{
@@ -186,7 +183,6 @@ namespace OpenUI
 		element->m_clientWindow->m_descendants.insert ( element );
 		m_children.emplace_back ( element );
 
-		// Invoke the OnChildAdded callback.
 		OnChildAdded ( *element );
 	}
 
@@ -219,7 +215,7 @@ namespace OpenUI
 		return find ( m_children.begin (), m_children.end (), element ) != m_children.end ();
 	}
 
-	void Element::Start () const
+	void Element::Start () 
 	{
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
 
@@ -231,18 +227,14 @@ namespace OpenUI
 
 	void Element::Initialize ()
 	{
-		m_background->setSize ( sf::Vector2f ( m_bounds.Size.sfVector ) );
-		m_background->setPosition ( sf::Vector2f ( m_bounds.Position.sfVector ) );
-
-		for ( auto element : m_children )
-		{
-			element->Initialize ();
-		}
 	}
 
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
-		m_scissorTest.SetScissorTest();
+		if(!m_allowOutOfBoundsDrawing)
+		{
+			ScissorTest::SetScissorTest(m_visibleBounds);
+		}
 
 		if ( m_clientWindow )
 		{
@@ -257,8 +249,6 @@ namespace OpenUI
 		{
 			element->Draw ( gContext );
 		}
-
-		m_scissorTest.RestoreParentsScissorTest();
 	}
 
 	void Element::OnMouseEnter ()
@@ -270,6 +260,7 @@ namespace OpenUI
 	void Element::OnMouseClick ()
 	{
 		Control::OnMouseClick ();
+		//LOG( "Name: " << GetName() << " Bounds: " << GetBounds() << '\n');
 		m_background->setFillColor(m_scheme->Colors.BackColor.Entered);
 	}
 
@@ -338,6 +329,8 @@ namespace OpenUI
 
 	void Element::OnBoundsChanged ( const IntRect& delta )
 	{
+		SetVisibleBounds();
+
 		for (Element* child : m_children)
 		{
 			child->OnParentBoundsChanged(delta);
@@ -346,7 +339,8 @@ namespace OpenUI
 
 	void Element::OnPositionChanged(const IntVector & delta)
 	{
-		m_scissorTest.UpdateScissorRectangle(m_bounds);
+		SetVisibleBounds();
+
 		for (Element * child : m_children)
 		{
 			child->OnParentPositionChanged(delta);
@@ -355,7 +349,8 @@ namespace OpenUI
 
 	void Element::OnSizeChanged(const IntVector & delta)
 	{
-		m_scissorTest.UpdateScissorRectangle(m_bounds);
+		SetVisibleBounds();
+
 		for (Element * child : m_children)
 		{
 			child->OnParentSizeChanged(delta);
@@ -364,17 +359,17 @@ namespace OpenUI
 
 	void Element::OnParentBoundsChanged ( const IntRect& delta )
 	{
-		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
+		SetVisibleBounds();
 	}
 
 	void Element::OnParentPositionChanged ( const IntVector & delta )
 	{
-		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
+		SetVisibleBounds();
 	}
 
 	void Element::OnParentSizeChanged ( const IntVector & delta )
 	{
-		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
+		SetVisibleBounds();
 	}
 
 	bool Element::operator== ( const Element& rhs ) const
@@ -401,6 +396,4 @@ namespace OpenUI
 	void Element::OnStateChanged ( const ControlState state )
 	{
 	}
-
-
 }

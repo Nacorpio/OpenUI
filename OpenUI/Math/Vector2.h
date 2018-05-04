@@ -140,6 +140,11 @@ namespace OpenUI
 		{
 			return Vector2 <_Ty> ( static_cast <_Ty> (X + p_rhs.x), static_cast <_Ty> (Y + p_rhs.y) );
 		}
+
+		Vector2 <_Ty> operator - (const sf::Vector2f& p_rhs)const
+		{
+			return Vector2 <_Ty>(static_cast <_Ty> (X - p_rhs.x), static_cast <_Ty> (Y - p_rhs.y));
+		}
 		// :)
 	};
 

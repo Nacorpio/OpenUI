@@ -22,7 +22,7 @@ OpenUI::ClientWindow::~ClientWindow ()
 	m_renderWindow = nullptr;
 }
 
-void OpenUI::ClientWindow::Start () const
+void OpenUI::ClientWindow::Start ()
 {
 	Element::Start();
 }

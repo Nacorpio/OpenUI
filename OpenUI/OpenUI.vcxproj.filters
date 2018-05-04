@@ -27,6 +27,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Entities\Elements\Windows\WindowElement.cpp" />
     <ClCompile Include="VertexArrayOpenUI.cpp" />
+    <ClCompile Include="ScrollBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Contexts.h" />
@@ -57,5 +58,6 @@
     <ClInclude Include="Entities\Elements\Windows\WindowElement.h" />
     <ClInclude Include="Common\Global.h" />
     <ClInclude Include="VertexArrayOpenUI.h" />
+    <ClInclude Include="ScrollBar.h" />
   </ItemGroup>
 </Project>

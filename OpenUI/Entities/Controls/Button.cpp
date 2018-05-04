@@ -14,7 +14,7 @@ namespace OpenUI
 	{
 	}
 
-	void Button::Start () const
+	void Button::Start ()
 	{
 		Element::Start ();
 	}
@@ -52,7 +52,6 @@ namespace OpenUI
 	void Button::OnMouseHover ()
 	{
 		Element::OnMouseHover ();
-		LOG("HOVER");
 	}
 
 	void Button::OnMouseDown ( )
@@ -63,13 +62,11 @@ namespace OpenUI
 	void Button::OnMouseClick ( )
 	{
 		Element::OnMouseClick (  );
-		LOG("SINGLE CLICK");
 	}
 
 	void Button::OnMouseDoubleClick (  )
 	{
 		Element::OnMouseDoubleClick (  );
-		LOG("DOUBLE CLICK");
 	}
 
 	void Button::OnMouseUp (  )

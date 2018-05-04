@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <SFML/Graphics/Rect.hpp>
 #include "Math/Vector2.h"
+#include <iostream>
 
 namespace OpenUI
 {
@@ -96,6 +97,7 @@ namespace OpenUI
 					|| X < p_rectangle.X
 					|| ( X + Width ) > ( p_rectangle.X + p_rectangle.Width );
 		}
+
 
 		/// <summary>
 		///		Resizes this rectangle to fit inside a specified rectangle.
@@ -239,7 +241,7 @@ namespace OpenUI
 			return Rectangle <_Ty> ( X + rhs.X, Y + rhs.Y, Width + rhs.Width, Height + rhs.Height );
 		}
 
-		Rectangle <_Ty> operator - ( const Rectangle <_Ty>& rhs )
+		Rectangle <_Ty> operator - ( const Rectangle <_Ty>& rhs ) const
 		{
 			return Rectangle <_Ty> ( X - rhs.X, Y - rhs.Y, Width - rhs.Width, Height - rhs.Height );
 		}
@@ -253,8 +255,15 @@ namespace OpenUI
 		{
 			return Rectangle <_Ty> ( X / rhs.X, Y / rhs.Y, Width / rhs.Width, Height / rhs.Height );
 		}
+		friend 	std::ostream & operator<< (std::ostream & os, Rectangle<int> & p_rhs);
 	};
 
 	typedef Rectangle <int32_t> IntRect;
 	typedef Rectangle <uint32_t> UIntRect;
+
+	inline std::ostream & operator<< ( std::ostream & os, Rectangle<int> & p_rhs)
+	{
+		os << "X: " << p_rhs.X << " Y: " << p_rhs.Y << " Width: " << p_rhs.Width << " Height: " << p_rhs.Height;
+		return os;
+	}
 }

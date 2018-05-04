@@ -36,7 +36,7 @@ namespace OpenUI
 		explicit ClientWindow ( const std::string& name, const RenderWindowSettings& windowSettings );
 		~ClientWindow ();
 
-		void Start () const override;
+		void Start () override;
 		void Initialize () override;
 		void Update () override;
 		void Draw ( const GraphicsContext& gContext ) override;

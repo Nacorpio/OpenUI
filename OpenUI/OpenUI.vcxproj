@@ -191,6 +191,7 @@
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Rectangle.h" />
     <ClInclude Include="Graphic\ScissorTest.h" />
+    <ClInclude Include="ScrollBar.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Entities\Elements\Windows\WindowElement.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="Managers\ResourceMgr.cpp" />
     <ClCompile Include="Math\Rectangle.cpp" />
     <ClCompile Include="Graphic\ScissorTest.cpp" />
+    <ClCompile Include="ScrollBar.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

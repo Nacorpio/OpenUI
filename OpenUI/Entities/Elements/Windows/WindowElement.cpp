@@ -1,103 +1,87 @@
 #include "stdafx.h"
 #include "WindowElement.h"
+#include "Managers/ElementMgr.h"
 
 namespace OpenUI
 {
-	WindowElement::WindowElement(const std::string& p_name, const uint16_t & p_headerSize)
-		: Element(p_name)
-	{m_guidDetail = ObjectGuid::Detail::WindowElement;	}
+#pragma region WindowHeaderElement
+	WindowHeaderElement::WindowHeaderElement ( const std::string & p_name )
+		: Element ( p_name )
+	{
+		m_guidDetail = ObjectGuid::Detail::WindowHeaderElement;
+	}
 
-	WindowElement::~WindowElement()
+	WindowHeaderElement::~WindowHeaderElement ()
 	{
 	}
 
-	void WindowElement::Start () const
+	WindowElement& WindowHeaderElement::GetWindowContainer () const
 	{
-		Element::Start();
+		return *m_windowElement;
 	}
 
-	void WindowElement::Initialize ()
+	void WindowHeaderElement::SetWindowContainer ( WindowElement * element )
 	{
-		Element::Initialize();
-
-		const auto bounds = GetBounds();
-		m_headerBar = new sf::RectangleShape(sf::Vector2f(bounds.Size.X, m_headerHeight));
-		m_headerBar->setPosition(sf::Vector2f(bounds.Position.sfVector));
-		m_headerBar->setFillColor(sf::Color(160, 160, 160));
-		AddShape(m_headerBar);
-
-		SetContainerRectangle(IntRect(bounds.X, bounds.Y + m_headerHeight, bounds.Width, bounds.Height - m_headerHeight));
+		const auto thisBounds = GetBounds();
+		m_windowElement = element;
+		AddChild ( m_windowElement );
+		m_windowElement->SetPosition ( { thisBounds.X,thisBounds.Y + thisBounds.Height } );
 	}
 
-	void WindowElement::Update ( )
+	void WindowHeaderElement::ContainerAddChild ( Element * element ) const
 	{
-		Element::Update ( );
-		if (!m_isMousePressedHeader)
+		if (!m_windowElement)
 		{
 			return;
 		}
+
+		m_windowElement->AddChild ( element );
+	}
+
+	void WindowHeaderElement::OnMouseDown ()
+	{
+		Element::OnMouseDown();
+		SetMousePressedPosition();
+		m_isMousePressed = true;
+	}
+
+	void WindowHeaderElement::Update ()
+	{
+		Element::Update();
+		if (!m_isMousePressed || !sInputInformation->MouseIsDown)
+		{
+			m_isMousePressed = false;
+			return;
+		}
+
 		DragWindow();
 	}
 
-	void WindowElement::Draw ( const GraphicsContext & gContext )
+	void WindowHeaderElement::SetMousePressedPosition ()
 	{
-		Element::Draw(gContext);
+		const auto currentLocation = GetBounds().Position;
+		m_mousePressedPosition.X = sInputInformation->MousePosition.X - currentLocation.X;
+		m_mousePressedPosition.Y = sInputInformation->MousePosition.Y - currentLocation.Y;
 	}
 
-	void WindowElement::OnMouseEnter ()
+	void WindowHeaderElement::DragWindow ()
 	{
-		Element::OnMouseEnter();
+		SetPosition ( sInputInformation->MousePosition - m_mousePressedPosition );
 	}
 
-	void WindowElement::OnMouseLeave ()
+#pragma endregion WindowHeaderElement
+
+#pragma region WindowElement
+
+	WindowElement::WindowElement ( const std::string & p_name )
+		: Element ( p_name )
 	{
-		Element::OnMouseLeave();
+		m_guidDetail = ObjectGuid::Detail::WindowElement;
 	}
 
-	void WindowElement::OnMouseMove ()
+	WindowElement::~WindowElement ()
 	{
-		Element::OnMouseMove();
 	}
 
-	void WindowElement::OnMouseHover ()
-	{
-		Element::OnMouseHover();
-	}
-
-	void WindowElement::OnMouseUp ()
-	{
-		Element::OnMouseUp();
-		m_isMousePressedHeader = false;
-	}
-
-	void WindowElement::OnMouseDown ()
-	{
-		Element::OnMouseDown();
-		m_isMousePressedHeader = CheckMouseDownHeader();
-	}
-
-	void WindowElement::OnMouseClick ()
-	{
-		Element::OnMouseClick();
-		m_isMousePressedHeader = false;
-	}
-
-	void WindowElement::OnDrop ( const InputHandler::MouseDropEvent & event )
-	{
-		Element::OnDrop(event);
-	}
-
-	void WindowElement::OnDragBegin ()
-	{
-		Element::OnDragBegin();
-	}
-
-	void WindowElement::OnBoundsChanged ( const IntRect & delta )
-	{
-		Element::OnBoundsChanged ( delta );
-		const auto bounds = GetBounds();
-		SetContainerRectangle(IntRect(bounds.X, bounds.Y + m_headerHeight, bounds.Width, bounds.Height - m_headerHeight));
-		m_headerBar->setSize ( sf::Vector2f ( bounds.Size.sfVector.x, m_headerHeight ) );
-		m_headerBar->setPosition ( sf::Vector2f (bounds.Position.sfVector ) );
-	}
+#pragma endregion WindowElement
 }
