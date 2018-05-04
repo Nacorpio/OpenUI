@@ -16,8 +16,8 @@ namespace OpenUI
 	{
 		m_guidTypeId = ObjectGuid::TypeId::Element;
 
-		AddFlag ( uint32_t ( ElementFlags::CaptureMouse ) );
-		AddFlag ( uint32_t ( ElementFlags::CaptureKeyboard ) );
+		AddFlag ( uint32_t ( ElementInputFlags::CaptureMouse ) );
+		AddFlag ( uint32_t ( ElementInputFlags::CaptureKeyboard ) );
 
 		m_background = new sf::RectangleShape ();
 		AddShape ( m_background );
@@ -181,6 +181,7 @@ namespace OpenUI
 		}
 
 		element->m_clientWindow->m_descendants.insert ( element );
+
 		m_children.emplace_back ( element );
 
 		OnChildAdded ( *element );
@@ -238,8 +239,8 @@ namespace OpenUI
 
 		if ( m_clientWindow )
 		{
-			sf::RenderWindow & renderWindow = m_clientWindow->GetRenderWindow();
-			for (auto shape : m_shapes)
+			sf::RenderWindow& renderWindow = m_clientWindow->GetRenderWindow ();
+			for ( auto shape : m_shapes )
 			{
 				renderWindow.draw ( *shape );
 			}
@@ -253,7 +254,7 @@ namespace OpenUI
 
 	void Element::OnMouseEnter ()
 	{
-		Control::OnMouseEnter ();
+		LOG("MOUSE ENTER");
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Entered );
 	}
 
@@ -266,59 +267,65 @@ namespace OpenUI
 
 	void Element::OnMouseDoubleClick ()
 	{
-		Control::OnMouseDoubleClick ();
-		m_background->setFillColor(m_scheme->Colors.BackColor.Entered);
+		LOG("MOUSE DOUBLE CLICK");
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Entered );
 	}
 
 	void Element::OnMouseLeave ()
 	{
-		Control::OnMouseLeave ();
+		LOG("MOUSE LEAVE");
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
 	}
 
 	void Element::OnMouseHover ()
 	{
-		Control::OnMouseHover ();
+		LOG("MOUSE HOVER");
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Hovered );
 	}
 
 	void Element::OnMouseMove ()
 	{
-		Control::OnMouseMove ();
 	}
 
 	void Element::OnMouseDown ()
 	{
-		Control::OnMouseDown ();
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Pressed );
 	}
 
 	void Element::OnMouseUp ()
 	{
-		Control::OnMouseUp ();
 	}
 
 	void Element::OnDrop ( const InputHandler::MouseDropEvent& event )
 	{
-		Control::OnDrop ( event );
 	}
 
 	void Element::OnDragBegin ()
 	{
-		Control::OnDragBegin ();
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Pressed );
 	}
 
 	void Element::OnDragDrop ( const InputHandler::MouseDragDropEvent& event )
 	{
-		Control::OnDragDrop ( event );
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
+	}
+
+	void Element::OnFocusGained ()
+	{
+		LOG("GAINED FOCUS FOR " << GetName());
+	}
+
+	void Element::OnFocusLost ()
+	{
+		LOG("LOST FOCUS FOR " << GetName());
 	}
 
 	void Element::Update ()
 	{
-		if (IsCursorInside () && !IsBeingHovered () && sTimeInformation->ElapsedTime - m_lastMoveTime >= 1000)
+		if ( IsCursorInside () && !IsBeingHovered () && sTimeInformation->ElapsedTime - m_lastMoveTime >= 1000 )
 		{
-			OnMouseHover();
+			AddState ( Hovered );
+			OnMouseHover ();
 		}
 
 		for ( auto element : m_children )
@@ -333,27 +340,27 @@ namespace OpenUI
 
 		for (Element* child : m_children)
 		{
-			child->OnParentBoundsChanged(delta);
+			child->OnParentBoundsChanged ( delta );
 		}
 	}
 
-	void Element::OnPositionChanged(const IntVector & delta)
+	void Element::OnPositionChanged ( const IntVector& delta )
 	{
 		SetVisibleBounds();
 
 		for (Element * child : m_children)
 		{
-			child->OnParentPositionChanged(delta);
+			child->OnParentPositionChanged ( delta );
 		}
 	}
 
-	void Element::OnSizeChanged(const IntVector & delta)
+	void Element::OnSizeChanged ( const IntVector& delta )
 	{
 		SetVisibleBounds();
 
 		for (Element * child : m_children)
 		{
-			child->OnParentSizeChanged(delta);
+			child->OnParentSizeChanged ( delta );
 		}
 	}
 
@@ -362,12 +369,12 @@ namespace OpenUI
 		SetVisibleBounds();
 	}
 
-	void Element::OnParentPositionChanged ( const IntVector & delta )
+	void Element::OnParentPositionChanged ( const IntVector& delta )
 	{
 		SetVisibleBounds();
 	}
 
-	void Element::OnParentSizeChanged ( const IntVector & delta )
+	void Element::OnParentSizeChanged ( const IntVector& delta )
 	{
 		SetVisibleBounds();
 	}
@@ -386,6 +393,32 @@ namespace OpenUI
 	{
 		m_drawOrder = value;
 		sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparerDrawOrder () );
+	}
+
+	void Element::GiveFocus ()
+	{
+		if ( HasFocus () )
+		{
+			return;
+		}
+
+		AddState ( Focused );
+
+		OnFocusGained ();
+		OnFocusChanged ();
+	}
+
+	void Element::LoseFocus ()
+	{
+		if ( ! HasFocus () )
+		{
+			return;
+		}
+
+		RemoveState ( Focused );
+
+		OnFocusLost ();
+		OnFocusChanged ();
 	}
 
 	void Element::SortDrawOrder () const

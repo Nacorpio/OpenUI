@@ -12,6 +12,17 @@ namespace OpenUI
 		WindowContainer,
 	};
 
+	enum class ElementInputFlags
+	{
+		CaptureMouse,
+		CaptureKeyboard,
+
+		//AllowChildOverlapping,
+		//AllowScissorTest,
+
+		CaptureInput = CaptureMouse | CaptureKeyboard
+	};
+
 	enum class ColorType
 	{
 		BackgroundColor,
@@ -42,6 +53,7 @@ namespace OpenUI
 		Hovered = 1 << 2,
 		Pressed = 1 << 3,
 		Dragged = 1 << 4,
+		Focused = 1 << 5
 	};
 
 	#define ENUM_OSTREAM_SWITCH(type, name) case type: os << name; break

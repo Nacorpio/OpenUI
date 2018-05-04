@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "InputHandler.h"
 #include "Entities/Elements/Element.h"
-#include <iostream>
 #include "Common/Global.h"
 
 namespace OpenUI
@@ -10,7 +9,7 @@ namespace OpenUI
 	{
 	}
 
-	bool InputHandler::IsMouseWithin ( Element* element ) const
+	bool InputHandler::IsMouseWithin ( Element* element )
 	{
 		return IsMouseWithin ( element->GetBounds (), sInputInformation->MousePosition );
 	}
@@ -23,112 +22,56 @@ namespace OpenUI
 
 	void InputHandler::OnMouseEnter ( Element* element )
 	{
+		if ( !element->m_isTopMost )
+		{
+			return;
+		}
+
+		element->AddState ( Entered );
 		element->OnMouseEnter ();
 
 		// TODO: Should the elements be able to send data to themselves?
-		if ( m_dragDropSource )
+		if ( m_dragDropSource && m_dragDropSource->IsBeingDragged () )
 		{
 			m_dragDropTarget = element;
+
+			element->AddState ( Entered );
 			element->OnDragEnter ( m_dragDropSource );
 		}
 	}
 
-	void InputHandler::OnDragBegin ( Element* source )
-	{
-		source->OnDragBegin ();
-	}
-
 	void InputHandler::OnMouseLeave ( Element* element )
 	{
+		if ( !element )
+		{
+			return;
+		}
+
 		if ( element->IsBeingDragged () && m_dragDropSource == element )
 		{
 			return;
 		}
 
+		element->RemoveState ( Entered );
 		element->OnMouseLeave ();
 
 		// The mouse is being held down outside of the element's borders.
 		if ( element->IsBeingPressed () )
 		{
 			m_dragDropSource = element;
-			OnDragBegin ( element );
+
+			element->AddState ( Dragged );
+			element->OnDragBegin ();
 		}
 	}
 
 	void InputHandler::OnMouseDown ( Element* element )
 	{
+		element->AddState ( Pressed );
 		element->OnMouseDown ();
 	}
 
-	//void InputHandler::OnMouseMove ( Element* element)
-	//{
-	//	const bool isMouseWithin = IsMouseWithin ( element );
-
-	//	if ( isMouseWithin )
-	//	{
-	//		if ( !m_activeElement )
-	//		{
-	//			m_activeElement = element;
-	//		}
-
-	//	if ( element->GetHeight () > m_activeElement->GetHeight () )
-	//	{
-	//		OnMouseLeave ( m_activeElement );
-	//		m_activeElement = element;
-	//	}
-	//}
-
-	void InputHandler::OnMouseMove ( Element* element )
-	{
-		const bool isMouseWithin = IsMouseWithin ( element );
-
-		if ( isMouseWithin )
-		{
-			CalculateTopMost ( element );
-
-			if ( element != m_top )
-			{
-				return;
-			}
-
-			m_lastMoved = element;
-
-			element->m_lastMoveTime = sTimeInformation->ElapsedTime;
-			element->OnMouseMove();
-
-			if (element->IsBeingHovered ())
-			{
-				element->RemoveState(Hovered);
-			}
-
-			if ( element->IsCursorInside () )
-			{
-				if ( element == m_dragDropTarget )
-				{
-					element->OnDragMove ( m_dragDropSource );
-				}
-
-				return;
-			}
-
-			if ( element->IsBeingDragged () )
-			{
-				element->AddState ( Entered );
-				return;
-			}
-
-			OnMouseEnter ( element );
-			return;
-		}
-
-		if ( element->IsCursorInside () )
-		{
-			m_top = nullptr;
-			OnMouseLeave ( element );
-		}
-	}
-
-	void InputHandler::CalculateClick ( Element* element )
+	inline void InputHandler::CalculateClick ( Element* element )
 	{
 		const bool isInTime = sTimeInformation->ElapsedTime - m_lastMouseClickTime <= 200;
 		sf::VertexArray df;
@@ -144,7 +87,13 @@ namespace OpenUI
 	void InputHandler::OnMouseUp ( Element* element )
 	{
 		// If it isn't the top-most element receiving the event, don't proceed.
-		if (element != m_top)
+		if ( element != m_top )
+		{
+			return;
+		}
+
+		// Make sure it's not another button being released.
+		if ( sInputInformation->LastActiveMouseButton != m_lastMousePress )
 		{
 			return;
 		}
@@ -152,13 +101,9 @@ namespace OpenUI
 		// If the mouse was released on another element, don't proceed.
 		if ( element != m_pressing )
 		{
-			m_pressing->OnMouseUp();
-			return;
-		}
+			m_pressing->RemoveState ( Pressed );
+			m_pressing->OnMouseUp ();
 
-		// Make sure it's not another button being released.
-		if (sInputInformation->LastActiveMouseButton != m_lastMousePress)
-		{
 			return;
 		}
 
@@ -169,13 +114,17 @@ namespace OpenUI
 			case 1 :
 			{
 			single:
+				element->RemoveState ( Pressed );
 				element->OnMouseClick ();
+
 				break;
 			}
 
 			case 2 :
 			{
+				element->RemoveState ( Pressed );
 				element->OnMouseDoubleClick ();
+
 				break;
 			}
 
@@ -203,7 +152,7 @@ namespace OpenUI
 	void InputHandler::HandleInput ( Element* element )
 	{
 		const IntVector mousePos = sInputInformation->MousePosition;
-		
+
 		switch ( sInputInformation->LastEvent )
 		{
 			case sf::Event::MouseMoved :
@@ -219,7 +168,7 @@ namespace OpenUI
 					return;
 				}
 
-				if (element != m_top)
+				if ( element != m_top )
 				{
 					return;
 				}
@@ -229,6 +178,17 @@ namespace OpenUI
 				m_lastMousePressPos = mousePos;
 				m_lastMousePressTime = sTimeInformation->ElapsedTime;
 				m_lastMousePress = sInputInformation->LastActiveMouseButton;
+
+				if ( !element->HasFocus () )
+				{
+					if ( m_focused )
+					{
+						m_focused->LoseFocus ();
+					}
+
+					m_focused = element;
+					element->GiveFocus ();
+				}
 
 				OnMouseDown ( element );
 				return;
@@ -244,6 +204,9 @@ namespace OpenUI
 				if ( element->IsBeingDragged () && m_dragDropSource == element )
 				{
 					m_dragDropSource = nullptr;
+
+					element->RemoveState ( Dragged );
+					element->RemoveState ( Pressed );
 
 					element->OnDragDrop ( MouseDragDropEvent ( m_dragDropTarget, m_lastMousePressPos, mousePos ) );
 
@@ -262,17 +225,66 @@ namespace OpenUI
 		}
 	}
 
-	void InputHandler::CalculateTopMost ( Element* element )
+	void InputHandler::OnMouseMove ( Element* element )
 	{
-		if ( !m_top )
+		const bool isMouseWithin = IsMouseWithin ( element );
+
+		if ( isMouseWithin )
 		{
-			m_top = element;
+			CalculateTopMost ( element );
+
+			if ( element != m_top )
+			{
+				return;
+			}
+
+			m_lastMoved = element;
+
+			element->m_lastMoveTime = m_lastMouseMoveTime = sTimeInformation->ElapsedTime;
+			element->OnMouseMove ();
+
+			if ( element->IsCursorInside () )
+			{
+				if ( element->IsBeingHovered () )
+				{
+					element->RemoveState ( Hovered );
+				}
+
+				if ( element == m_dragDropTarget )
+				{
+					element->OnDragMove ( m_dragDropSource );
+				}
+
+				return;
+			}
+
+			if ( element->IsBeingDragged () )
+			{
+				element->AddState ( Entered );
+				return;
+			}
+
+			OnMouseEnter ( element );
+			return;
 		}
 
-		if ( element->GetHeight () > m_top->GetHeight () )
+		if ( element->IsCursorInside () )
+		{
+			m_top = nullptr;
+			OnMouseLeave ( element );
+		}
+	}
+
+	void InputHandler::CalculateTopMost ( Element* element )
+	{
+		if ( !m_top || element->GetHeight () > m_top->GetHeight () )
 		{
 			OnMouseLeave ( m_top );
+
 			m_top = element;
+			m_top->m_isTopMost = true;
+
+			OnMouseEnter ( m_top );
 		}
 	}
 
