@@ -18,6 +18,16 @@ namespace OpenUI
 		{
 		}
 
+		ObjectGuid::TypeId GetTypeId() const
+		{
+			return m_guidTypeId;
+		}
+
+		ObjectGuid::Detail GetDetail() const
+		{
+			return m_guidDetail;
+		}
+
 		void SetFlag ( const int flag )
 		{
 			m_flags = flag;

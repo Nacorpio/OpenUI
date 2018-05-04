@@ -50,12 +50,10 @@ namespace OpenUI
 
 	//	void Refresh ( sf::Event::MouseMoveEvent& event );
 
-		bool IsMouseWithin ( Element* element ) const;
+		static bool IsMouseWithin ( Element* element );
 
 		template < typename _Ty >
 		static bool IsMouseWithin ( IntRect& p_value, Vector2 <_Ty> point );
-
-		void OnDragBegin ( Element* source );
 
 		void OnMouseEnter ( Element* element );
 		void OnMouseLeave ( Element* element );
@@ -84,6 +82,7 @@ namespace OpenUI
 
 		Element* m_top;
 		Element* m_pressing;
+		Element* m_focused;
 
 		Element* m_lastClicked;
 		Element* m_lastMoved;

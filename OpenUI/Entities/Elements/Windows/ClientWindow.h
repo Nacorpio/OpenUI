@@ -6,7 +6,6 @@
 #include "Entities/Elements/Element.h"
 #include "InputHandler.h"
 #include "Common/Comparers/ElementComparer.h"
-#include "Contexts.h"
 
 namespace OpenUI
 {
@@ -40,10 +39,9 @@ namespace OpenUI
 		void Initialize () override;
 		void Update () override;
 		void Draw ( const GraphicsContext& gContext ) override;
+		void Input();
 
 		sf::RenderWindow& GetRenderWindow () const;
-
-		void Input ();
 
 	private:
 		friend class Element;
@@ -52,7 +50,7 @@ namespace OpenUI
 
 		sf::Event m_event;
 
-		std::set <Element*, ElementComparerTree> m_descendants { };
+		std::set <Element*, ElementComparerHeight> m_descendants { };
 		sf::RenderWindow* m_renderWindow { };
 
 		InputHandler m_inputHandler { };

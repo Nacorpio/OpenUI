@@ -9,7 +9,7 @@ namespace OpenUI
 		bool operator () ( const Element* lhs, const Element* rhs ) const;
 	};
 
-	struct ElementComparerTree
+	struct ElementComparerHeight
 	{
 		bool operator () (const Element* lhs, const Element* rhs) const;
 	};

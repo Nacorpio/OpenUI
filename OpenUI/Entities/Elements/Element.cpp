@@ -6,7 +6,7 @@
 #include "Graphic/GraphicsContext.h"
 #include "Graphic/Scheme.h"
 #include <iostream>
-#include "Global.h"
+#include "Common/Global.h"
 
 namespace OpenUI
 {
@@ -16,8 +16,8 @@ namespace OpenUI
 	{
 		m_guidTypeId = ObjectGuid::TypeId::Element;
 
-		AddFlag ( uint32_t ( ElementFlags::CaptureMouse ) );
-		AddFlag ( uint32_t ( ElementFlags::CaptureKeyboard ) );
+		AddFlag ( uint32_t ( ElementInputFlags::CaptureMouse ) );
+		AddFlag ( uint32_t ( ElementInputFlags::CaptureKeyboard ) );
 
 		m_background = new sf::RectangleShape ();
 		AddShape ( m_background );
@@ -44,17 +44,17 @@ namespace OpenUI
 		SetPosition ( value.Position );
 		SetSize ( value.Size );
 
-		if(m_bounds == value)
+		if ( m_bounds == value )
 		{
 			return; // Return if value is the same as the current bounds.
 		}
 
 		const IntRect delta = m_bounds - value;
 
-		SetPosition(value.Position);
-		SetSize(value.Size);
-		
-		OnBoundsChanged(delta);
+		SetPosition ( value.Position );
+		SetSize ( value.Size );
+
+		OnBoundsChanged ( delta );
 	}
 
 	void Element::SetSize ( const IntVector& value )
@@ -80,7 +80,7 @@ namespace OpenUI
 		//	shape->setSize ( sf::Vector2f ( value.sfVector ) );
 		//}
 
-		OnSizeChanged(delta);
+		OnSizeChanged ( delta );
 	}
 
 	void Element::SetPosition ( const IntVector& value )
@@ -105,7 +105,7 @@ namespace OpenUI
 			shape->setPosition
 					( sf::Vector2f ( value.sfVector ) );
 		}
-		OnPositionChanged(delta);
+		OnPositionChanged ( delta );
 	}
 
 	void Element::SetContainerRectangle ( const IntRect& p_value )
@@ -171,8 +171,9 @@ namespace OpenUI
 		element->m_drawOrder = uint16_t ( m_children.size () );
 		element->m_height = uint16_t ( m_height + m_children.size () + 1 );
 		element->m_level = m_level + 1;
-		element->SetPosition(m_containerRectangle.Position + element->GetPosition() );
-		element->m_bounds.ResizeToFit(GetBounds());
+
+		element->SetPosition ( m_containerRectangle.Position + element->GetPosition () );
+		element->m_bounds.ResizeToFit ( m_bounds );
 
 		if ( m_clientWindow )
 		{
@@ -184,6 +185,7 @@ namespace OpenUI
 		}
 
 		element->m_clientWindow->m_descendants.insert ( element );
+
 		m_children.emplace_back ( element );
 
 		// Invoke the OnChildAdded callback.
@@ -242,12 +244,12 @@ namespace OpenUI
 
 	void Element::Draw ( const GraphicsContext& gContext )
 	{
-		m_scissorTest.SetScissorTest();
+		m_scissorTest.SetScissorTest ();
 
 		if ( m_clientWindow )
 		{
-			sf::RenderWindow & renderWindow = m_clientWindow->GetRenderWindow();
-			for (auto shape : m_shapes)
+			sf::RenderWindow& renderWindow = m_clientWindow->GetRenderWindow ();
+			for ( auto shape : m_shapes )
 			{
 				renderWindow.draw ( *shape );
 			}
@@ -258,76 +260,82 @@ namespace OpenUI
 			element->Draw ( gContext );
 		}
 
-		m_scissorTest.RestoreParentsScissorTest();
+		m_scissorTest.RestoreParentsScissorTest ();
 	}
 
 	void Element::OnMouseEnter ()
 	{
-		Control::OnMouseEnter ();
+		LOG("MOUSE ENTER");
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Entered );
 	}
 
 	void Element::OnMouseClick ()
 	{
-		Control::OnMouseClick ();
-		m_background->setFillColor(m_scheme->Colors.BackColor.Entered);
+		LOG("MOUSE CLICK");
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Entered );
 	}
 
 	void Element::OnMouseDoubleClick ()
 	{
-		Control::OnMouseDoubleClick ();
-		m_background->setFillColor(m_scheme->Colors.BackColor.Entered);
+		LOG("MOUSE DOUBLE CLICK");
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Entered );
 	}
 
 	void Element::OnMouseLeave ()
 	{
-		Control::OnMouseLeave ();
+		LOG("MOUSE LEAVE");
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
 	}
 
 	void Element::OnMouseHover ()
 	{
-		Control::OnMouseHover ();
+		LOG("MOUSE HOVER");
+		m_background->setFillColor ( m_scheme->Colors.BackColor.Hovered );
 	}
 
 	void Element::OnMouseMove ()
 	{
-		Control::OnMouseMove ();
 	}
 
 	void Element::OnMouseDown ()
 	{
-		Control::OnMouseDown ();
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Pressed );
 	}
 
 	void Element::OnMouseUp ()
 	{
-		Control::OnMouseUp ();
 	}
 
 	void Element::OnDrop ( const InputHandler::MouseDropEvent& event )
 	{
-		Control::OnDrop ( event );
 	}
 
 	void Element::OnDragBegin ()
 	{
-		Control::OnDragBegin ();
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Pressed );
 	}
 
 	void Element::OnDragDrop ( const InputHandler::MouseDragDropEvent& event )
 	{
-		Control::OnDragDrop ( event );
 		m_background->setFillColor ( m_scheme->Colors.BackColor.Default );
+	}
+
+	void Element::OnFocusGained ()
+	{
+		LOG("GAINED FOCUS FOR " << GetName());
+	}
+
+	void Element::OnFocusLost ()
+	{
+		LOG("LOST FOCUS FOR " << GetName());
 	}
 
 	void Element::Update ()
 	{
-		if (IsCursorInside () && !IsBeingHovered () && sTimeInformation->ElapsedTime - m_lastMoveTime >= 1000)
+		if ( IsCursorInside () && !IsBeingHovered () && sTimeInformation->ElapsedTime - m_lastMoveTime >= 1000 )
 		{
-			OnMouseHover();
+			AddState ( Hovered );
+			OnMouseHover ();
 		}
 
 		for ( auto element : m_children )
@@ -338,27 +346,27 @@ namespace OpenUI
 
 	void Element::OnBoundsChanged ( const IntRect& delta )
 	{
-		for (Element* child : m_children)
+		for ( Element* child : m_children )
 		{
-			child->OnParentBoundsChanged(delta);
+			child->OnParentBoundsChanged ( delta );
 		}
 	}
 
-	void Element::OnPositionChanged(const IntVector & delta)
+	void Element::OnPositionChanged ( const IntVector& delta )
 	{
-		m_scissorTest.UpdateScissorRectangle(m_bounds);
-		for (Element * child : m_children)
+		m_scissorTest.UpdateScissorRectangle ( m_bounds );
+		for ( Element* child : m_children )
 		{
-			child->OnParentPositionChanged(delta);
+			child->OnParentPositionChanged ( delta );
 		}
 	}
 
-	void Element::OnSizeChanged(const IntVector & delta)
+	void Element::OnSizeChanged ( const IntVector& delta )
 	{
-		m_scissorTest.UpdateScissorRectangle(m_bounds);
-		for (Element * child : m_children)
+		m_scissorTest.UpdateScissorRectangle ( m_bounds );
+		for ( Element* child : m_children )
 		{
-			child->OnParentSizeChanged(delta);
+			child->OnParentSizeChanged ( delta );
 		}
 	}
 
@@ -367,12 +375,12 @@ namespace OpenUI
 		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
 	}
 
-	void Element::OnParentPositionChanged ( const IntVector & delta )
+	void Element::OnParentPositionChanged ( const IntVector& delta )
 	{
 		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
 	}
 
-	void Element::OnParentSizeChanged ( const IntVector & delta )
+	void Element::OnParentSizeChanged ( const IntVector& delta )
 	{
 		m_scissorTest.ParentScissorTest = m_parent->m_scissorTest.ScissorRectangle;
 	}
@@ -393,6 +401,32 @@ namespace OpenUI
 		sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparerDrawOrder () );
 	}
 
+	void Element::GiveFocus ()
+	{
+		if ( HasFocus () )
+		{
+			return;
+		}
+
+		AddState ( Focused );
+
+		OnFocusGained ();
+		OnFocusChanged ();
+	}
+
+	void Element::LoseFocus ()
+	{
+		if ( ! HasFocus () )
+		{
+			return;
+		}
+
+		RemoveState ( Focused );
+
+		OnFocusLost ();
+		OnFocusChanged ();
+	}
+
 	void Element::SortDrawOrder () const
 	{
 		sort ( m_parent->m_children.begin (), m_parent->m_children.end (), ElementComparerDrawOrder () );
@@ -401,6 +435,4 @@ namespace OpenUI
 	void Element::OnStateChanged ( const ControlState state )
 	{
 	}
-
-
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <SFML/Window/Event.hpp>
 #include "InputHandler.h"
 #include "Common/Enums.h"
 
@@ -9,6 +8,7 @@ namespace OpenUI
 {
 	enum class MouseState;
 	class Element;
+
 	class Control
 
 	{
@@ -18,40 +18,44 @@ namespace OpenUI
 
 		ControlState GetState () const;
 
-		bool IsBeingDragged () const { return m_st & Dragged; }
-		bool IsCursorInside () const { return m_st & Entered; }
-		bool IsBeingPressed () const { return m_st & Pressed; }
-		bool IsBeingHovered () const { return m_st & Hovered; }
+		bool IsBeingDragged () const { return HasState ( Dragged ); }
+		bool IsBeingPressed () const { return HasState ( Pressed ); }
+		bool IsBeingHovered () const { return HasState ( Hovered ); }
+
+		bool IsCursorInside () const { return HasState ( Entered ); }
+		bool HasFocus () const { return HasState ( Focused ); }
 
 	protected:
-		virtual void OnMouseEnter ();
-		virtual void OnMouseLeave ();
-		virtual void OnMouseHover ();
-		virtual void OnMouseMove ();
+		virtual void OnMouseEnter() = 0;
+		virtual void OnMouseLeave () = 0;
+		virtual void OnMouseHover () = 0;
+		virtual void OnMouseMove () = 0;
 
-		virtual void OnMouseDown ( );
-		virtual void OnMouseUp();
+		virtual void OnMouseDown () = 0;
+		virtual void OnMouseUp () = 0;
 
-		virtual void OnMouseClick ();
-		virtual void OnMouseDoubleClick();
+		virtual void OnMouseClick () = 0;
+		virtual void OnMouseDoubleClick () = 0;
 
-		virtual void OnDragBegin ();
-		virtual void OnDragEnter ( Element* );
-		virtual void OnDragMove ( Element* );
+		virtual void OnDragBegin () = 0;
+		virtual void OnDragEnter ( Element* ) = 0;
+		virtual void OnDragMove ( Element* ) = 0;
 
-		virtual void OnDrop ( const InputHandler::MouseDropEvent& );
-		virtual void OnDragDrop ( const InputHandler::MouseDragDropEvent& );
+		virtual void OnDrop ( const InputHandler::MouseDropEvent& ) = 0;
+		virtual void OnDragDrop ( const InputHandler::MouseDragDropEvent& ) = 0;
 
-		virtual void OnStateChanged(const ControlState p_state) {}
+		virtual void OnStateChanged ( ControlState p_state ) = 0;
 
 		friend struct InputHandler;
 
-		void SetState(ControlState state);
-		void SetState(int state);
+		void SetState ( ControlState state );
+		void SetState ( int state );
 
 		void AddState ( ControlState state );
 		void RemoveState ( ControlState state );
 		void ToggleState ( ControlState state );
+
+		bool HasState ( ControlState state ) const;
 
 	private:
 		union
